@@ -1,0 +1,40 @@
+name: g-p1-fn-t0-vf-k0-c32-snud
+description: 'plan first; review segment on a compacted conversation; compact the
+  conversation above 32000 prompt tokens; no edit after 20 steps: nudge'
+entry: plan
+nodes:
+  solve:
+    type: agent
+    params:
+      compact_at: 32000
+      edit_by: 20
+    max_visits: 9
+  plan:
+    type: plan
+  verify:
+    type: agent
+    params:
+      role: verify
+  verify_compact:
+    type: compact
+  compact:
+    type: compact
+    max_visits: 7
+edges:
+- - solve
+  - verify_compact
+  - done
+- - solve
+  - compact
+  - context_high
+- - solve
+  - solve
+  - stalled
+- - plan
+  - solve
+- - verify
+  - END
+- - verify_compact
+  - verify
+- - compact
+  - solve

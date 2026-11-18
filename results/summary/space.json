@@ -1,0 +1,39 @@
+{
+ "raw_combinations": 6480,
+ "after_rule_canonicalisation": 3600,
+ "distinct_graph_signatures": 3600,
+ "all_pass_static_checks": true,
+ "max_nodes": 11,
+ "nodes_per_graph": {
+  "1": 4,
+  "2": 36,
+  "3": 146,
+  "4": 364,
+  "5": 632,
+  "6": 802,
+  "7": 754,
+  "8": 520,
+  "9": 252,
+  "10": 78,
+  "11": 12
+ },
+ "hand_written_points": {
+  "h01_react": "g-p0-fn-t0-vn-k0-c0-snon",
+  "h02_plan": "g-p1-fn-t0-vn-k0-c0-snon",
+  "h03_reproduce_first": "g-p0-fr-t0-vn-k0-c0-snon",
+  "h04_check_retry": "g-p0-fn-t0-vn-kcon2-c0-snon",
+  "h05_check_reflect": "g-p0-fn-t0-vn-kref2-c0-snon",
+  "h06_check_reset": "g-p0-fn-t0-vn-kres2-c0-snon",
+  "h07_compact": "g-p0-fn-t0-vn-k0-c16-snon",
+  "h08_reproduce_check": "g-p0-fr-t0-vn-kcon2-c0-snon",
+  "h09_full": "g-p1-fr-t0-vn-kref2-c16-snon",
+  "h10_stall_nudge": "g-p0-fn-t0-vn-k0-c0-snud",
+  "h11_stall_reflect": "g-p0-fn-t0-vn-k0-c0-sref",
+  "h12_stall_reset": "g-p0-fn-t0-vn-k0-c0-sres",
+  "h13_stall_compact": "g-p0-fn-t0-vn-k0-c0-scom",
+  "h14_verify": "g-p0-fn-t0-vs-k0-c0-snon",
+  "h15_fresh_verify": "g-p0-fn-t0-vf-k0-c0-snon",
+  "h16_checker_tool": "g-p0-fn-t1-vn-k0-c0-snon",
+  "h17_checker_tool_gate": "g-p0-fn-t1-vn-kcon2-c0-snon"
+ }
+}

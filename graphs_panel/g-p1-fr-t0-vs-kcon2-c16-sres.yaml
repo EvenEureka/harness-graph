@@ -1,0 +1,63 @@
+name: g-p1-fr-t0-vs-kcon2-c16-sres
+description: 'plan first; reproduce the bug first; review segment; enforced check,
+  on failure continue with the feedback (up to 2 times); compact the conversation
+  above 16000 prompt tokens; no edit after 20 steps: reset'
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      compact_at: 16000
+      edit_by: 20
+    max_visits: 11
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 3
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 3
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+  stall_reset:
+    type: reset
+edges:
+- - fix
+  - verify
+  - done
+- - fix
+  - compact
+  - context_high
+- - fix
+  - stall_reflect
+  - stalled
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - check
+  - END
+  - pass
+- - check
+  - fix
+  - fail
+- - verify
+  - check
+- - compact
+  - fix
+- - stall_reflect
+  - stall_reset
+- - stall_reset
+  - fix

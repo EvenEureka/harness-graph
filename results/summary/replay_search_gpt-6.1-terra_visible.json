@@ -1,0 +1,552 @@
+{
+ "args": {
+  "files": [
+   "results/raw/confirm_visible/gpt-6.1-terra.jsonl"
+  ],
+  "tests": "visible",
+  "model": "",
+  "graphs": "h01_react:h02_plan:h03_reproduce_first:h04_check_retry:h05_check_reflect:h06_check_reset:h07_compact:h14_verify:h15_fresh_verify",
+  "seeds": "0",
+  "budgets": "36:72:144:288:576",
+  "reps": 300,
+  "start": "h01_react",
+  "batch": 16,
+  "tol": 0.03,
+  "cost_weight": 0.0,
+  "out": "results/summary/replay_search_gpt-6.1-terra_visible.json"
+ },
+ "arms": [
+  "h01_react",
+  "h02_plan",
+  "h03_reproduce_first",
+  "h04_check_retry",
+  "h05_check_reflect",
+  "h06_check_reset",
+  "h07_compact",
+  "h14_verify",
+  "h15_fresh_verify"
+ ],
+ "n_tasks": 81,
+ "truth_all_tasks": {
+  "h01_react": 0.7654320987654321,
+  "h02_plan": 0.7654320987654321,
+  "h03_reproduce_first": 0.7530864197530864,
+  "h04_check_retry": 0.9753086419753086,
+  "h05_check_reflect": 0.9753086419753086,
+  "h06_check_reset": 0.9382716049382716,
+  "h07_compact": 0.7530864197530864,
+  "h14_verify": 0.7777777777777778,
+  "h15_fresh_verify": 0.7777777777777778
+ },
+ "results": [
+  {
+   "method": "linear_thompson",
+   "budget": 36,
+   "value": 0.9473170731707317,
+   "regret": 0.03463414634146342,
+   "regret_lo": 0.0,
+   "regret_hi": 0.24390243902439024,
+   "near_best": 0.7166666666666667,
+   "picks": {
+    "h04_check_retry": 0.043333333333333335,
+    "h14_verify": 0.013333333333333334,
+    "h06_check_reset": 0.30333333333333334,
+    "h07_compact": 0.006666666666666667,
+    "h02_plan": 0.01,
+    "h03_reproduce_first": 0.013333333333333334,
+    "h05_check_reflect": 0.6,
+    "h15_fresh_verify": 0.01
+   }
+  },
+  {
+   "method": "linear_thompson",
+   "budget": 72,
+   "value": 0.9593495934959347,
+   "regret": 0.022601626016260166,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8066666666666666,
+   "picks": {
+    "h04_check_retry": 0.16666666666666666,
+    "h14_verify": 0.0033333333333333335,
+    "h06_check_reset": 0.24,
+    "h07_compact": 0.0033333333333333335,
+    "h05_check_reflect": 0.5833333333333334,
+    "h15_fresh_verify": 0.0033333333333333335
+   }
+  },
+  {
+   "method": "linear_thompson",
+   "budget": 144,
+   "value": 0.9595121951219513,
+   "regret": 0.022439024390243905,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8433333333333334,
+   "picks": {
+    "h04_check_retry": 0.24666666666666667,
+    "h14_verify": 0.0033333333333333335,
+    "h06_check_reset": 0.17333333333333334,
+    "h05_check_reflect": 0.5733333333333334,
+    "h15_fresh_verify": 0.0033333333333333335
+   }
+  },
+  {
+   "method": "linear_thompson",
+   "budget": 288,
+   "value": 0.9609756097560976,
+   "regret": 0.02097560975609757,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8866666666666667,
+   "picks": {
+    "h05_check_reflect": 0.5166666666666667,
+    "h06_check_reset": 0.12,
+    "h04_check_retry": 0.36,
+    "h01_react": 0.0033333333333333335
+   }
+  },
+  {
+   "method": "linear_thompson",
+   "budget": 576,
+   "value": 0.9629268292682926,
+   "regret": 0.01902439024390245,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.9233333333333333,
+   "picks": {
+    "h05_check_reflect": 0.5133333333333333,
+    "h06_check_reset": 0.08333333333333333,
+    "h04_check_retry": 0.4033333333333333
+   }
+  },
+  {
+   "method": "local_search_guided",
+   "budget": 36,
+   "value": 0.8326016260162601,
+   "regret": 0.14934959349593493,
+   "regret_lo": 0.0,
+   "regret_hi": 0.3054878048780482,
+   "near_best": 0.29,
+   "picks": {
+    "h04_check_retry": 0.14666666666666667,
+    "h14_verify": 0.01,
+    "h06_check_reset": 0.11333333333333333,
+    "h07_compact": 0.023333333333333334,
+    "h02_plan": 0.01,
+    "h03_reproduce_first": 0.023333333333333334,
+    "h05_check_reflect": 0.10333333333333333,
+    "h15_fresh_verify": 0.02,
+    "h01_react": 0.55
+   }
+  },
+  {
+   "method": "local_search_guided",
+   "budget": 72,
+   "value": 0.9527642276422764,
+   "regret": 0.0291869918699187,
+   "regret_lo": 0.0,
+   "regret_hi": 0.24390243902439024,
+   "near_best": 0.86,
+   "picks": {
+    "h04_check_retry": 0.6866666666666666,
+    "h14_verify": 0.0033333333333333335,
+    "h06_check_reset": 0.08,
+    "h07_compact": 0.013333333333333334,
+    "h03_reproduce_first": 0.016666666666666666,
+    "h05_check_reflect": 0.15333333333333332,
+    "h15_fresh_verify": 0.02,
+    "h01_react": 0.02666666666666667
+   }
+  },
+  {
+   "method": "local_search_guided",
+   "budget": 144,
+   "value": 0.9617886178861788,
+   "regret": 0.020162601626016265,
+   "regret_lo": 0.0,
+   "regret_hi": 0.159146341463414,
+   "near_best": 0.89,
+   "picks": {
+    "h04_check_retry": 0.62,
+    "h06_check_reset": 0.10666666666666667,
+    "h07_compact": 0.0033333333333333335,
+    "h02_plan": 0.0033333333333333335,
+    "h03_reproduce_first": 0.006666666666666667,
+    "h05_check_reflect": 0.24333333333333335,
+    "h15_fresh_verify": 0.0033333333333333335,
+    "h01_react": 0.013333333333333334
+   }
+  },
+  {
+   "method": "local_search_guided",
+   "budget": 288,
+   "value": 0.9654471544715447,
+   "regret": 0.016504065040650412,
+   "regret_lo": 0.0,
+   "regret_hi": 0.07317073170731703,
+   "near_best": 0.91,
+   "picks": {
+    "h05_check_reflect": 0.29333333333333333,
+    "h06_check_reset": 0.10666666666666667,
+    "h04_check_retry": 0.6
+   }
+  },
+  {
+   "method": "local_search_guided",
+   "budget": 576,
+   "value": 0.9654471544715447,
+   "regret": 0.016504065040650412,
+   "regret_lo": 0.0,
+   "regret_hi": 0.07317073170731703,
+   "near_best": 0.91,
+   "picks": {
+    "h05_check_reflect": 0.29333333333333333,
+    "h06_check_reset": 0.10666666666666667,
+    "h04_check_retry": 0.6
+   }
+  },
+  {
+   "method": "local_search_random",
+   "budget": 36,
+   "value": 0.8326016260162601,
+   "regret": 0.14934959349593493,
+   "regret_lo": 0.0,
+   "regret_hi": 0.3054878048780482,
+   "near_best": 0.29,
+   "picks": {
+    "h04_check_retry": 0.14666666666666667,
+    "h14_verify": 0.01,
+    "h06_check_reset": 0.11333333333333333,
+    "h07_compact": 0.023333333333333334,
+    "h02_plan": 0.01,
+    "h03_reproduce_first": 0.023333333333333334,
+    "h05_check_reflect": 0.10333333333333333,
+    "h15_fresh_verify": 0.02,
+    "h01_react": 0.55
+   }
+  },
+  {
+   "method": "local_search_random",
+   "budget": 72,
+   "value": 0.8988617886178862,
+   "regret": 0.08308943089430892,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2926829268292682,
+   "near_best": 0.5766666666666667,
+   "picks": {
+    "h04_check_retry": 0.24333333333333335,
+    "h14_verify": 0.013333333333333334,
+    "h06_check_reset": 0.2,
+    "h07_compact": 0.016666666666666666,
+    "h02_plan": 0.0033333333333333335,
+    "h03_reproduce_first": 0.03,
+    "h05_check_reflect": 0.23666666666666666,
+    "h15_fresh_verify": 0.023333333333333334,
+    "h01_react": 0.23333333333333334
+   }
+  },
+  {
+   "method": "local_search_random",
+   "budget": 144,
+   "value": 0.9477235772357725,
+   "regret": 0.03422764227642277,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2682926829268293,
+   "near_best": 0.81,
+   "picks": {
+    "h04_check_retry": 0.37333333333333335,
+    "h14_verify": 0.006666666666666667,
+    "h06_check_reset": 0.2,
+    "h07_compact": 0.0033333333333333335,
+    "h02_plan": 0.006666666666666667,
+    "h03_reproduce_first": 0.01,
+    "h05_check_reflect": 0.3466666666666667,
+    "h15_fresh_verify": 0.0033333333333333335,
+    "h01_react": 0.05
+   }
+  },
+  {
+   "method": "local_search_random",
+   "budget": 288,
+   "value": 0.9644715447154473,
+   "regret": 0.017479674796747974,
+   "regret_lo": 0.0,
+   "regret_hi": 0.07317073170731703,
+   "near_best": 0.8833333333333333,
+   "picks": {
+    "h05_check_reflect": 0.4066666666666667,
+    "h06_check_reset": 0.13,
+    "h04_check_retry": 0.4633333333333333
+   }
+  },
+  {
+   "method": "local_search_random",
+   "budget": 576,
+   "value": 0.9644715447154473,
+   "regret": 0.017479674796747974,
+   "regret_lo": 0.0,
+   "regret_hi": 0.07317073170731703,
+   "near_best": 0.8833333333333333,
+   "picks": {
+    "h05_check_reflect": 0.4066666666666667,
+    "h06_check_reset": 0.13,
+    "h04_check_retry": 0.4633333333333333
+   }
+  },
+  {
+   "method": "successive_halving",
+   "budget": 36,
+   "value": 0.9110569105691059,
+   "regret": 0.07089430894308943,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2682926829268293,
+   "near_best": 0.6133333333333333,
+   "picks": {
+    "h04_check_retry": 0.26666666666666666,
+    "h14_verify": 0.05,
+    "h06_check_reset": 0.18666666666666668,
+    "h07_compact": 0.023333333333333334,
+    "h02_plan": 0.05333333333333334,
+    "h03_reproduce_first": 0.056666666666666664,
+    "h05_check_reflect": 0.2966666666666667,
+    "h15_fresh_verify": 0.043333333333333335,
+    "h01_react": 0.023333333333333334
+   }
+  },
+  {
+   "method": "successive_halving",
+   "budget": 72,
+   "value": 0.948130081300813,
+   "regret": 0.033821138211382114,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2567073170731702,
+   "near_best": 0.7833333333333333,
+   "picks": {
+    "h04_check_retry": 0.38666666666666666,
+    "h14_verify": 0.01,
+    "h06_check_reset": 0.19333333333333333,
+    "h07_compact": 0.01,
+    "h02_plan": 0.02,
+    "h03_reproduce_first": 0.013333333333333334,
+    "h05_check_reflect": 0.3433333333333333,
+    "h15_fresh_verify": 0.02,
+    "h01_react": 0.0033333333333333335
+   }
+  },
+  {
+   "method": "successive_halving",
+   "budget": 144,
+   "value": 0.9595934959349594,
+   "regret": 0.022357723577235776,
+   "regret_lo": 0.0,
+   "regret_hi": 0.08597560975609697,
+   "near_best": 0.8566666666666667,
+   "picks": {
+    "h04_check_retry": 0.43666666666666665,
+    "h06_check_reset": 0.16,
+    "h02_plan": 0.01,
+    "h05_check_reflect": 0.38666666666666666,
+    "h15_fresh_verify": 0.0033333333333333335,
+    "h01_react": 0.0033333333333333335
+   }
+  },
+  {
+   "method": "successive_halving",
+   "budget": 288,
+   "value": 0.9635772357723577,
+   "regret": 0.018373983739837407,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.9166666666666666,
+   "picks": {
+    "h05_check_reflect": 0.4866666666666667,
+    "h06_check_reset": 0.08666666666666667,
+    "h04_check_retry": 0.4266666666666667
+   }
+  },
+  {
+   "method": "successive_halving",
+   "budget": 576,
+   "value": 0.9626016260162601,
+   "regret": 0.019349593495934972,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.9266666666666666,
+   "picks": {
+    "h05_check_reflect": 0.48,
+    "h06_check_reset": 0.07333333333333333,
+    "h04_check_retry": 0.44666666666666666
+   }
+  },
+  {
+   "method": "thompson",
+   "budget": 36,
+   "value": 0.9282926829268293,
+   "regret": 0.05365853658536584,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2926829268292682,
+   "near_best": 0.71,
+   "picks": {
+    "h04_check_retry": 0.30666666666666664,
+    "h14_verify": 0.023333333333333334,
+    "h06_check_reset": 0.21666666666666667,
+    "h07_compact": 0.03666666666666667,
+    "h02_plan": 0.013333333333333334,
+    "h03_reproduce_first": 0.02666666666666667,
+    "h05_check_reflect": 0.32,
+    "h15_fresh_verify": 0.02,
+    "h01_react": 0.03666666666666667
+   }
+  },
+  {
+   "method": "thompson",
+   "budget": 72,
+   "value": 0.9549593495934959,
+   "regret": 0.026991869918699188,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2195121951219512,
+   "near_best": 0.8266666666666667,
+   "picks": {
+    "h04_check_retry": 0.38,
+    "h06_check_reset": 0.20333333333333334,
+    "h07_compact": 0.006666666666666667,
+    "h02_plan": 0.0033333333333333335,
+    "h05_check_reflect": 0.38333333333333336,
+    "h15_fresh_verify": 0.006666666666666667,
+    "h01_react": 0.016666666666666666
+   }
+  },
+  {
+   "method": "thompson",
+   "budget": 144,
+   "value": 0.9616260162601626,
+   "regret": 0.020325203252032527,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8633333333333333,
+   "picks": {
+    "h05_check_reflect": 0.43333333333333335,
+    "h06_check_reset": 0.15333333333333332,
+    "h04_check_retry": 0.41333333333333333
+   }
+  },
+  {
+   "method": "thompson",
+   "budget": 288,
+   "value": 0.9623577235772357,
+   "regret": 0.01959349593495936,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8933333333333333,
+   "picks": {
+    "h05_check_reflect": 0.43333333333333335,
+    "h06_check_reset": 0.10666666666666667,
+    "h04_check_retry": 0.46
+   }
+  },
+  {
+   "method": "thompson",
+   "budget": 576,
+   "value": 0.9633333333333334,
+   "regret": 0.018617886178861797,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.9266666666666666,
+   "picks": {
+    "h05_check_reflect": 0.4533333333333333,
+    "h06_check_reset": 0.07333333333333333,
+    "h04_check_retry": 0.47333333333333333
+   }
+  },
+  {
+   "method": "uniform",
+   "budget": 36,
+   "value": 0.8841463414634146,
+   "regret": 0.09780487804878048,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2926829268292683,
+   "near_best": 0.4866666666666667,
+   "picks": {
+    "h04_check_retry": 0.19333333333333333,
+    "h14_verify": 0.08,
+    "h06_check_reset": 0.20333333333333334,
+    "h07_compact": 0.02666666666666667,
+    "h02_plan": 0.08,
+    "h03_reproduce_first": 0.05333333333333334,
+    "h05_check_reflect": 0.21333333333333335,
+    "h15_fresh_verify": 0.08333333333333333,
+    "h01_react": 0.06666666666666667
+   }
+  },
+  {
+   "method": "uniform",
+   "budget": 72,
+   "value": 0.9120325203252031,
+   "regret": 0.06991869918699187,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2926829268292682,
+   "near_best": 0.6133333333333333,
+   "picks": {
+    "h04_check_retry": 0.27,
+    "h14_verify": 0.03333333333333333,
+    "h06_check_reset": 0.21,
+    "h07_compact": 0.03,
+    "h02_plan": 0.02666666666666667,
+    "h03_reproduce_first": 0.04,
+    "h05_check_reflect": 0.2966666666666667,
+    "h15_fresh_verify": 0.03333333333333333,
+    "h01_react": 0.06
+   }
+  },
+  {
+   "method": "uniform",
+   "budget": 144,
+   "value": 0.9520325203252031,
+   "regret": 0.029918699186991873,
+   "regret_lo": 0.0,
+   "regret_hi": 0.2682926829268293,
+   "near_best": 0.8133333333333334,
+   "picks": {
+    "h04_check_retry": 0.44,
+    "h14_verify": 0.0033333333333333335,
+    "h06_check_reset": 0.18,
+    "h07_compact": 0.0033333333333333335,
+    "h02_plan": 0.01,
+    "h03_reproduce_first": 0.0033333333333333335,
+    "h05_check_reflect": 0.33,
+    "h15_fresh_verify": 0.02,
+    "h01_react": 0.01
+   }
+  },
+  {
+   "method": "uniform",
+   "budget": 288,
+   "value": 0.9621138211382113,
+   "regret": 0.01983739837398374,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8533333333333334,
+   "picks": {
+    "h05_check_reflect": 0.4633333333333333,
+    "h15_fresh_verify": 0.0033333333333333335,
+    "h06_check_reset": 0.15666666666666668,
+    "h04_check_retry": 0.37666666666666665
+   }
+  },
+  {
+   "method": "uniform",
+   "budget": 576,
+   "value": 0.9619512195121952,
+   "regret": 0.020000000000000007,
+   "regret_lo": 0.0,
+   "regret_hi": 0.09756097560975607,
+   "near_best": 0.8833333333333333,
+   "picks": {
+    "h05_check_reflect": 0.48,
+    "h06_check_reset": 0.11666666666666667,
+    "h04_check_retry": 0.4033333333333333
+   }
+  }
+ ]
+}

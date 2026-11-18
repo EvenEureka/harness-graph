@@ -1,0 +1,10 @@
+name: h07_compact
+description: Plain agent loop whose conversation is replaced by a summary whenever the prompt passes 16k tokens.
+entry: solve
+nodes:
+  solve: {type: agent, params: {compact_at: 16000}, max_visits: 8}
+  compact: {type: compact, max_visits: 7}
+edges:
+  - [solve, END, done]
+  - [solve, compact, context_high]
+  - [compact, solve]

@@ -1,0 +1,14 @@
+name: h06_check_reset
+description: On a failed check the attempt is discarded. The repository is restored and a fresh conversation starts with only the lesson.
+entry: solve
+nodes:
+  solve: {type: agent, max_visits: 3}
+  check: {type: check, max_visits: 3}
+  reflect: {type: reflect, max_visits: 2}
+  reset: {type: reset, max_visits: 2}
+edges:
+  - [solve, check]
+  - [check, END, pass]
+  - [check, reflect, fail]
+  - [reflect, reset]
+  - [reset, solve]

@@ -1,0 +1,66 @@
+name: g-p1-fn-t0-vf-kres2-c32-sref
+description: 'plan first; review segment on a compacted conversation; enforced check,
+  on failure diagnose, restore the repository and restart (up to 2 times); compact
+  the conversation above 32000 prompt tokens; no edit after 20 steps: reflect'
+entry: plan
+nodes:
+  solve:
+    type: agent
+    params:
+      compact_at: 32000
+      edit_by: 20
+    max_visits: 11
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 3
+  reflect:
+    type: reflect
+    max_visits: 2
+  reset:
+    type: reset
+    max_visits: 2
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 3
+  verify_compact:
+    type: compact
+    max_visits: 3
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+edges:
+- - solve
+  - verify_compact
+  - done
+- - solve
+  - compact
+  - context_high
+- - solve
+  - stall_reflect
+  - stalled
+- - plan
+  - solve
+- - check
+  - END
+  - pass
+- - check
+  - reflect
+  - fail
+- - reflect
+  - reset
+- - reset
+  - solve
+- - verify
+  - check
+- - verify_compact
+  - verify
+- - compact
+  - solve
+- - stall_reflect
+  - solve

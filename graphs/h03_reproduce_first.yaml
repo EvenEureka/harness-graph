@@ -1,0 +1,9 @@
+name: h03_reproduce_first
+description: Two phases. First write a failing reproduction script (at most 15 steps), then fix.
+entry: reproduce
+nodes:
+  reproduce: {type: agent, params: {role: reproduce, max_steps: 15}}
+  fix: {type: agent, params: {role: fix}}
+edges:
+  - [reproduce, fix]
+  - [fix, END]

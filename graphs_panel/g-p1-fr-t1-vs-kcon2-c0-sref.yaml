@@ -1,0 +1,51 @@
+name: g-p1-fr-t1-vs-kcon2-c0-sref
+description: 'plan first; reproduce the bug first; checker available to the agent;
+  review segment; enforced check, on failure continue with the feedback (up to 2 times);
+  no edit after 20 steps: reflect'
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      checker: true
+      edit_by: 20
+    max_visits: 4
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 3
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 3
+  stall_reflect:
+    type: reflect
+edges:
+- - fix
+  - verify
+  - done
+- - fix
+  - stall_reflect
+  - stalled
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - check
+  - END
+  - pass
+- - check
+  - fix
+  - fail
+- - verify
+  - check
+- - stall_reflect
+  - fix

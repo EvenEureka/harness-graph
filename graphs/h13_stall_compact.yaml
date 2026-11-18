@@ -1,0 +1,10 @@
+name: h13_stall_compact
+description: After 20 steps without an edit the conversation is replaced by the agent's own summary of what it found.
+entry: solve
+nodes:
+  solve: {type: agent, params: {edit_by: 20}, max_visits: 2}
+  compact: {type: compact}
+edges:
+  - [solve, END, done]
+  - [solve, compact, stalled]
+  - [compact, solve]

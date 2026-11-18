@@ -1,0 +1,50 @@
+name: g-p1-fr-t1-vs-k0-c16-scom
+description: 'plan first; reproduce the bug first; checker available to the agent;
+  review segment; compact the conversation above 16000 prompt tokens; no edit after
+  20 steps: compact'
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      checker: true
+      compact_at: 16000
+      edit_by: 20
+    max_visits: 9
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  verify:
+    type: agent
+    params:
+      role: verify
+  compact:
+    type: compact
+    max_visits: 7
+  stall_compact:
+    type: compact
+edges:
+- - fix
+  - verify
+  - done
+- - fix
+  - compact
+  - context_high
+- - fix
+  - stall_compact
+  - stalled
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - verify
+  - END
+- - compact
+  - fix
+- - stall_compact
+  - fix

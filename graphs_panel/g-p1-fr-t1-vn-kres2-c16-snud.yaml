@@ -1,0 +1,60 @@
+name: g-p1-fr-t1-vn-kres2-c16-snud
+description: 'plan first; reproduce the bug first; checker available to the agent;
+  enforced check, on failure diagnose, restore the repository and restart (up to 2
+  times); compact the conversation above 16000 prompt tokens; no edit after 20 steps:
+  nudge'
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      checker: true
+      compact_at: 16000
+      edit_by: 20
+    max_visits: 11
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 3
+  reflect:
+    type: reflect
+    max_visits: 2
+  reset:
+    type: reset
+    max_visits: 2
+  compact:
+    type: compact
+    max_visits: 7
+edges:
+- - fix
+  - check
+  - done
+- - fix
+  - compact
+  - context_high
+- - fix
+  - fix
+  - stalled
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - check
+  - END
+  - pass
+- - check
+  - reflect
+  - fail
+- - reflect
+  - reset
+- - reset
+  - fix
+- - compact
+  - fix

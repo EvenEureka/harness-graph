@@ -1,0 +1,48 @@
+name: g-p1-fn-t1-vf-kcon3-c0-sref
+description: 'plan first; checker available to the agent; review segment on a compacted
+  conversation; enforced check, on failure continue with the feedback (up to 3 times);
+  no edit after 20 steps: reflect'
+entry: plan
+nodes:
+  solve:
+    type: agent
+    params:
+      checker: true
+      edit_by: 20
+    max_visits: 5
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 4
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 4
+  verify_compact:
+    type: compact
+    max_visits: 4
+  stall_reflect:
+    type: reflect
+edges:
+- - solve
+  - verify_compact
+  - done
+- - solve
+  - stall_reflect
+  - stalled
+- - plan
+  - solve
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - verify
+  - check
+- - verify_compact
+  - verify
+- - stall_reflect
+  - solve

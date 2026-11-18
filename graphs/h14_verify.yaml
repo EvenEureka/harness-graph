@@ -1,0 +1,9 @@
+name: h14_verify
+description: When the agent says it is done, a review phase makes it show that every reported symptom is fixed before the work is submitted.
+entry: solve
+nodes:
+  solve: {type: agent}
+  verify: {type: agent, params: {role: verify}}
+edges:
+  - [solve, verify]
+  - [verify, END]

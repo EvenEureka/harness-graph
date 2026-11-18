@@ -1,0 +1,67 @@
+name: g-p0-fr-t0-vs-kres1-c32-sres
+description: 'reproduce the bug first; review segment; enforced check, on failure
+  diagnose, restore the repository and restart (up to 1 times); compact the conversation
+  above 32000 prompt tokens; no edit after 20 steps: reset'
+entry: reproduce
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      compact_at: 32000
+      edit_by: 20
+    max_visits: 10
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  check:
+    type: check
+    max_visits: 2
+  reflect:
+    type: reflect
+  reset:
+    type: reset
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 2
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+  stall_reset:
+    type: reset
+edges:
+- - fix
+  - verify
+  - done
+- - fix
+  - compact
+  - context_high
+- - fix
+  - stall_reflect
+  - stalled
+- - reproduce
+  - fix
+- - check
+  - END
+  - pass
+- - check
+  - reflect
+  - fail
+- - reflect
+  - reset
+- - reset
+  - fix
+- - verify
+  - check
+- - compact
+  - fix
+- - stall_reflect
+  - stall_reset
+- - stall_reset
+  - fix

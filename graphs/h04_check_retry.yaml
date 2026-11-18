@@ -1,0 +1,10 @@
+name: h04_check_retry
+description: Work is checked before it is submitted; on a failed check the agent continues with the feedback (up to 2 times).
+entry: solve
+nodes:
+  solve: {type: agent, max_visits: 3}
+  check: {type: check, max_visits: 3}
+edges:
+  - [solve, check]
+  - [check, END, pass]
+  - [check, solve, fail]

@@ -1,0 +1,10 @@
+name: h11_stall_reflect
+description: After 20 steps without an edit the agent first writes a diagnosis, then continues in the same conversation.
+entry: solve
+nodes:
+  solve: {type: agent, params: {edit_by: 20}, max_visits: 2}
+  reflect: {type: reflect}
+edges:
+  - [solve, END, done]
+  - [solve, reflect, stalled]
+  - [reflect, solve]

@@ -1,0 +1,8 @@
+name: h10_stall_nudge
+description: Plain agent loop that is told to stop exploring and edit when 20 steps pass without any change to the repository.
+entry: solve
+nodes:
+  solve: {type: agent, params: {edit_by: 20}, max_visits: 2}
+edges:
+  - [solve, END, done]
+  - [solve, solve, stalled]

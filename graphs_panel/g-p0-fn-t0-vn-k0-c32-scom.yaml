@@ -1,0 +1,30 @@
+name: g-p0-fn-t0-vn-k0-c32-scom
+description: 'compact the conversation above 32000 prompt tokens; no edit after 20
+  steps: compact'
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      compact_at: 32000
+      edit_by: 20
+    max_visits: 9
+  compact:
+    type: compact
+    max_visits: 7
+  stall_compact:
+    type: compact
+edges:
+- - solve
+  - END
+  - done
+- - solve
+  - compact
+  - context_high
+- - solve
+  - stall_compact
+  - stalled
+- - compact
+  - solve
+- - stall_compact
+  - solve

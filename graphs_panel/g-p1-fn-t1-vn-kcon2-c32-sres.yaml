@@ -1,0 +1,49 @@
+name: g-p1-fn-t1-vn-kcon2-c32-sres
+description: 'plan first; checker available to the agent; enforced check, on failure
+  continue with the feedback (up to 2 times); compact the conversation above 32000
+  prompt tokens; no edit after 20 steps: reset'
+entry: plan
+nodes:
+  solve:
+    type: agent
+    params:
+      checker: true
+      compact_at: 32000
+      edit_by: 20
+    max_visits: 11
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 3
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+  stall_reset:
+    type: reset
+edges:
+- - solve
+  - check
+  - done
+- - solve
+  - compact
+  - context_high
+- - solve
+  - stall_reflect
+  - stalled
+- - plan
+  - solve
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - compact
+  - solve
+- - stall_reflect
+  - stall_reset
+- - stall_reset
+  - solve

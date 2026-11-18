@@ -1,0 +1,46 @@
+name: g-p1-fr-t1-vf-k0-c32-snon
+description: plan first; reproduce the bug first; checker available to the agent;
+  review segment on a compacted conversation; compact the conversation above 32000
+  prompt tokens
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      checker: true
+      compact_at: 32000
+    max_visits: 8
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  verify:
+    type: agent
+    params:
+      role: verify
+  verify_compact:
+    type: compact
+  compact:
+    type: compact
+    max_visits: 7
+edges:
+- - fix
+  - verify_compact
+  - done
+- - fix
+  - compact
+  - context_high
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - verify
+  - END
+- - verify_compact
+  - verify
+- - compact
+  - fix

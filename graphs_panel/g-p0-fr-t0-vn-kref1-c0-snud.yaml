@@ -1,0 +1,38 @@
+name: g-p0-fr-t0-vn-kref1-c0-snud
+description: 'reproduce the bug first; enforced check, on failure diagnose, then continue
+  (up to 1 times); no edit after 20 steps: nudge'
+entry: reproduce
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      edit_by: 20
+    max_visits: 3
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  check:
+    type: check
+    max_visits: 2
+  reflect:
+    type: reflect
+edges:
+- - fix
+  - check
+  - done
+- - fix
+  - fix
+  - stalled
+- - reproduce
+  - fix
+- - check
+  - END
+  - pass
+- - check
+  - reflect
+  - fail
+- - reflect
+  - fix

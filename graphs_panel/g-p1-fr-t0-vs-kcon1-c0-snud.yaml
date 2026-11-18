@@ -1,0 +1,45 @@
+name: g-p1-fr-t0-vs-kcon1-c0-snud
+description: 'plan first; reproduce the bug first; review segment; enforced check,
+  on failure continue with the feedback (up to 1 times); no edit after 20 steps: nudge'
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      edit_by: 20
+    max_visits: 3
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  check:
+    type: check
+    max_visits: 2
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 2
+edges:
+- - fix
+  - verify
+  - done
+- - fix
+  - fix
+  - stalled
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - check
+  - END
+  - pass
+- - check
+  - fix
+  - fail
+- - verify
+  - check

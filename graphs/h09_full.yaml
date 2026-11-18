@@ -1,0 +1,19 @@
+name: h09_full
+description: Plan, reproduce first, fix with context compaction, check, and diagnose failed checks.
+entry: plan
+nodes:
+  plan: {type: plan}
+  reproduce: {type: agent, params: {role: reproduce, max_steps: 15}}
+  fix: {type: agent, params: {role: fix, compact_at: 16000}, max_visits: 8}
+  compact: {type: compact, max_visits: 5}
+  check: {type: check, max_visits: 3}
+  reflect: {type: reflect, max_visits: 2}
+edges:
+  - [plan, reproduce]
+  - [reproduce, fix]
+  - [fix, check, done]
+  - [fix, compact, context_high]
+  - [compact, fix]
+  - [check, END, pass]
+  - [check, reflect, fail]
+  - [reflect, fix]

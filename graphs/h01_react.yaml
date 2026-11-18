@@ -1,0 +1,7 @@
+name: h01_react
+description: Plain agent loop. The model acts until it says it is done (the usual baseline harness).
+entry: solve
+nodes:
+  solve: {type: agent}
+edges:
+  - [solve, END]

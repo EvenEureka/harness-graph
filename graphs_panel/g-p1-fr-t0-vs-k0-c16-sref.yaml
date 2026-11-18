@@ -1,0 +1,48 @@
+name: g-p1-fr-t0-vs-k0-c16-sref
+description: 'plan first; reproduce the bug first; review segment; compact the conversation
+  above 16000 prompt tokens; no edit after 20 steps: reflect'
+entry: plan
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      compact_at: 16000
+      edit_by: 20
+    max_visits: 9
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  plan:
+    type: plan
+  verify:
+    type: agent
+    params:
+      role: verify
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+edges:
+- - fix
+  - verify
+  - done
+- - fix
+  - compact
+  - context_high
+- - fix
+  - stall_reflect
+  - stalled
+- - reproduce
+  - fix
+- - plan
+  - reproduce
+- - verify
+  - END
+- - compact
+  - fix
+- - stall_reflect
+  - fix

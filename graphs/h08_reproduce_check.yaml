@@ -1,0 +1,12 @@
+name: h08_reproduce_check
+description: Reproduce first, then fix; the check reruns the agent's own reproduction script and the visible tests (up to 2 retries).
+entry: reproduce
+nodes:
+  reproduce: {type: agent, params: {role: reproduce, max_steps: 15}}
+  fix: {type: agent, params: {role: fix}, max_visits: 3}
+  check: {type: check, max_visits: 3}
+edges:
+  - [reproduce, fix]
+  - [fix, check]
+  - [check, END, pass]
+  - [check, fix, fail]

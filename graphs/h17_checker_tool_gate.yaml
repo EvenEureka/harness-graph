@@ -1,0 +1,10 @@
+name: h17_checker_tool_gate
+description: Same instructions and checker as h16, and the check is also enforced before submission (up to 2 retries).
+entry: solve
+nodes:
+  solve: {type: agent, max_visits: 3, params: {checker: true}}
+  check: {type: check, max_visits: 3}
+edges:
+  - [solve, check]
+  - [check, END, pass]
+  - [check, solve, fail]

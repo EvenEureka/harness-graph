@@ -1,0 +1,12 @@
+name: h12_stall_reset
+description: After 20 steps without an edit the agent writes what it learned, and a fresh conversation starts from that note.
+entry: solve
+nodes:
+  solve: {type: agent, params: {edit_by: 20}, max_visits: 2}
+  reflect: {type: reflect}
+  reset: {type: reset}
+edges:
+  - [solve, END, done]
+  - [solve, reflect, stalled]
+  - [reflect, reset]
+  - [reset, solve]

@@ -1,0 +1,11 @@
+name: h15_fresh_verify
+description: Like h14, but the review starts from a fresh conversation that holds only a summary and the diff.
+entry: solve
+nodes:
+  solve: {type: agent}
+  compact: {type: compact}
+  verify: {type: agent, params: {role: verify}}
+edges:
+  - [solve, compact]
+  - [compact, verify]
+  - [verify, END]

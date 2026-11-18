@@ -1,0 +1,20 @@
+name: g-p1-fn-t0-vs-k0-c0-snon
+description: plan first; review segment
+entry: plan
+nodes:
+  solve:
+    type: agent
+  plan:
+    type: plan
+  verify:
+    type: agent
+    params:
+      role: verify
+edges:
+- - solve
+  - verify
+  - done
+- - plan
+  - solve
+- - verify
+  - END

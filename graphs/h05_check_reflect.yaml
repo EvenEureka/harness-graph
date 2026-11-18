@@ -1,0 +1,12 @@
+name: h05_check_reflect
+description: Like h04, but the model must diagnose a failed check before it continues.
+entry: solve
+nodes:
+  solve: {type: agent, max_visits: 3}
+  check: {type: check, max_visits: 3}
+  reflect: {type: reflect, max_visits: 2}
+edges:
+  - [solve, check]
+  - [check, END, pass]
+  - [check, reflect, fail]
+  - [reflect, solve]

@@ -1,0 +1,60 @@
+{
+ "gpt-6.1-terra": {
+  "fixed_best": {
+   "mean": 0.7191524031443117,
+   "lo": 0.6543091168091169,
+   "hi": 0.7777777777777778
+  },
+  "oracle": {
+   "mean": 0.7705529097296072,
+   "lo": 0.7159606481481481,
+   "hi": 0.8228401898734177
+  },
+  "rule[tests_visible]": {
+   "mean": 0.7338209799212294,
+   "lo": 0.6748971518987342,
+   "hi": 0.7901234567901234
+  },
+  "rule[tests_visible] - fixed_best": {
+   "mean": 0.014668576776917828,
+   "lo": -0.01234953703703709,
+   "hi": 0.038461538461538436
+  },
+  "rule[repo]": {
+   "mean": 0.7303469438675776,
+   "lo": 0.6375,
+   "hi": 0.7948717948717948
+  },
+  "rule[repo] - fixed_best": {
+   "mean": 0.011194540723266153,
+   "lo": -0.04938271604938271,
+   "hi": 0.038461538461538436
+  },
+  "feature_router": {
+   "mean": 0.7297151978447323,
+   "lo": 0.6666666666666666,
+   "hi": 0.7875
+  },
+  "feature_router - fixed_best": {
+   "mean": 0.010562794700420769,
+   "lo": -0.024999999999999915,
+   "hi": 0.03749999999999998
+  },
+  "rule_table_all_data": {
+   "False": "h14_verify",
+   "True": "h04_check_retry"
+  },
+  "n_units": 158,
+  "graphs": [
+   "h01_react",
+   "h02_plan",
+   "h03_reproduce_first",
+   "h04_check_retry",
+   "h05_check_reflect",
+   "h06_check_reset",
+   "h07_compact",
+   "h14_verify",
+   "h15_fresh_verify"
+  ]
+ }
+}

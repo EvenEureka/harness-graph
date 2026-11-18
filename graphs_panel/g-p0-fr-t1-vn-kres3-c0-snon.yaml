@@ -1,0 +1,41 @@
+name: g-p0-fr-t1-vn-kres3-c0-snon
+description: reproduce the bug first; checker available to the agent; enforced check,
+  on failure diagnose, restore the repository and restart (up to 3 times)
+entry: reproduce
+nodes:
+  fix:
+    type: agent
+    params:
+      role: fix
+      checker: true
+    max_visits: 4
+  reproduce:
+    type: agent
+    params:
+      role: reproduce
+      max_steps: 15
+  check:
+    type: check
+    max_visits: 4
+  reflect:
+    type: reflect
+    max_visits: 3
+  reset:
+    type: reset
+    max_visits: 3
+edges:
+- - fix
+  - check
+  - done
+- - reproduce
+  - fix
+- - check
+  - END
+  - pass
+- - check
+  - reflect
+  - fail
+- - reflect
+  - reset
+- - reset
+  - fix

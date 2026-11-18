@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adaptive Graph Harness Optimization for LLM Agents</title>
+<meta name="description" content="A coding agent's harness written as a graph: an execution engine, a study of hand-designed graphs on bug-fixing tasks, and a searchable space of 3,600 graphs with an interactive builder.">
+<style>
+:root{
+  --bg:#f7f7f5; --card:#ffffff; --fg:#16191c; --muted:#565b61; --line:#cfd3d6; --accent:#1f5fae; --accent-soft:#e6eef8;
+  --plain:#eb6834; --check:#2a78d6; --grid:#e3e5e7;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root{
+  --bg:#141414; --card:#1c1c1b; --fg:#ecebe8; --muted:#b3b1a9; --line:#45474a; --accent:#7fb2f0; --accent-soft:#1d2a3b;
+  --plain:#d95926; --check:#3987e5; --grid:#303234; color-scheme:dark } }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16.5px;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:44px 20px 64px;display:flex;flex-direction:column;gap:46px}
+a{color:var(--accent)}
+h1{font-size:34px;line-height:1.2;margin:10px 0 10px;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:23px;line-height:1.3;margin:0;text-wrap:balance}
+h3{font-size:17px;margin:6px 0 0}
+p{margin:0;max-width:74ch}
+section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+.kicker{font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kicker b{color:var(--accent)}
+.by{color:var(--muted);font-size:15.5px}
+.lead{font-size:19px;line-height:1.55;max-width:66ch;margin-top:14px}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.btn{display:inline-block;font-size:15px;font-weight:600;text-decoration:none;border:1.5px solid var(--fg);color:var(--fg);border-radius:6px;padding:7px 14px}
+.btn.primary{background:var(--fg);color:var(--bg)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary:hover{background:var(--accent);color:var(--bg)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.tile .big{font-size:30px;font-weight:700;letter-spacing:-.01em;line-height:1.2;font-variant-numeric:tabular-nums}
+.tile .big span{color:var(--muted);font-weight:500}
+.tile .what{font-size:14.5px;color:var(--muted);margin-top:4px}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px}
+.scroll{overflow-x:auto}
+figure svg{display:block;width:100%;min-width:720px;height:auto;font-family:var(--sans)}
+figcaption{color:var(--muted);font-size:14.5px;margin-top:12px;max-width:86ch}
+figcaption b{color:var(--fg)}
+.box{fill:var(--card);stroke:var(--fg);stroke-width:1.3}
+.prog{stroke-dasharray:5 4}
+.hl{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.6}
+.t{font-size:14px;font-weight:600;fill:var(--fg)}
+.s{font-size:12px;fill:var(--muted)}
+.e{font-size:12px;fill:var(--fg)}
+.cap{font-size:13px;font-weight:700;fill:var(--accent)}
+.code{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.ar{stroke:var(--fg);stroke-width:1.3;fill:none}
+.ah{fill:var(--fg)}
+.ax{font-size:12px;fill:var(--muted)}
+.lab{font-size:13.5px;fill:var(--fg)}
+.lab.b{font-weight:600}
+.val{font-size:13px;fill:var(--fg);font-variant-numeric:tabular-nums}
+.gridl{stroke:var(--grid);stroke-width:1}
+.zero{stroke:var(--muted);stroke-width:1}
+.conn{stroke:var(--muted);stroke-width:2}
+.d-plain{fill:var(--plain);stroke:var(--card);stroke-width:2}
+.d-check{fill:var(--check);stroke:var(--card);stroke-width:2}
+.w-check{stroke:var(--check);stroke-width:2}
+.d-other{fill:var(--muted);stroke:var(--card);stroke-width:2}
+.w-other{stroke:var(--muted);stroke-width:2}
+.legend{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px;color:var(--muted);margin-bottom:8px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.sw{display:inline-block;width:22px;height:12px;border:1.5px solid var(--fg);border-radius:2px;vertical-align:-1px;margin-right:6px}
+.sw.p{border-style:dashed}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:600px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:13.5px}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.ours td{background:var(--accent-soft);font-weight:600}
+code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
+ul,ol{margin:0;padding-left:1.3em;max-width:74ch}
+li{margin:5px 0}
+.finding{border-left:3px solid var(--accent);padding-left:14px}
+.finding b{display:block}
+.sum{font-family:var(--mono);font-size:14px;background:var(--accent-soft);border-radius:6px;padding:10px 12px;overflow-x:auto;white-space:nowrap}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:10px 14px}
+.board label{display:flex;flex-direction:column;gap:3px;font-size:13.5px;color:var(--muted);min-width:0}
+.board select{font:inherit;font-size:15px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.board select:disabled{opacity:.45}
+.board select:focus-visible,.presets button:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.presets{display:flex;flex-wrap:wrap;gap:8px}
+.presets button{font:inherit;font-size:14.5px;color:var(--fg);background:var(--card);border:1px solid var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer}
+.presets button:hover{background:var(--accent-soft)}
+.readout{font-size:15px}
+.readout b{color:var(--fg)}
+details{border:1px solid var(--line);border-radius:8px;background:var(--card);padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+details .scroll{margin-top:10px}
+.st{font-weight:600;white-space:nowrap}
+.st.done{color:var(--accent)}
+.st.run{color:var(--plain)}
+.st.todo{color:var(--muted)}
+footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:18px}
+@media (max-width:600px){ h1{font-size:27px} .lead{font-size:17.5px} body{font-size:16px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Research project · <b>in progress</b> · updated 18 November 2026</div>
+  <h1>Adaptive Graph Harness Optimization for LLM Agents</h1>
+  <div class="by">Yiwen Lu · University of Notre Dame</div>
+  <p class="lead">A coding agent is a language model plus the program around it, the <em>harness</em>: what the model is asked to do first, when its work is checked, and what happens after a failed check. This project writes the harness as a graph, compares hand-designed graphs on bug-fixing tasks, and is now searching a space of 3,600 graphs for better ones.</p>
+  <div class="links">
+    <a class="btn primary" href="#builder">Try the graph builder</a>
+    <a class="btn" href="https://github.com/EvenEureka/harness-graph">Code</a>
+    <a class="btn" href="#results">Results so far</a>
+  </div>
+</header>
+
+<div class="tiles">
+  <div class="tile"><div class="big">75% <span>→</span> 98%</div><div class="what">bugs repaired by gpt-6.1-terra when the harness checks the patch and sends failures back, tests visible</div></div>
+  <div class="tile"><div class="big">63% <span>→</span> 77%</div><div class="what">the same change of harness for the smaller gpt-6-luna</div></div>
+  <div class="tile"><div class="big">3,600</div><div class="what">distinct single-agent harness graphs generated from nine design variables, all passing the static checks</div></div>
+</div>
+
+<section>
+  <h2>1 · A harness as a graph</h2>
+  <p>A <b>node</b> is one unit of execution: a stretch of agent conversation, or a deterministic program such as a test run. It reads the shared state, writes to it, and returns an outcome label such as <code>done</code>, <code>pass</code> or <code>fail</code>.</p>
+  <p>An <b>edge</b> is a control rule: <em>node X returned outcome r, so run node Y next</em>. Edges carry no data. Everything a later node needs is in the <b>shared state</b>: the conversation, the repository working copy, and the latest feedback.</p>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1000 200" role="img" aria-label="Graph A has one node: edit code, then submit. Graph B has two nodes: edit code, then run tests; on pass submit, on fail go back to editing, at most twice.">
+      <defs><marker id="a0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+      <text class="cap" x="30" y="34">A · Plain loop: 1 node, 1 edge</text>
+      <rect class="box" x="30" y="60" width="110" height="52" rx="4"/>
+      <text class="t" x="85" y="82" text-anchor="middle">Edit code</text>
+      <text class="code" x="85" y="100" text-anchor="middle">solve</text>
+      <rect class="box" x="220" y="60" width="110" height="52" rx="26"/>
+      <text class="t" x="275" y="91" text-anchor="middle">Submit</text>
+      <line class="ar" x1="140" y1="86" x2="218" y2="86" marker-end="url(#a0)"/>
+      <text class="e" x="180" y="78" text-anchor="middle">done</text>
+
+      <text class="cap" x="420" y="34">B · Check and retry: 2 nodes, 3 edges</text>
+      <rect class="box" x="420" y="60" width="110" height="52" rx="4"/>
+      <text class="t" x="475" y="82" text-anchor="middle">Edit code</text>
+      <text class="code" x="475" y="100" text-anchor="middle">solve</text>
+      <rect class="box prog" x="610" y="60" width="110" height="52" rx="4"/>
+      <text class="t" x="665" y="82" text-anchor="middle">Run tests</text>
+      <text class="code" x="665" y="100" text-anchor="middle">check</text>
+      <rect class="box" x="800" y="60" width="110" height="52" rx="26"/>
+      <text class="t" x="855" y="91" text-anchor="middle">Submit</text>
+      <line class="ar" x1="530" y1="86" x2="608" y2="86" marker-end="url(#a0)"/>
+      <text class="e" x="570" y="78" text-anchor="middle">done</text>
+      <line class="ar" x1="720" y1="86" x2="798" y2="86" marker-end="url(#a0)"/>
+      <text class="e" x="760" y="78" text-anchor="middle">pass</text>
+      <polyline class="ar" points="665,112 665,160 475,160 475,114" marker-end="url(#a0)"/>
+      <text class="e" x="570" y="152" text-anchor="middle">fail (up to 2)</text>
+    </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> The two graphs behind the headline numbers. In A the agent edits until it says it is done. B adds one program node and one edge that leads back: a failed test run returns the agent to editing with the failure output in the conversation.
+      <span class="legend" style="margin:8px 0 0"><span><i class="sw"></i>solid: the node calls the model</span><span><i class="sw p"></i>dashed: a program, no model call</span></span></figcaption>
+  </figure>
+  <p>The engine has six node types. Before a graph runs, static checks confirm that every outcome of every node has an edge, every node can be reached, loops are bounded by visit limits, and each node's inputs are written on every path that leads to it.</p>
+  <div class="scroll">
+  <table>
+    <tr><th>Node type</th><th>What it does</th><th>Outcomes it can return</th></tr>
+    <tr><td><code>agent</code></td><td>The model issues shell commands one at a time until it says it is done. Its role sets the instruction: <code>solve</code>, <code>reproduce</code> the bug, <code>fix</code> after reproducing, or <code>verify</code> before submitting.</td><td>done · step limit · context too long · stalled</td></tr>
+    <tr><td><code>plan</code></td><td>The model reads the file list and writes a short plan.</td><td>next</td></tr>
+    <tr><td><code>check</code></td><td>A program runs the project's tests on the current patch.</td><td>pass · fail</td></tr>
+    <tr><td><code>reflect</code></td><td>The model reads the failure output and writes down the cause.</td><td>next</td></tr>
+    <tr><td><code>reset</code></td><td>A program restores the code and clears the conversation, keeping only the note on the cause.</td><td>next</td></tr>
+    <tr><td><code>compact</code></td><td>The model replaces a long conversation with a summary.</td><td>next</td></tr>
+  </table>
+  </div>
+</section>
+
+<section id="results">
+  <h2>2 · What the hand-designed graphs showed</h2>
+  <p>Seventeen graphs were written by hand for short bug-fixing tasks from SWE-smith (real Python repositories with an injected bug) and run with two models. After a pilot on 27 development tasks, nine graphs were run on 81 confirmation tasks in two conditions: with the failing tests <em>visible</em> in the repository, so a <code>check</code> node can run them, and with those tests <em>hidden</em>. Two more graphs were added for the comparison in Table 1.</p>
+  <figure>
+    <div class="legend"><span><i class="dot" style="background:var(--plain)"></i>Plain loop (graph A)</span><span><i class="dot" style="background:var(--check)"></i>Check and retry (graph B)</span></div>
+    <div class="scroll"><svg viewBox="0 0 880 266" role="img" aria-label="Repair rate of the plain loop and of check-and-retry, for two models, with tests visible and with tests hidden."><line class="gridl" x1="250" y1="40" x2="250" y2="226"/><text class="ax" x="250" y="246" text-anchor="middle">0%</text><line class="gridl" x1="340" y1="40" x2="340" y2="226"/><text class="ax" x="340" y="246" text-anchor="middle">25%</text><line class="gridl" x1="430" y1="40" x2="430" y2="226"/><text class="ax" x="430" y="246" text-anchor="middle">50%</text><line class="gridl" x1="520" y1="40" x2="520" y2="226"/><text class="ax" x="520" y="246" text-anchor="middle">75%</text><line class="gridl" x1="610" y1="40" x2="610" y2="226"/><text class="ax" x="610" y="246" text-anchor="middle">100%</text><text class="ax" x="650" y="28">difference [95% interval]</text><text class="ax" x="430" y="262" text-anchor="middle">share of bugs repaired</text><text class="cap" x="20" y="28">Tests visible to the agent</text><text class="lab" x="20" y="67">gpt-6.1-terra</text><line class="conn" x1="519.6" y1="62" x2="604.1" y2="62"/><circle class="d-plain" cx="519.6" cy="62" r="7"><title>gpt-6.1-terra, tests visible to the agent: plain loop 74.9% of 81 tasks</title></circle><circle class="d-check" cx="604.1" cy="62" r="7"><title>gpt-6.1-terra, tests visible to the agent: check and retry 98.4% of 81 tasks</title></circle><text class="val" x="507.6" y="67" text-anchor="end">75%</text><text class="val" x="616.1" y="67">98%</text><text class="val" x="650" y="67">+23.5 [14.8, 32.5]</text><text class="lab" x="20" y="101">gpt-6-luna</text><line class="conn" x1="478.1" y1="96" x2="527.0" y2="96"/><circle class="d-plain" cx="478.1" cy="96" r="7"><title>gpt-6-luna, tests visible to the agent: plain loop 63.4% of 81 tasks</title></circle><circle class="d-check" cx="527.0" cy="96" r="7"><title>gpt-6-luna, tests visible to the agent: check and retry 77.0% of 81 tasks</title></circle><text class="val" x="466.1" y="101" text-anchor="end">63%</text><text class="val" x="539.0" y="101">77%</text><text class="val" x="650" y="101">+13.6 [7.0, 20.6]</text><text class="cap" x="20" y="138">Tests hidden</text><text class="lab" x="20" y="177">gpt-6.1-terra</text><line class="conn" x1="418.3" y1="172" x2="427.7" y2="172"/><circle class="d-plain" cx="427.7" cy="172" r="7"><title>gpt-6.1-terra, tests hidden: plain loop 49.4% of 77 tasks</title></circle><circle class="d-check" cx="418.3" cy="172" r="7"><title>gpt-6.1-terra, tests hidden: check and retry 46.8% of 77 tasks</title></circle><text class="val" x="406.3" y="177" text-anchor="end">47%</text><text class="val" x="439.7" y="177">49%</text><text class="val" x="650" y="177">−2.6 [−6.5, 0.0]</text><text class="lab" x="20" y="211">gpt-6-luna</text><line class="conn" x1="393.1" y1="206" x2="393.1" y2="206"/><circle class="d-plain" cx="393.1" cy="206" r="7"><title>gpt-6-luna, tests hidden: plain loop 39.7% of 78 tasks</title></circle><circle class="d-check" cx="393.1" cy="206" r="7"><title>gpt-6-luna, tests hidden: check and retry 39.7% of 78 tasks</title></circle><text class="val" x="381.1" y="211" text-anchor="end">40%</text><text class="val" x="405.1" y="211">40%</text><text class="val" x="650" y="211">0.0 [−5.1, 5.1]</text></svg></div>
+    <figcaption><b>Figure 2.</b> Share of bugs repaired on the 81 confirmation tasks. Right column: check-and-retry minus plain loop in percentage points, with a 95% interval from a paired bootstrap over tasks. Visible-test rows pool three runs per task; hidden-test rows are one run on the 77 and 78 tasks completed by every graph.</figcaption>
+  </figure>
+  <div class="finding"><p><b>With tests visible, checking the patch and returning failures raises the repair rate.</b>From 75% to 98% for gpt-6.1-terra (+23.5 points, 95% interval 14.8 to 32.5; better on 22 tasks, worse on 0) and from 63% to 77% for gpt-6-luna (+13.6 points, 7.0 to 20.6; better on 19, worse on 2). The price is 12% and 27% more model calls.</p></div>
+  <div class="finding"><p><b>With tests hidden, no graph showed an improvement over the plain loop.</b>The check node then has nothing informative to run. Across the eight other graphs measured in this condition, differences to the plain loop ranged from −3.9 to +2.6 points, every interval including zero.</p></div>
+  <div class="finding"><p><b>Enforcing the check does more than suggesting it.</b>Asking the model to review its own work before submitting changed the repair rate by +1.3 points for gpt-6.1-terra and +9.0 for gpt-6-luna, less than the enforced check for both (Figure 3). Handing the model the same test checker as a tool it may call helped the larger model; making the check a node the patch must pass added a further +7.4 points for gpt-6.1-terra and +7.4 for gpt-6-luna (Table 1).</p></div>
+  <figure>
+    <div class="legend"><span><i class="dot" style="background:var(--check)"></i>graph contains an enforced <code>check</code> node</span><span><i class="dot" style="background:var(--muted)"></i>graph does not</span></div>
+    <div class="scroll"><svg viewBox="0 0 880 326" role="img" aria-label="Difference in repair rate to the plain loop for eight hand-designed graphs, tests visible, two models."><text class="lab b" x="270" y="28">gpt-6.1-terra</text><line class="gridl" x1="270.0" y1="42" x2="270.0" y2="290"/><text class="ax" x="270.0" y="308" text-anchor="middle">−10</text><line class="zero" x1="330.0" y1="42" x2="330.0" y2="290"/><text class="ax" x="330.0" y="308" text-anchor="middle">0</text><line class="gridl" x1="390.0" y1="42" x2="390.0" y2="290"/><text class="ax" x="390.0" y="308" text-anchor="middle">+10</text><line class="gridl" x1="450.0" y1="42" x2="450.0" y2="290"/><text class="ax" x="450.0" y="308" text-anchor="middle">+20</text><line class="gridl" x1="510.0" y1="42" x2="510.0" y2="290"/><text class="ax" x="510.0" y="308" text-anchor="middle">+30</text><text class="lab" x="20" y="67">Check, retry (graph B)</text><line class="w-check" x1="400.1" y1="62" x2="517.0" y2="62"/><circle class="d-check" cx="454.7" cy="62" r="6"><title>gpt-6.1-terra: Check, retry (graph B) minus plain loop +20.8 points [11.7, 31.2], 77 tasks</title></circle><text class="val" x="525.0" y="67">+20.8</text><text class="lab" x="20" y="97">Check, find cause, retry</text><line class="w-check" x1="400.1" y1="92" x2="509.2" y2="92"/><circle class="d-check" cx="454.7" cy="92" r="6"><title>gpt-6.1-terra: Check, find cause, retry minus plain loop +20.8 points [11.7, 29.9], 77 tasks</title></circle><text class="val" x="517.2" y="97">+20.8</text><text class="lab" x="20" y="127">Check, find cause, start over</text><line class="w-check" x1="392.3" y1="122" x2="493.6" y2="122"/><circle class="d-check" cx="439.1" cy="122" r="6"><title>gpt-6.1-terra: Check, find cause, start over minus plain loop +18.2 points [10.4, 27.3], 77 tasks</title></circle><text class="val" x="501.6" y="127">+18.2</text><text class="lab" x="20" y="157">Self-review</text><line class="w-other" x1="330.0" y1="152" x2="353.4" y2="152"/><circle class="d-other" cx="337.8" cy="152" r="6"><title>gpt-6.1-terra: Self-review minus plain loop +1.3 points [0.0, 3.9], 77 tasks</title></circle><text class="lab" x="20" y="187">Self-review after summarizing</text><line class="w-other" x1="330.0" y1="182" x2="353.4" y2="182"/><circle class="d-other" cx="337.8" cy="182" r="6"><title>gpt-6.1-terra: Self-review after summarizing minus plain loop +1.3 points [0.0, 3.9], 77 tasks</title></circle><text class="lab" x="20" y="217">Plan first</text><line class="w-other" x1="306.6" y1="212" x2="353.4" y2="212"/><circle class="d-other" cx="330.0" cy="212" r="6"><title>gpt-6.1-terra: Plan first minus plain loop 0.0 points [−3.9, 3.9], 77 tasks</title></circle><text class="lab" x="20" y="247">Reproduce the bug first</text><line class="w-other" x1="291.0" y1="242" x2="353.4" y2="242"/><circle class="d-other" cx="322.2" cy="242" r="6"><title>gpt-6.1-terra: Reproduce the bug first minus plain loop −1.3 points [−6.5, 3.9], 77 tasks</title></circle><text class="lab" x="20" y="277">Summarize long conversations</text><line class="w-other" x1="298.6" y1="272" x2="345.6" y2="272"/><circle class="d-other" cx="322.2" cy="272" r="6"><title>gpt-6.1-terra: Summarize long conversations minus plain loop −1.3 points [−5.2, 2.6], 77 tasks</title></circle><text class="lab b" x="590" y="28">gpt-6-luna</text><line class="gridl" x1="590.0" y1="42" x2="590.0" y2="290"/><text class="ax" x="590.0" y="308" text-anchor="middle">−10</text><line class="zero" x1="650.0" y1="42" x2="650.0" y2="290"/><text class="ax" x="650.0" y="308" text-anchor="middle">0</text><line class="gridl" x1="710.0" y1="42" x2="710.0" y2="290"/><text class="ax" x="710.0" y="308" text-anchor="middle">+10</text><line class="gridl" x1="770.0" y1="42" x2="770.0" y2="290"/><text class="ax" x="770.0" y="308" text-anchor="middle">+20</text><line class="gridl" x1="830.0" y1="42" x2="830.0" y2="290"/><text class="ax" x="830.0" y="308" text-anchor="middle">+30</text><line class="w-check" x1="711.5" y1="62" x2="819.2" y2="62"/><circle class="d-check" cx="765.4" cy="62" r="6"><title>gpt-6-luna: Check, retry (graph B) minus plain loop +19.2 points [10.3, 28.2], 78 tasks</title></circle><text class="val" x="827.2" y="67">+19.2</text><line class="w-check" x1="680.8" y1="92" x2="773.1" y2="92"/><circle class="d-check" cx="726.9" cy="92" r="6"><title>gpt-6-luna: Check, find cause, retry minus plain loop +12.8 points [5.1, 20.5], 78 tasks</title></circle><text class="val" x="781.1" y="97">+12.8</text><line class="w-check" x1="657.7" y1="122" x2="734.6" y2="122"/><circle class="d-check" cx="696.2" cy="122" r="6"><title>gpt-6-luna: Check, find cause, start over minus plain loop +7.7 points [1.3, 14.1], 78 tasks</title></circle><text class="val" x="742.6" y="127">+7.7</text><line class="w-other" x1="673.1" y1="152" x2="742.3" y2="152"/><circle class="d-other" cx="703.8" cy="152" r="6"><title>gpt-6-luna: Self-review minus plain loop +9.0 points [3.8, 15.4], 78 tasks</title></circle><line class="w-other" x1="650.0" y1="182" x2="726.9" y2="182"/><circle class="d-other" cx="688.5" cy="182" r="6"><title>gpt-6-luna: Self-review after summarizing minus plain loop +6.4 points [0.0, 12.8], 78 tasks</title></circle><line class="w-other" x1="619.2" y1="212" x2="696.2" y2="212"/><circle class="d-other" cx="657.7" cy="212" r="6"><title>gpt-6-luna: Plan first minus plain loop +1.3 points [−5.1, 7.7], 78 tasks</title></circle><line class="w-other" x1="619.2" y1="242" x2="711.5" y2="242"/><circle class="d-other" cx="665.4" cy="242" r="6"><title>gpt-6-luna: Reproduce the bug first minus plain loop +2.6 points [−5.1, 10.3], 78 tasks</title></circle><line class="w-other" x1="626.9" y1="272" x2="726.9" y2="272"/><circle class="d-other" cx="673.1" cy="272" r="6"><title>gpt-6-luna: Summarize long conversations minus plain loop +3.8 points [−3.8, 12.8], 78 tasks</title></circle><text class="ax" x="565" y="324" text-anchor="middle">percentage points relative to the plain loop</text></svg></div>
+    <figcaption><b>Figure 3.</b> Tests visible: repair rate of eight hand-designed graphs minus the plain loop, in percentage points, with 95% paired-bootstrap intervals (one run per task). Only the three graphs with an enforced check move clearly away from zero for both models.</figcaption>
+  </figure>
+  <div class="scroll">
+  <table>
+    <tr><th>Tests visible, 81 tasks, two runs per task</th><th class="num">gpt-6.1-terra</th><th class="num">gpt-6-luna</th></tr>
+    <tr><td>Plain loop</td><td class="num">74.1%</td><td class="num">65.4%</td></tr>
+    <tr><td>Plain loop + checker offered as a tool, with an instruction to use it</td><td class="num">90.1%</td><td class="num">68.5%</td></tr>
+    <tr class="ours"><td>Checker offered as a tool + enforced <code>check</code> node with retries</td><td class="num">97.5%</td><td class="num">75.9%</td></tr>
+    <tr><td>Enforced minus offered, 95% interval</td><td class="num">+7.4 [1.9, 13.6]</td><td class="num">+7.4 [2.5, 13.0]</td></tr>
+  </table>
+  </div>
+  <p style="color:var(--muted);font-size:14.5px"><b style="color:var(--fg)">Table 1.</b> Offering the checker versus enforcing it. The design of this comparison was fixed before these runs.</p>
+</section>
+
+<section id="builder">
+  <h2>3 · From 17 hand-drawn graphs to a space of 3,600</h2>
+  <p>The hand-designed graphs differ in a small number of decisions. Writing those decisions down as nine design variables turns the collection into a space: choose a value for each variable and a compiler assembles the graph. Set the variables below and the graph is redrawn.</p>
+  <div class="presets">
+    <button type="button" data-preset="plain">Plain loop (graph A)</button>
+    <button type="button" data-preset="gate">Check and retry (graph B)</button>
+    <button type="button" data-preset="mid">A mid-size graph</button>
+    <button type="button" data-preset="full">Everything on (11 nodes)</button>
+  </div>
+  <div class="board">
+    <label>① Write a plan first<select id="s-plan"><option value="0">no</option><option value="1">yes</option></select></label>
+    <label>② Reproduce the bug first<select id="s-first"><option value="0">no</option><option value="1">yes</option></select></label>
+    <label>③ Give the agent a checker tool<select id="s-tool"><option value="0">no</option><option value="1">yes</option></select></label>
+    <label>④ Self-review before submitting<select id="s-verify"><option value="none">none</option><option value="same">in the same conversation</option><option value="fresh">after summarizing</option></select></label>
+    <label>⑤ Enforced test check<select id="s-gate"><option value="0">no</option><option value="1">yes</option></select></label>
+    <label>⑥ After a failed check<select id="s-onfail"><option value="continue">go back to editing</option><option value="reflect">find the cause, then edit</option><option value="reset">find the cause, start over</option></select></label>
+    <label>⑦ Retries allowed<select id="s-retries"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option></select></label>
+    <label>⑧ Summarize a long conversation<select id="s-compact"><option value="none">never</option><option value="16k">past 16k tokens</option><option value="32k">past 32k tokens</option></select></label>
+    <label>⑨ After 20 steps without an edit<select id="s-stall"><option value="none">nothing</option><option value="nudge">remind the agent</option><option value="reflect">find the cause</option><option value="reset">start over</option><option value="compact">summarize</option></select></label>
+  </div>
+  <figure>
+    <div class="scroll" id="gsvg"></div>
+    <figcaption class="readout" id="gtext"></figcaption>
+  </figure>
+  <noscript><p>The builder needs JavaScript. Figure 1 shows two of the graphs it draws.</p></noscript>
+
+  <h3>How a setting becomes a graph</h3>
+  <ol>
+    <li><b>Main line.</b> The compiler lays out the nodes that are switched on in a fixed order: plan, reproduce, edit, summarize, self-review, run tests, submit. Consecutive nodes are joined by the edge for the normal outcome (<code>done</code>, <code>next</code>, <code>pass</code>).</li>
+    <li><b>Side loops.</b> Three outcomes lead off the main line and back to the editing node: <code>fail</code> from the test check (variables ⑥ and ⑦ decide what lies on the way back and how often it may be taken), <code>context too long</code> (variable ⑧), and <code>stalled</code> (variable ⑨).</li>
+    <li><b>Limits.</b> Every node on a loop gets a visit limit computed from the retry settings, so each graph is guaranteed to end. The static checks of section 1 are then run on the result.</li>
+    <li><b>Counting.</b> Variables ⑥ and ⑦ do nothing unless ⑤ is on, so those settings are merged:</li>
+  </ol>
+  <div class="sum">①②③④: 2×2×2×3 = 24 &nbsp;&nbsp; ⑤⑥⑦: 1 without the check + 3×3 with it = 10 &nbsp;&nbsp; ⑧⑨: 3×5 = 15 &nbsp;&nbsp; 24 × 10 × 15 = 3,600</div>
+  <p>Of the 6,480 raw settings, 3,600 graphs remain. All are structurally different from one another, all pass the static checks, and they range from 1 to 11 nodes. The 17 hand-designed graphs are 17 points of this space. The compiler is <a href="https://github.com/EvenEureka/harness-graph/blob/main/harness_graph/grammar.py"><code>harness_graph/grammar.py</code></a>; the drawing on this page is a JavaScript port of it, checked against the Python version on every setting.</p>
+</section>
+
+<section>
+  <h2>4 · In progress: search and task-conditioned selection</h2>
+  <p>With a space of graphs, harness design becomes a search problem: given a fixed number of agent runs, which graph should be tried on which task next, and which graph should be returned at the end? The returned graph is then scored on tasks the search never saw.</p>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1000 205" role="img" aria-label="A search procedure picks a graph and a task, runs one episode, receives repaired or not repaired, and decides the next episode. When the budget is used up it returns one graph, which is scored on held-out tasks.">
+      <defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+      <rect class="box" x="10" y="64" width="150" height="60" rx="4"/>
+      <text class="t" x="85" y="90" text-anchor="middle">Candidate graphs</text>
+      <text class="s" x="85" y="110" text-anchor="middle">from the 3,600</text>
+      <rect class="hl" x="230" y="64" width="190" height="60" rx="4"/>
+      <text class="t" x="325" y="90" text-anchor="middle">Search procedure</text>
+      <text class="s" x="325" y="110" text-anchor="middle">picks the next graph and task</text>
+      <rect class="box" x="530" y="64" width="170" height="60" rx="4"/>
+      <text class="t" x="615" y="90" text-anchor="middle">Run one episode</text>
+      <text class="s" x="615" y="110" text-anchor="middle">this graph on this bug</text>
+      <rect class="box" x="820" y="64" width="170" height="60" rx="4"/>
+      <text class="t" x="905" y="90" text-anchor="middle">Return one graph</text>
+      <text class="s" x="905" y="110" text-anchor="middle">scored on held-out tasks</text>
+      <line class="ar" x1="160" y1="94" x2="228" y2="94" marker-end="url(#a1)"/>
+      <line class="ar" x1="420" y1="94" x2="528" y2="94" marker-end="url(#a1)"/>
+      <text class="e" x="474" y="86" text-anchor="middle">graph, task</text>
+      <polyline class="ar" points="615,124 615,176 325,176 325,126" marker-end="url(#a1)"/>
+      <text class="e" x="470" y="168" text-anchor="middle">repaired or not, and how the run ended</text>
+      <polyline class="ar" points="325,64 325,26 905,26 905,62" marker-end="url(#a1)"/>
+      <text class="e" x="615" y="18" text-anchor="middle">budget used up</text>
+    </svg>
+    </div>
+    <figcaption><b>Figure 4.</b> The search loop. Each box is a program; each arrow says what is passed. The feedback arrow carries the grade and the way the run ended (wrong patch submitted, out of steps, no edit made), which one of the procedures uses to choose its next change.</figcaption>
+  </figure>
+  <p><b>Search.</b> Five procedures share one interface and one episode budget: uniform allocation, successive halving, Thompson sampling, Thompson sampling with a linear model over the design variables, and local search that changes one variable at a time, either at random or chosen from the way the last runs failed.</p>
+  <p><b>Selection before the run.</b> A second question is whether different tasks should get different graphs. Three policies are compared: one fixed graph, a rule on whether executable tests are available, and a model on features of the task text. All are fitted on search tasks, frozen, and scored on other tasks.</p>
+  <div class="scroll">
+  <table>
+    <tr><th>Part</th><th>Status</th></tr>
+    <tr><td>Execution engine, six node types, static checks</td><td class="st done">built, tested</td></tr>
+    <tr><td>Grammar of 3,600 graphs and its compiler</td><td class="st done">built, tested</td></tr>
+    <tr><td>Five search procedures; offline replay on stored runs</td><td class="st done">built, tested</td></tr>
+    <tr><td>Three selection policies; fit, freeze, score on other tasks</td><td class="st done">built, tested</td></tr>
+    <tr><td>Task splits: 188 for search, 56 for selection, 232 held out for confirmation (120 of them from three repositories used nowhere else)</td><td class="st done">built</td></tr>
+    <tr><td>Table of 32 graphs × 188 search tasks on an open-weight model (Qwen3.8-27B)</td><td class="st done">measured</td></tr>
+    <tr><td>Search over the whole grammar with live agent runs</td><td class="st run">running</td></tr>
+    <tr><td>Selection of one searched graph and confirmation on the 232 held-out tasks</td><td class="st todo">next</td></tr>
+    <tr><td>Graphs with several agents (separate conversations, parallel branches)</td><td class="st todo">not started</td></tr>
+  </table>
+  </div>
+  <p><b>First measurement.</b> On the open-weight model with tests visible, check-and-retry again leads the plain loop: 82.4% against 73.3% on 187 tasks, one run each. The best of 30 graphs drawn at random from the grammar reached 82.9%. Whether search returns a graph that beats the hand-designed one on held-out tasks is what the running experiment tests.</p>
+</section>
+
+<section>
+  <h2>5 · Scope and limits</h2>
+  <ul>
+    <li>The results in section 2 come from one benchmark family (short bug fixes in nine Python repositories, 81 confirmation tasks) and two models from one vendor.</li>
+    <li>In the visible-test condition the check runs the same tests the grader uses, so it is an executable specification of the task. The result says what a harness can do when such a specification exists; it does not show that a check built from weaker signals would help.</li>
+    <li>With hidden tests the study found no improvement. It was not sized to show that the graphs are equivalent.</li>
+    <li>Check-and-retry costs more: 12% and 27% more model calls, 35% and 60% more tokens. The comparison is not at matched cost.</li>
+    <li>Why the enforced check helps (most rescued runs had stopped with a failing check) is an observation from the logs and a hypothesis, not a tested mechanism.</li>
+    <li>3,600 counts graphs that are structurally different. Two different graphs can behave identically on a given task.</li>
+    <li>Every graph has a single agent, and the branch thresholds (16k tokens, 20 steps) are set by hand.</li>
+    <li>The numbers in section 4 are from one run per cell on search tasks and have not been confirmed on held-out tasks.</li>
+  </ul>
+</section>
+
+<footer>
+  Every number on this page is filled in from result files by <a href="https://github.com/EvenEureka/harness-graph/blob/main/scripts/build_site.py"><code>scripts/build_site.py</code></a>. Code and results: <a href="https://github.com/EvenEureka/harness-graph">github.com/EvenEureka/harness-graph</a> (MIT license).
+</footer>
+</div>
+<script src="builder.js"></script>
+</body>
+</html>

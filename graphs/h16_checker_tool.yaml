@@ -1,0 +1,7 @@
+name: h16_checker_tool
+description: Plain agent loop that is told to run the checker before finishing; nothing enforces it.
+entry: solve
+nodes:
+  solve: {type: agent, params: {checker: true}}
+edges:
+  - [solve, END]

@@ -1,0 +1,9 @@
+name: h02_plan
+description: The model writes a plan before its first command.
+entry: plan
+nodes:
+  plan: {type: plan}
+  solve: {type: agent}
+edges:
+  - [plan, solve]
+  - [solve, END]

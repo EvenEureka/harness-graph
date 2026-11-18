@@ -1,0 +1,37 @@
+name: g-p1-fn-t1-vf-k0-c32-snon
+description: plan first; checker available to the agent; review segment on a compacted
+  conversation; compact the conversation above 32000 prompt tokens
+entry: plan
+nodes:
+  solve:
+    type: agent
+    params:
+      checker: true
+      compact_at: 32000
+    max_visits: 8
+  plan:
+    type: plan
+  verify:
+    type: agent
+    params:
+      role: verify
+  verify_compact:
+    type: compact
+  compact:
+    type: compact
+    max_visits: 7
+edges:
+- - solve
+  - verify_compact
+  - done
+- - solve
+  - compact
+  - context_high
+- - plan
+  - solve
+- - verify
+  - END
+- - verify_compact
+  - verify
+- - compact
+  - solve

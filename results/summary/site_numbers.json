@@ -1,0 +1,86 @@
+{
+ "cost": {
+  "gpt-6.1-terra": {
+   "model_calls": {
+    "graph": "h04_check_retry",
+    "col": "model_calls",
+    "ratio": 1.1203319502074691,
+    "lo": 1.0632427078078488,
+    "hi": 1.1843469906024229
+   },
+   "tokens": {
+    "graph": "h04_check_retry",
+    "col": "tokens",
+    "ratio": 1.3481421738355523,
+    "lo": 1.1808096686697895,
+    "hi": 1.541117917697655
+   },
+   "runs_per_task": 3
+  },
+  "gpt-6-luna": {
+   "model_calls": {
+    "graph": "h04_check_retry",
+    "col": "model_calls",
+    "ratio": 1.2706447963800906,
+    "lo": 1.159148384360058,
+    "hi": 1.38753468229603
+   },
+   "tokens": {
+    "graph": "h04_check_retry",
+    "col": "tokens",
+    "ratio": 1.6011524903089462,
+    "lo": 1.268091916963225,
+    "hi": 2.0635666840216085
+   },
+   "runs_per_task": 3
+  }
+ },
+ "numbers": {
+  "distinct": "3,600",
+  "e_l_d": "+7.4",
+  "e_l_gate": "75.9%",
+  "e_l_hi": "13.0",
+  "e_l_lo": "2.5",
+  "e_l_plain": "65.4%",
+  "e_l_tool": "68.5%",
+  "e_t_d": "+7.4",
+  "e_t_gate": "97.5%",
+  "e_t_hi": "13.6",
+  "e_t_lo": "1.9",
+  "e_t_plain": "74.1%",
+  "e_t_tool": "90.1%",
+  "hid_max": "+2.6",
+  "hid_min": "−3.9",
+  "hid_n_l": "78",
+  "hid_n_t": "77",
+  "l_calls": "27%",
+  "l_delta": "+13.6",
+  "l_h01": "63%",
+  "l_h04": "77%",
+  "l_hi": "20.6",
+  "l_lo": "7.0",
+  "l_losses": "2",
+  "l_sv": "+9.0",
+  "l_tokens": "60%",
+  "l_wins": "19",
+  "max_nodes": "11",
+  "n_confirm": "81",
+  "q_best": "82.9%",
+  "q_graphs": "32",
+  "q_h01": "73.3%",
+  "q_h04": "82.4%",
+  "q_tasks": "187",
+  "raw": "6,480",
+  "t_calls": "12%",
+  "t_delta": "+23.5",
+  "t_h01": "75%",
+  "t_h04": "98%",
+  "t_hi": "32.5",
+  "t_lo": "14.8",
+  "t_losses": "0",
+  "t_sv": "+1.3",
+  "t_tokens": "35%",
+  "t_wins": "22",
+  "updated": "18 November 2026"
+ }
+}

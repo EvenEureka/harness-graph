@@ -1,0 +1,56 @@
+name: g-p0-fn-t0-vs-kref2-c32-sres
+description: 'review segment; enforced check, on failure diagnose, then continue (up
+  to 2 times); compact the conversation above 32000 prompt tokens; no edit after 20
+  steps: reset'
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      compact_at: 32000
+      edit_by: 20
+    max_visits: 11
+  check:
+    type: check
+    max_visits: 3
+  reflect:
+    type: reflect
+    max_visits: 2
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 3
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+  stall_reset:
+    type: reset
+edges:
+- - solve
+  - verify
+  - done
+- - solve
+  - compact
+  - context_high
+- - solve
+  - stall_reflect
+  - stalled
+- - check
+  - END
+  - pass
+- - check
+  - reflect
+  - fail
+- - reflect
+  - solve
+- - verify
+  - check
+- - compact
+  - solve
+- - stall_reflect
+  - stall_reset
+- - stall_reset
+  - solve

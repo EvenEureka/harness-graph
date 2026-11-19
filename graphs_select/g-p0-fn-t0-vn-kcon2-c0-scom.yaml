@@ -1,0 +1,30 @@
+name: g-p0-fn-t0-vn-kcon2-c0-scom
+description: 'enforced check, on failure continue with the feedback (up to 2 times);
+  no edit after 20 steps: compact'
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      edit_by: 20
+    max_visits: 4
+  check:
+    type: check
+    max_visits: 3
+  stall_compact:
+    type: compact
+edges:
+- - solve
+  - check
+  - done
+- - solve
+  - stall_compact
+  - stalled
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - stall_compact
+  - solve

@@ -1,0 +1,52 @@
+name: g-p0-fn-t0-vf-kcon1-c16-sref
+description: 'review segment on a compacted conversation; enforced check, on failure
+  continue with the feedback (up to 1 times); compact the conversation above 16000
+  prompt tokens; no edit after 20 steps: reflect'
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      compact_at: 16000
+      edit_by: 20
+    max_visits: 10
+  check:
+    type: check
+    max_visits: 2
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 2
+  verify_compact:
+    type: compact
+    max_visits: 2
+  compact:
+    type: compact
+    max_visits: 7
+  stall_reflect:
+    type: reflect
+edges:
+- - solve
+  - verify_compact
+  - done
+- - solve
+  - compact
+  - context_high
+- - solve
+  - stall_reflect
+  - stalled
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - verify
+  - check
+- - verify_compact
+  - verify
+- - compact
+  - solve
+- - stall_reflect
+  - solve

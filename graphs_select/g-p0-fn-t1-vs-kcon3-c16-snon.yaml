@@ -1,0 +1,40 @@
+name: g-p0-fn-t1-vs-kcon3-c16-snon
+description: checker available to the agent; review segment; enforced check, on failure
+  continue with the feedback (up to 3 times); compact the conversation above 16000
+  prompt tokens
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      checker: true
+      compact_at: 16000
+    max_visits: 11
+  check:
+    type: check
+    max_visits: 4
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 4
+  compact:
+    type: compact
+    max_visits: 7
+edges:
+- - solve
+  - verify
+  - done
+- - solve
+  - compact
+  - context_high
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - verify
+  - check
+- - compact
+  - solve

@@ -288,6 +288,7 @@ class Replay:
         self.used: dict = {}
         self.order: dict = {}
         self.pulls = self.reused = 0
+        self.reused_after: list[int] = []            # reused pulls among the first k pulls, at index k - 1
 
     def reward(self, r: dict) -> float:
         return float(bool(r["resolved"])) - self.w * float(r.get(self.key, 0)) / self.scale
@@ -301,6 +302,7 @@ class Replay:
         self.pulls += 1
         if k >= len(rows):
             self.reused += 1
+        self.reused_after.append(self.reused)
         if k == 0:
             self.order[(arm, task)] = list(self.rng.permutation(len(rows)))
         r = rows[self.order[(arm, task)][k % len(rows)]]

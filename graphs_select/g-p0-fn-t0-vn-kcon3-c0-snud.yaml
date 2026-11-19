@@ -1,0 +1,26 @@
+name: g-p0-fn-t0-vn-kcon3-c0-snud
+description: 'enforced check, on failure continue with the feedback (up to 3 times);
+  no edit after 20 steps: nudge'
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      edit_by: 20
+    max_visits: 5
+  check:
+    type: check
+    max_visits: 4
+edges:
+- - solve
+  - check
+  - done
+- - solve
+  - solve
+  - stalled
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail

@@ -25,9 +25,19 @@ model calls. Making the check a node the patch must pass adds 7.4 points over of
 for both models. The page gives the figures, the comparison of all hand-designed graphs, and the limits of these
 results. Every number there and here comes from `results/summary/` through `scripts/build_site.py`.
 
-The search over the graph space and the selection of a graph per task are implemented and being run; their
-protocol, with the deviations recorded so far, is `refine-logs/EXPERIMENT_PLAN.md` (the review records it cites
-are not part of this repository).
+**Search over the 3,600 graphs, results so far** (Qwen3.8-27B, tests visible, search tasks only; none of this is a
+held-out result yet):
+
+- A table of 32 graphs on 188 search tasks: check-and-retry repaired 81.9%, the plain loop 72.9% (+9.0 points,
+  4.3 to 13.8). On the 80 tasks new to this project the lead is +3.8 points (−1.3 to 8.8).
+- Four search procedures replayed on that table: after 512 draws each returns graphs with a higher average held-out
+  repair rate than the plain loop and a lower one than check-and-retry.
+- Ten live local searches over the whole space, 512 agent runs each, all starting from the plain loop: all ten ended
+  on a graph with the enforced check, and the ten graphs are all different.
+
+Selection among the returned graphs (56 tasks) is running; confirmation on 232 held-out tasks follows. The protocol,
+with the deviations recorded so far, is `refine-logs/EXPERIMENT_PLAN.md` (the review records it cites are not part
+of this repository).
 
 ## Layout
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Adaptive Graph Harness Optimization for LLM Agents</title>
-<meta name="description" content="A coding agent's harness written as a graph: an execution engine, a study of hand-designed graphs on bug-fixing tasks, and a searchable space of 3,600 graphs with an interactive builder.">
+<meta name="description" content="A coding agent's harness written as a graph: an execution engine, a study of hand-designed graphs on bug-fixing tasks, a space of 3,600 graphs with an interactive builder, and a search over that space.">
 <style>
 :root{
   --bg:#f7f7f5; --card:#ffffff; --fg:#16191c; --muted:#565b61; --line:#cfd3d6; --accent:#1f5fae; --accent-soft:#e6eef8;
@@ -98,6 +98,10 @@ details .scroll{margin-top:10px}
 .st.done{color:var(--accent)}
 .st.run{color:var(--plain)}
 .st.todo{color:var(--muted)}
+.mini{font:inherit;font-size:13.5px;color:var(--accent);background:none;border:1px solid var(--line);border-radius:5px;padding:2px 9px;cursor:pointer}
+.mini:hover{background:var(--accent-soft)}
+.mini:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+td[rowspan]{font-weight:600}
 footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:18px}
 @media (max-width:600px){ h1{font-size:27px} .lead{font-size:17.5px} body{font-size:16px} }
 </style>
@@ -113,7 +117,8 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);paddin
   <div class="links">
     <a class="btn primary" href="#builder">Try the graph builder</a>
     <a class="btn" href="https://github.com/EvenEureka/harness-graph">Code</a>
-    <a class="btn" href="#results">Results so far</a>
+    <a class="btn" href="#results">Hand-designed graphs</a>
+    <a class="btn" href="#search">Search results so far</a>
   </div>
 </header>
 
@@ -239,8 +244,8 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);paddin
   <p>Of the {{raw}} raw settings, {{distinct}} graphs remain. All are structurally different from one another, all pass the static checks, and they range from 1 to {{max_nodes}} nodes. The 17 hand-designed graphs are 17 points of this space. The compiler is <a href="https://github.com/EvenEureka/harness-graph/blob/main/harness_graph/grammar.py"><code>harness_graph/grammar.py</code></a>; the drawing on this page is a JavaScript port of it, checked against the Python version on every setting.</p>
 </section>
 
-<section>
-  <h2>4 · In progress: search and task-conditioned selection</h2>
+<section id="search">
+  <h2>4 · Searching the space: results so far</h2>
   <p>With a space of graphs, harness design becomes a search problem: given a fixed number of agent runs, which graph should be tried on which task next, and which graph should be returned at the end? The returned graph is then scored on tasks the search never saw.</p>
   <figure>
     <div class="scroll">
@@ -269,23 +274,59 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);paddin
     </div>
     <figcaption><b>Figure 4.</b> The search loop. Each box is a program; each arrow says what is passed. The feedback arrow carries the grade and the way the run ended (wrong patch submitted, out of steps, no edit made), which one of the procedures uses to choose its next change.</figcaption>
   </figure>
-  <p><b>Search.</b> Five procedures share one interface and one episode budget: uniform allocation, successive halving, Thompson sampling, Thompson sampling with a linear model over the design variables, and local search that changes one variable at a time, either at random or chosen from the way the last runs failed.</p>
-  <p><b>Selection before the run.</b> A second question is whether different tasks should get different graphs. Three policies are compared: one fixed graph, a rule on whether executable tests are available, and a model on features of the task text. All are fitted on search tasks, frozen, and scored on other tasks.</p>
+  <p>The search experiment uses an open-weight model (Qwen3.8-27B, thinking disabled) with tests visible. Its tasks are split into 188 for search, 56 for selection and 232 held out for confirmation. Three stages are finished; all three used only the search tasks.</p>
+
+  <h3>Stage 1 · A table of {{q_graphs}} graphs on {{q_tasks}} tasks</h3>
+  <div class="finding"><p><b>Check-and-retry leads the plain loop on the search tasks, and the observed lead is smaller on tasks new to this project.</b>The completed table contains one scored run for each of {{q_graphs}} graphs on {{q_tasks}} search tasks ({{q_runs}} scored runs): the plain loop, check-and-retry and 30 graphs drawn at random from the grammar. Check-and-retry repaired {{q_h04}} and the plain loop {{q_h01}}, for {{q_calls}} more model calls and {{q_tokens}} more tokens. Table 2 splits the tasks by whether the study of section 2 had already used them.</p></div>
+  <div class="scroll">
+  <table>
+    <tr><th>Search tasks</th><th class="num">Tasks</th><th class="num">Plain loop</th><th class="num">Check and retry</th><th class="num">Difference in points [95% interval]</th><th class="num">Better / worse</th></tr>
+    <tr class="ours"><td>All</td><td class="num">{{q_n}}</td><td class="num">{{q_h01}}</td><td class="num">{{q_h04}}</td><td class="num">{{q_d}} [{{q_lo}}, {{q_hi}}]</td><td class="num">{{q_better}} / {{q_worse}}</td></tr>
+    <tr><td>Also used in the study of section 2</td><td class="num">{{u_n}}</td><td class="num">{{u_h01}}</td><td class="num">{{u_h04}}</td><td class="num">{{u_d}} [{{u_lo}}, {{u_hi}}]</td><td class="num">{{u_better}} / {{u_worse}}</td></tr>
+    <tr><td>New to this project</td><td class="num">{{w_n}}</td><td class="num">{{w_h01}}</td><td class="num">{{w_h04}}</td><td class="num">{{w_d}} [{{w_lo}}, {{w_hi}}]</td><td class="num">{{w_better}} / {{w_worse}}</td></tr>
+  </table>
+  </div>
+  <p style="color:var(--muted);font-size:14.5px"><b style="color:var(--fg)">Table 2.</b> Qwen3.8-27B, tests visible, one run per task. Intervals are from a paired bootstrap over tasks inside repositories. The last column counts tasks repaired by one graph and not by the other.</p>
+  <div class="finding"><p><b>None of the 30 random graphs is clearly better than check-and-retry, and the table cannot rule out one that is.</b>The best of them repaired one task of {{q_tasks}} more than check-and-retry ({{q_top_d}} points). Accounting for all 31 comparisons together, the approximate 95% upper bound on the improvement of any measured graph over check-and-retry is {{q_bound}} points. A five-point improvement inside this set of graphs is therefore neither demonstrated nor excluded.</p></div>
+
+  <h3>Stage 2 · Four search procedures replayed on the table</h3>
+  <div class="finding"><p><b>At {{r_budget}} table draws, all four procedures returned graphs with a higher average held-out repair rate than the plain loop and a lower one than check-and-retry.</b>The procedures are uniform allocation, successive halving, Thompson sampling, and Thompson sampling with a linear model over the design variables. For each of {{r_splits}} random halvings of the tasks, a procedure searches using {{r_budget}} draws from the stored results on one half, returns one graph, and that graph is scored on the other half (Figure 5).</p></div>
+  <figure>
+    <div class="legend"><span><i class="dot" style="background:var(--plain)"></i>Plain loop (graph A)</span><span><i class="dot" style="background:var(--check)"></i>Check and retry (graph B)</span><span><i class="dot" style="background:var(--muted)"></i>graph returned by a search procedure</span></div>
+    <div class="scroll">{{fig_replay}}</div>
+    <figcaption><b>Figure 5.</b> Average repair rate, on the held-out half of the tasks, of the graph each procedure returns after {{r_budget}} draws from the table. The two coloured rows return the same graph every time. Averages over {{r_splits}} random halvings of the {{q_tasks}} search tasks.</figcaption>
+  </figure>
+
+  <h3>Stage 3 · Local search over all {{distinct}} graphs with live agent runs</h3>
+  <div class="finding"><p><b>All ten searches ended on a graph with the enforced test check.</b>Each search starts from the plain loop and proposes a change to one design variable at a time. A step runs the current graph and the changed graph on the same 16 tasks and keeps the change if the changed graph repairs more of them. Five searches chose the next change at random and five chose it from the way the last runs had failed. All {{ls_runs}} completed {{ls_budget}} scored agent runs ({{ls_steps}} steps), with no engine errors or deadline overruns. All {{ls_runs}} eventually accepted the enforced check and kept it in their final graph; {{ls_gate_rejected}} rejected their first proposal to add it before accepting a later one, and adding the check was the first change proposed in {{ls_gate_first}}.</p></div>
+  <div class="finding"><p><b>The ten returned graphs are all different.</b>Besides the check, {{ls_retries3}} allow up to three retries after a failed check, {{ls_compact}} summarize the conversation past a length threshold, and {{ls_nudge}} remind the agent after a stall (Table 3). Scores observed during a search are not independent estimates of how its graph does on unseen tasks, because the search used those observations to decide which changes to keep. Each returned graph is therefore being run on the 56 selection tasks, which no search has used.</p></div>
+  <div class="scroll">
+  <table>
+    <tr><th>How the next change was chosen</th><th class="num">Search</th><th>What the returned graph adds to the plain loop, besides the enforced test check</th><th>In the builder</th></tr>
+    {{search_rows}}
+  </table>
+  </div>
+  <p style="color:var(--muted);font-size:14.5px"><b style="color:var(--fg)">Table 3.</b> The graphs returned by the ten live searches. Each row lists settings that are switched on in the graph; it does not say that the part was triggered in a run or that it helped. “draw” loads the graph into the builder of section 3.</p>
+
+  <h3>What happens next</h3>
+  <p><b>Selection.</b> Fourteen graphs are being run twice on the 56 selection tasks: the ten of Table 3, the plain loop, check-and-retry, and the two other graphs returned by the table procedures of stage 2 when each is run once on all {{q_tasks}} tasks. The graph with the highest repair rate goes on to confirmation. The two ways of choosing the next change in Table 3 will be compared on the same tasks, with a rule fixed before they were run.</p>
+  <p><b>Confirmation.</b> The selected graph, check-and-retry and the plain loop are then run on the 232 held-out tasks. The comparison fixed in advance is the selected graph against check-and-retry.</p>
+  <p><b>A graph per task.</b> A last question is whether different tasks should get different graphs. Three policies are compared: one fixed graph, a rule on whether executable tests are available, and a model on features of the task text. All are fitted on search tasks, frozen, and scored on the confirmation tasks.</p>
   <div class="scroll">
   <table>
     <tr><th>Part</th><th>Status</th></tr>
     <tr><td>Execution engine, six node types, static checks</td><td class="st done">built, tested</td></tr>
     <tr><td>Grammar of {{distinct}} graphs and its compiler</td><td class="st done">built, tested</td></tr>
-    <tr><td>Five search procedures; offline replay on stored runs</td><td class="st done">built, tested</td></tr>
-    <tr><td>Three selection policies; fit, freeze, score on other tasks</td><td class="st done">built, tested</td></tr>
     <tr><td>Task splits: 188 for search, 56 for selection, 232 held out for confirmation (120 of them from three repositories used nowhere else)</td><td class="st done">built</td></tr>
-    <tr><td>Table of {{q_graphs}} graphs × 188 search tasks on an open-weight model (Qwen3.8-27B)</td><td class="st done">measured</td></tr>
-    <tr><td>Search over the whole grammar with live agent runs</td><td class="st run">running</td></tr>
-    <tr><td>Selection of one searched graph and confirmation on the 232 held-out tasks</td><td class="st todo">next</td></tr>
+    <tr><td>Stage 1: table of {{q_graphs}} graphs × {{q_tasks}} search tasks</td><td class="st done">done</td></tr>
+    <tr><td>Stage 2: four search procedures replayed on the table</td><td class="st done">done</td></tr>
+    <tr><td>Stage 3: ten live local searches over the whole grammar, {{ls_budget}} agent runs each</td><td class="st done">done</td></tr>
+    <tr><td>Stage 4: selection among 14 graphs on 56 tasks</td><td class="st run">running</td></tr>
+    <tr><td>Stage 5: confirmation on the 232 held-out tasks</td><td class="st todo">next</td></tr>
+    <tr><td>Stage 6: a graph per task, scored on the confirmation tasks</td><td class="st todo">next</td></tr>
     <tr><td>Graphs with several agents (separate conversations, parallel branches)</td><td class="st todo">not started</td></tr>
   </table>
   </div>
-  <p><b>First measurement.</b> On the open-weight model with tests visible, check-and-retry again leads the plain loop: {{q_h04}} against {{q_h01}} on {{q_tasks}} tasks, one run each. The best of 30 graphs drawn at random from the grammar reached {{q_best}}. Whether search returns a graph that beats the hand-designed one on held-out tasks is what the running experiment tests.</p>
 </section>
 
 <section>
@@ -298,7 +339,12 @@ footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);paddin
     <li>Why the enforced check helps (most rescued runs had stopped with a failing check) is an observation from the logs and a hypothesis, not a tested mechanism.</li>
     <li>3,600 counts graphs that are structurally different. Two different graphs can behave identically on a given task.</li>
     <li>Every graph has a single agent, and the branch thresholds (16k tokens, 20 steps) are set by hand.</li>
-    <li>The numbers in section 4 are from one run per cell on search tasks and have not been confirmed on held-out tasks.</li>
+    <li>Nothing in section 4 is a held-out result. Stages 1 to 3 used only the search tasks, one model, and the visible-test condition. Selection chooses a graph; the confirmation tasks then test that graph.</li>
+    <li>{{u_n}} of the {{q_tasks}} search tasks were also used in the study of section 2, and the live searches ran on these same {{q_tasks}} tasks. That every search kept the enforced check is therefore not independent evidence that the check helps on new tasks.</li>
+    <li>The {{w_n}} tasks new to this project come from the same repositories as the others, and the interval for the lead of check-and-retry on them includes zero. Two readings of the smaller lead are not separated: that the other tasks had been used before, and that there is less to gain where the plain loop already repairs more.</li>
+    <li>Stage 2 compares four implementations on one table with one run per cell. Between {{r_reuse_lo}} and {{r_reuse_hi}} of the {{r_budget}} draws repeat a stored result. The averages describe this table; they do not rank the procedures in general, and the bound of {{q_bound}} points covers the {{q_graphs}} measured graphs, not the whole grammar.</li>
+    <li>In stage 1, 1,281 of the {{q_runs}} runs were made with 28 instead of 16 agent runs sharing a GPU. {{q_replaced}} runs that ended on the time limit under that load were run again, as was one run that failed in the engine; seven runs that went past the time limit were kept. With the {{q_replaced}} original outcomes put back, the lead of check-and-retry is unchanged and the best random graph ties check-and-retry. A check on a rerun sample of the 1,281 runs is still owed.</li>
+    <li>Stage 3 has five searches per way of choosing the next change, and for each seed the two ways share their first proposed change. Choosing from failures uses a hand-written table from the way a run ended to a remedy; a difference between the two ways would not by itself show that diagnosing failures helps.</li>
   </ul>
 </section>
 

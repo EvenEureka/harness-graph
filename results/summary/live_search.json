@@ -1,0 +1,1610 @@
+{
+ "runs": [
+  {
+   "run": "local_guided_s0",
+   "method": "local_search_guided",
+   "seed": 0,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 401,
+    "model_call_budget": 110,
+    "format_errors": 1
+   },
+   "past_deadline": 0,
+   "median_s": 155.527,
+   "distinct_tasks": 141,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 6,
+   "recommendation": "g-p0-fn-t0-vn-kcon3-c0-snud",
+   "changed_from_plain_loop": [
+    "gate=True",
+    "retries=3",
+    "stall=nudge"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 64,
+   "mean_seen_by_search": 0.859375,
+   "plain_loop_seen": {
+    "pulls": 16,
+    "mean": 0.6875
+   },
+   "first_move": [
+    "stall=reset"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.1875,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.125,
+     "accepted": true
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=2"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=None"
+     ],
+     "paired_diff": 0.1875,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": -0.25,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_guided_s1",
+   "method": "local_search_guided",
+   "seed": 1,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 391,
+    "model_call_budget": 117,
+    "format_errors": 1,
+    "visit_cap": 3
+   },
+   "past_deadline": 0,
+   "median_s": 164.1385,
+   "distinct_tasks": 142,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 6,
+   "recommendation": "g-p0-fn-t0-vn-kcon3-c16-snon",
+   "changed_from_plain_loop": [
+    "gate=True",
+    "retries=3",
+    "compact_at=16000"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 32,
+   "mean_seen_by_search": 0.84375,
+   "plain_loop_seen": {
+    "pulls": 16,
+    "mean": 0.6875
+   },
+   "first_move": [
+    "gate=True"
+   ],
+   "trace": [
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.1875,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=none"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.1875,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=none"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_guided_s2",
+   "method": "local_search_guided",
+   "seed": 2,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 404,
+    "model_call_budget": 108
+   },
+   "past_deadline": 0,
+   "median_s": 161.68,
+   "distinct_tasks": 140,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 6,
+   "recommendation": "g-p0-fn-t0-vn-kref3-c16-sref",
+   "changed_from_plain_loop": [
+    "gate=True",
+    "on_fail=reflect",
+    "retries=3",
+    "compact_at=16000",
+    "stall=reflect"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 16,
+   "mean_seen_by_search": 0.8125,
+   "plain_loop_seen": {
+    "pulls": 32,
+    "mean": 0.78125
+   },
+   "first_move": [
+    "stall=reset"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "on_fail=reflect"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    }
+   ]
+  },
+  {
+   "run": "local_guided_s3",
+   "method": "local_search_guided",
+   "seed": 3,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 402,
+    "model_call_budget": 105,
+    "format_errors": 4,
+    "visit_cap": 1
+   },
+   "past_deadline": 0,
+   "median_s": 171.3295,
+   "distinct_tasks": 147,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 7,
+   "recommendation": "g-p0-fn-t1-vs-kcon3-c16-snon",
+   "changed_from_plain_loop": [
+    "checker_tool=True",
+    "verify=same",
+    "gate=True",
+    "retries=3",
+    "compact_at=16000"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 32,
+   "mean_seen_by_search": 0.875,
+   "plain_loop_seen": {
+    "pulls": 64,
+    "mean": 0.71875
+   },
+   "first_move": [
+    "stall=reflect"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.125,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.125,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": 0.1875,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=none"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=2"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_guided_s4",
+   "method": "local_search_guided",
+   "seed": 4,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 406,
+    "model_call_budget": 103,
+    "format_errors": 2,
+    "visit_cap": 1
+   },
+   "past_deadline": 0,
+   "median_s": 167.3125,
+   "distinct_tasks": 138,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 6,
+   "recommendation": "g-p0-fn-t0-vf-kcon2-c0-snud",
+   "changed_from_plain_loop": [
+    "verify=fresh",
+    "gate=True",
+    "stall=nudge"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 32,
+   "mean_seen_by_search": 0.75,
+   "plain_loop_seen": {
+    "pulls": 32,
+    "mean": 0.78125
+   },
+   "first_move": [
+    "stall=nudge"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.25,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "on_fail=reset"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=None"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": 0.125,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_random_s0",
+   "method": "local_search_random",
+   "seed": 0,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 436,
+    "model_call_budget": 76
+   },
+   "past_deadline": 0,
+   "median_s": 147.09449999999998,
+   "distinct_tasks": 142,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 2,
+   "recommendation": "g-p0-fn-t0-vn-kcon2-c0-scom",
+   "changed_from_plain_loop": [
+    "gate=True",
+    "stall=compact"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 64,
+   "mean_seen_by_search": 0.890625,
+   "plain_loop_seen": {
+    "pulls": 80,
+    "mean": 0.75
+   },
+   "first_move": [
+    "stall=reset"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.25,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_random_s1",
+   "method": "local_search_random",
+   "seed": 1,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 406,
+    "model_call_budget": 103,
+    "format_errors": 2,
+    "visit_cap": 1
+   },
+   "past_deadline": 0,
+   "median_s": 191.61450000000002,
+   "distinct_tasks": 146,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 3,
+   "recommendation": "g-p0-fr-t0-vf-kcon2-c0-snon",
+   "changed_from_plain_loop": [
+    "first=reproduce",
+    "verify=fresh",
+    "gate=True"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 64,
+   "mean_seen_by_search": 0.828125,
+   "plain_loop_seen": {
+    "pulls": 96,
+    "mean": 0.78125
+   },
+   "first_move": [
+    "gate=True"
+   ],
+   "trace": [
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": 0.125,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "on_fail=reflect"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=none"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_random_s2",
+   "method": "local_search_random",
+   "seed": 2,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 408,
+    "model_call_budget": 99,
+    "visit_cap": 3,
+    "format_errors": 2
+   },
+   "past_deadline": 0,
+   "median_s": 192.709,
+   "distinct_tasks": 139,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 5,
+   "recommendation": "g-p0-fn-t1-vn-kcon2-c0-snud",
+   "changed_from_plain_loop": [
+    "checker_tool=True",
+    "gate=True",
+    "stall=nudge"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 80,
+   "mean_seen_by_search": 0.8875,
+   "plain_loop_seen": {
+    "pulls": 16,
+    "mean": 0.75
+   },
+   "first_move": [
+    "stall=reset"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.375,
+     "accepted": true
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=3"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "on_fail=reset"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.1875,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=none"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_random_s3",
+   "method": "local_search_random",
+   "seed": 3,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 412,
+    "model_call_budget": 95,
+    "format_errors": 3,
+    "visit_cap": 2
+   },
+   "past_deadline": 0,
+   "median_s": 169.51850000000002,
+   "distinct_tasks": 145,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 3,
+   "recommendation": "g-p0-fn-t0-vn-kcon2-c32-snud",
+   "changed_from_plain_loop": [
+    "gate=True",
+    "compact_at=32000",
+    "stall=nudge"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 64,
+   "mean_seen_by_search": 0.828125,
+   "plain_loop_seen": {
+    "pulls": 32,
+    "mean": 0.78125
+   },
+   "first_move": [
+    "stall=reflect"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.1875,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "on_fail=reset"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=same"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "plan=True"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.1875,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=none"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": 0.1875,
+     "accepted": true
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    }
+   ]
+  },
+  {
+   "run": "local_random_s4",
+   "method": "local_search_random",
+   "seed": 4,
+   "spent": 512,
+   "scored_episodes": 512,
+   "engine_error_records": 0,
+   "engine_errors_retried": 0,
+   "exit_reasons": {
+    "end": 387,
+    "model_call_budget": 117,
+    "format_errors": 7,
+    "visit_cap": 1
+   },
+   "past_deadline": 0,
+   "median_s": 215.696,
+   "distinct_tasks": 142,
+   "graphs_run": 17,
+   "steps": 16,
+   "accepted": 8,
+   "recommendation": "g-p0-fn-t0-vf-kcon1-c16-sref",
+   "changed_from_plain_loop": [
+    "verify=fresh",
+    "gate=True",
+    "retries=1",
+    "compact_at=16000",
+    "stall=reflect"
+   ],
+   "has_enforced_check": true,
+   "pulls_of_recommendation": 32,
+   "mean_seen_by_search": 0.6875,
+   "plain_loop_seen": {
+    "pulls": 48,
+    "mean": 0.75
+   },
+   "first_move": [
+    "stall=nudge"
+   ],
+   "trace": [
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reset"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "first=reproduce"
+     ],
+     "paired_diff": 0.0,
+     "accepted": false
+    },
+    {
+     "move": [
+      "verify=fresh"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=32000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "gate=True"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "retries=1"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "compact_at=16000"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "stall=none"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "on_fail=reflect"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=nudge"
+     ],
+     "paired_diff": -0.1875,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=compact"
+     ],
+     "paired_diff": -0.125,
+     "accepted": false
+    },
+    {
+     "move": [
+      "checker_tool=True"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    },
+    {
+     "move": [
+      "stall=reflect"
+     ],
+     "paired_diff": 0.0625,
+     "accepted": true
+    },
+    {
+     "move": [
+      "on_fail=reflect"
+     ],
+     "paired_diff": -0.0625,
+     "accepted": false
+    }
+   ]
+  }
+ ],
+ "by_method": {
+  "local_search_guided": {
+   "runs": 5,
+   "with_enforced_check": 5,
+   "distinct_recommendations": 5,
+   "accepted_per_run": [
+    6,
+    6,
+    6,
+    7,
+    6
+   ],
+   "steps_per_run": [
+    16,
+    16,
+    16,
+    16,
+    16
+   ],
+   "accepted_moves": {
+    "gate=True": 5,
+    "compact_at=16000": 5,
+    "retries=3": 4,
+    "stall=compact": 3,
+    "stall=nudge": 2,
+    "compact_at=None": 2,
+    "stall=reset": 1,
+    "first=reproduce": 1,
+    "retries=1": 1,
+    "first=none": 1,
+    "stall=reflect": 1,
+    "on_fail=reflect": 1,
+    "checker_tool=True": 1,
+    "verify=same": 1,
+    "stall=none": 1,
+    "verify=fresh": 1
+   },
+   "first_moves": {
+    "stall=reset": 2,
+    "gate=True": 1,
+    "stall=reflect": 1,
+    "stall=nudge": 1
+   },
+   "exit_reasons": {
+    "end": 2004,
+    "model_call_budget": 543,
+    "format_errors": 8,
+    "visit_cap": 5
+   }
+  },
+  "local_search_random": {
+   "runs": 5,
+   "with_enforced_check": 5,
+   "distinct_recommendations": 5,
+   "accepted_per_run": [
+    2,
+    3,
+    5,
+    3,
+    8
+   ],
+   "steps_per_run": [
+    16,
+    16,
+    16,
+    16,
+    16
+   ],
+   "accepted_moves": {
+    "gate=True": 5,
+    "stall=compact": 2,
+    "verify=fresh": 2,
+    "stall=reset": 2,
+    "stall=nudge": 2,
+    "compact_at=32000": 2,
+    "first=reproduce": 1,
+    "checker_tool=True": 1,
+    "retries=1": 1,
+    "compact_at=16000": 1,
+    "stall=none": 1,
+    "stall=reflect": 1
+   },
+   "first_moves": {
+    "stall=reset": 2,
+    "gate=True": 1,
+    "stall=reflect": 1,
+    "stall=nudge": 1
+   },
+   "exit_reasons": {
+    "end": 2049,
+    "model_call_budget": 490,
+    "format_errors": 14,
+    "visit_cap": 7
+   }
+  }
+ }
+}

@@ -1,0 +1,1374 @@
+{
+ "args": {
+  "tasks": "data/v2/search.jsonl",
+  "panel": "hand",
+  "method": "local_guided",
+  "budget": 512,
+  "checkpoints": "64:128:256:512",
+  "batch": 16,
+  "parallel": 16,
+  "seed": 3,
+  "cost_weight": 0.0,
+  "model": "qwen3.8-27b",
+  "base_url": "http://127.0.0.1:20588/v1",
+  "model_calls": 50,
+  "wall_s": 3600,
+  "no_thinking": true,
+  "thinking_headroom": 8192,
+  "api_key_env": "",
+  "reasoning_effort": "low",
+  "prices": [
+   0,
+   0,
+   0
+  ],
+  "max_usd": null,
+  "visible_tests": true,
+  "out": "results/search/local_guided_s3"
+ },
+ "method": "local_search_guided",
+ "recommendation": "g-p0-fn-t1-vs-kcon3-c16-snon",
+ "recommendation_config": {
+  "plan": false,
+  "first": "none",
+  "checker_tool": true,
+  "verify": "same",
+  "gate": true,
+  "on_fail": "continue",
+  "retries": 3,
+  "compact_at": 16000,
+  "stall": "none"
+ },
+ "recommendation_graph": {
+  "name": "g-p0-fn-t1-vs-kcon3-c16-snon",
+  "description": "checker available to the agent; review segment; enforced check, on failure continue with the feedback (up to 3 times); compact the conversation above 16000 prompt tokens",
+  "entry": "solve",
+  "nodes": {
+   "solve": {
+    "type": "agent",
+    "params": {
+     "checker": true,
+     "compact_at": 16000
+    },
+    "max_visits": 11
+   },
+   "check": {
+    "type": "check",
+    "max_visits": 4
+   },
+   "verify": {
+    "type": "agent",
+    "params": {
+     "role": "verify"
+    },
+    "max_visits": 4
+   },
+   "compact": {
+    "type": "compact",
+    "max_visits": 7
+   }
+  },
+  "edges": [
+   [
+    "solve",
+    "verify",
+    "done"
+   ],
+   [
+    "solve",
+    "compact",
+    "context_high"
+   ],
+   [
+    "check",
+    "END",
+    "pass"
+   ],
+   [
+    "check",
+    "solve",
+    "fail"
+   ],
+   [
+    "verify",
+    "check"
+   ],
+   [
+    "compact",
+    "solve"
+   ]
+  ]
+ },
+ "checkpoints": {
+  "64": "g-p0-fn-t0-vn-k0-c0-snon",
+  "128": "g-p0-fn-t0-vn-k0-c0-snon",
+  "256": "g-p0-fn-t1-vn-kcon3-c0-snon",
+  "512": "g-p0-fn-t1-vs-kcon3-c16-snon"
+ },
+ "spent": 512,
+ "engine_errors": 0,
+ "pulls": {
+  "g-p0-fn-t0-vn-k0-c0-snon": 64,
+  "g-p0-fn-t0-vn-k0-c0-sref": 16,
+  "g-p0-fn-t0-vn-k0-c16-snon": 16,
+  "g-p0-fn-t0-vn-kcon2-c0-snon": 16,
+  "g-p0-fn-t1-vn-k0-c0-snon": 48,
+  "g-p0-fn-t1-vn-k0-c16-snon": 16,
+  "g-p0-fn-t1-vn-kcon2-c0-snon": 32,
+  "g-p0-fn-t1-vn-kcon3-c0-snon": 80,
+  "g-p0-fn-t1-vn-kcon3-c16-snon": 16,
+  "g-p0-fn-t1-vn-kcon3-c0-sref": 16,
+  "g-p0-fn-t1-vf-kcon3-c0-snon": 16,
+  "g-p0-fn-t1-vn-kcon3-c0-scom": 32,
+  "g-p0-fn-t1-vn-kcon3-c16-scom": 32,
+  "g-p0-fn-t1-vs-kcon3-c16-scom": 48,
+  "g-p0-fn-t1-vs-kcon1-c16-scom": 16,
+  "g-p0-fn-t1-vs-kcon3-c16-snon": 32,
+  "g-p0-fn-t1-vs-kcon2-c16-snon": 16
+ },
+ "means": {
+  "g-p0-fn-t0-vn-k0-c0-snon": 0.71875,
+  "g-p0-fn-t0-vn-k0-c0-sref": 0.6875,
+  "g-p0-fn-t0-vn-k0-c16-snon": 0.75,
+  "g-p0-fn-t0-vn-kcon2-c0-snon": 0.6875,
+  "g-p0-fn-t1-vn-k0-c0-snon": 0.7291666666666666,
+  "g-p0-fn-t1-vn-k0-c16-snon": 0.625,
+  "g-p0-fn-t1-vn-kcon2-c0-snon": 0.84375,
+  "g-p0-fn-t1-vn-kcon3-c0-snon": 0.825,
+  "g-p0-fn-t1-vn-kcon3-c16-snon": 0.6875,
+  "g-p0-fn-t1-vn-kcon3-c0-sref": 0.625,
+  "g-p0-fn-t1-vf-kcon3-c0-snon": 0.875,
+  "g-p0-fn-t1-vn-kcon3-c0-scom": 0.875,
+  "g-p0-fn-t1-vn-kcon3-c16-scom": 0.8125,
+  "g-p0-fn-t1-vs-kcon3-c16-scom": 0.875,
+  "g-p0-fn-t1-vs-kcon1-c16-scom": 0.875,
+  "g-p0-fn-t1-vs-kcon3-c16-snon": 0.875,
+  "g-p0-fn-t1-vs-kcon2-c16-snon": 0.6875
+ },
+ "trace": [
+  {
+   "from": "g-p0-fn-t0-vn-k0-c0-snon",
+   "candidate": "g-p0-fn-t0-vn-k0-c0-sref",
+   "paired_diff": -0.0625,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 2,
+    "submitted_wrong": 2
+   }
+  },
+  {
+   "from": "g-p0-fn-t0-vn-k0-c0-snon",
+   "candidate": "g-p0-fn-t0-vn-k0-c16-snon",
+   "paired_diff": -0.125,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 2,
+    "submitted_wrong": 4
+   }
+  },
+  {
+   "from": "g-p0-fn-t0-vn-k0-c0-snon",
+   "candidate": "g-p0-fn-t0-vn-kcon2-c0-snon",
+   "paired_diff": 0.0,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 5,
+    "submitted_wrong": 6
+   }
+  },
+  {
+   "from": "g-p0-fn-t0-vn-k0-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-k0-c0-snon",
+   "paired_diff": 0.125,
+   "accepted": true,
+   "reasons": {
+    "out_of_budget": 8,
+    "submitted_wrong": 10
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-k0-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-k0-c16-snon",
+   "paired_diff": -0.0625,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 5,
+    "no_edit": 1,
+    "submitted_wrong": 3,
+    "context": 1
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-k0-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-kcon2-c0-snon",
+   "paired_diff": 0.0625,
+   "accepted": true,
+   "reasons": {
+    "out_of_budget": 6,
+    "no_edit": 1,
+    "submitted_wrong": 5,
+    "context": 1
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon2-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-kcon3-c0-snon",
+   "paired_diff": 0.125,
+   "accepted": true,
+   "reasons": {
+    "ended_on_failed_check": 1,
+    "out_of_budget": 4
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon3-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-kcon3-c16-snon",
+   "paired_diff": -0.0625,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 5
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon3-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-kcon3-c0-sref",
+   "paired_diff": -0.0625,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 10
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon3-c0-snon",
+   "candidate": "g-p0-fn-t1-vf-kcon3-c0-snon",
+   "paired_diff": -0.0625,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 11
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon3-c0-snon",
+   "candidate": "g-p0-fn-t1-vn-kcon3-c0-scom",
+   "paired_diff": 0.0625,
+   "accepted": true,
+   "reasons": {
+    "out_of_budget": 14
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon3-c0-scom",
+   "candidate": "g-p0-fn-t1-vn-kcon3-c16-scom",
+   "paired_diff": 0.0625,
+   "accepted": true,
+   "reasons": {
+    "out_of_budget": 4
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vn-kcon3-c16-scom",
+   "candidate": "g-p0-fn-t1-vs-kcon3-c16-scom",
+   "paired_diff": 0.1875,
+   "accepted": true,
+   "reasons": {
+    "out_of_budget": 6
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vs-kcon3-c16-scom",
+   "candidate": "g-p0-fn-t1-vs-kcon1-c16-scom",
+   "paired_diff": 0.0,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 4
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vs-kcon3-c16-scom",
+   "candidate": "g-p0-fn-t1-vs-kcon3-c16-snon",
+   "paired_diff": 0.0625,
+   "accepted": true,
+   "reasons": {
+    "out_of_budget": 6
+   }
+  },
+  {
+   "from": "g-p0-fn-t1-vs-kcon3-c16-snon",
+   "candidate": "g-p0-fn-t1-vs-kcon2-c16-snon",
+   "paired_diff": -0.125,
+   "accepted": false,
+   "reasons": {
+    "out_of_budget": 4
+   }
+  }
+ ],
+ "configs": {
+  "g-p0-fn-t0-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p1-fn-t0-vn-k0-c0-snon": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fr-t0-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vs-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "same",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vf-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "fresh",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-kcon2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-k0-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-k0-c32-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 32000,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-k0-c0-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t0-vn-k0-c0-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t0-vn-k0-c0-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reset"
+  },
+  "g-p0-fn-t0-vn-k0-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p1-fn-t1-vn-k0-c0-snon": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fr-t1-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vf-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "fresh",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-k0-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-k0-c32-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 32000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-k0-c0-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t1-vn-k0-c0-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t1-vn-k0-c0-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reset"
+  },
+  "g-p0-fn-t1-vn-k0-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p1-fn-t1-vn-kcon2-c0-snon": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fr-t1-vn-kcon2-c0-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kcon2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vf-kcon2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "fresh",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kref2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kres2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon1-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 1,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon3-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon2-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon2-c32-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 32000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon2-c0-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t1-vn-kcon2-c0-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t1-vn-kcon2-c0-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reset"
+  },
+  "g-p0-fn-t1-vn-kcon2-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p1-fn-t1-vn-kcon3-c0-snon": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fr-t1-vn-kcon3-c0-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-kcon3-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kcon3-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vf-kcon3-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "fresh",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kref3-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kres3-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon3-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon3-c32-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 32000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon3-c0-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t1-vn-kcon3-c0-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t1-vn-kcon3-c0-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "reset"
+  },
+  "g-p0-fn-t1-vn-kcon3-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p1-fn-t1-vn-kcon3-c0-scom": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fr-t1-vn-kcon3-c0-scom": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t0-vn-kcon3-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kcon3-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vf-kcon3-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "fresh",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kref3-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kres3-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 3,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kcon1-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 1,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kcon3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kcon3-c32-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 32000,
+   "stall": "compact"
+  },
+  "g-p1-fn-t1-vn-kcon3-c16-scom": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fr-t1-vn-kcon3-c16-scom": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t0-vn-kcon3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kcon3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vf-kcon3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "fresh",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-k0-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kref3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kres3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kcon1-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 1,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kcon2-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vn-kcon3-c16-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t1-vn-kcon3-c16-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t1-vn-kcon3-c16-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "reset"
+  },
+  "g-p1-fn-t1-vs-kcon3-c16-scom": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fr-t1-vs-kcon3-c16-scom": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t0-vs-kcon3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-k0-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kref3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kres3-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kcon1-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 1,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kcon2-c16-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kcon3-c32-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 32000,
+   "stall": "compact"
+  },
+  "g-p0-fn-t1-vs-kcon3-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kcon3-c16-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t1-vs-kcon3-c16-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t1-vs-kcon3-c16-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "reset"
+  },
+  "g-p1-fn-t1-vs-kcon3-c16-snon": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fr-t1-vs-kcon3-c16-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vs-kcon3-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vf-kcon3-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "fresh",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-k0-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kref3-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kres3-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 3,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kcon1-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 1,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kcon2-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vs-kcon3-c32-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "same",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 3,
+   "compact_at": 32000,
+   "stall": "none"
+  }
+ }
+}

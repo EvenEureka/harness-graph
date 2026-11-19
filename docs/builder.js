@@ -150,6 +150,13 @@ function init() {
   Array.prototype.forEach.call(document.querySelectorAll('[data-preset]'), function (b) {
     b.addEventListener('click', function () { apply(PRESETS[b.getAttribute('data-preset')]); });
   });
+  /* a button anywhere on the page that carries a setting: draw it and bring the builder into view */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-config]'), function (b) {
+    b.addEventListener('click', function () {
+      apply(JSON.parse(b.getAttribute('data-config')));
+      document.getElementById('builder').scrollIntoView({behavior: 'smooth'});
+    });
+  });
   apply(PRESETS.mid);
 }
 if (typeof document !== 'undefined') init();

@@ -28,5 +28,12 @@ if (names.size !== space.distinct_graph_signatures) fail(`distinct names ${names
 if (JSON.stringify(hist) !== JSON.stringify(space.nodes_per_graph)) fail('node histogram differs: ' + JSON.stringify(hist));
 for (const [h, n] of Object.entries(space.hand_written_points)) if (!names.has(n)) fail(`${h} = ${n} is not drawn`);
 for (const n of Object.keys(panel.configs)) if (!names.has(n)) fail(`panel graph ${n} is not drawn`);
+/* the "draw" buttons of the page give exactly the graphs the live searches returned */
+const cand = JSON.parse(fs.readFileSync(path.join(root, 'graphs_select/candidates.json')));
+const want = Object.values(cand.live).map((r) => r.recommendation).sort();
+const page = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
+const drawn = [...page.matchAll(/data-config='([^']*)'/g)].map((m) => B.graphName(Object.assign({}, B.DEF, JSON.parse(m[1])))).sort();
+if (JSON.stringify(drawn) !== JSON.stringify(want)) fail(`draw buttons give ${drawn}, searches returned ${want}`);
+else console.log(`${drawn.length} draw buttons match the graphs returned by the live searches`);
 console.log(`${raw} settings, ${names.size} distinct graphs, nodes per graph ${JSON.stringify(hist)}, at most ${maxEdges} edges; ` +
             `${Object.keys(space.hand_written_points).length} hand-written and ${Object.keys(panel.configs).length} panel graphs found`);

@@ -9,6 +9,7 @@ episodes when they are present (results/raw is not in the repository) and otherw
 import datetime
 import json
 import re
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,9 +24,10 @@ VARIANTS = [("h04_check_retry", "Check, retry (graph B)", True), ("h05_check_ref
 load = lambda name: json.loads((S / name).read_text())
 minus = lambda s: s.replace("-", "−")
 pct = lambda x: f"{100 * x:.0f}%"
-pct1 = lambda x: f"{100 * x:.1f}%"
-pts = lambda x: "0.0" if abs(x) < 5e-4 else minus(f"{100 * x:+.1f}")
-num = lambda x: minus(f"{100 * x:.1f}")
+r1 = lambda x: float(Decimal(repr(round(100 * x, 6))).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))   # 86.25 -> 86.3
+pct1 = lambda x: f"{r1(x):.1f}%"
+pts = lambda x: "0.0" if abs(x) < 5e-4 else minus(f"{r1(x):+.1f}")
+num = lambda x: minus(f"{r1(x):.1f}")
 more = lambda r: f"{100 * (r - 1):.0f}%"
 
 
@@ -103,6 +105,115 @@ def fig_variants(cond) -> str:
     return "".join(out) + "</svg>"
 
 
+WORDS = {("checker_tool", True): "checker tool", ("verify", "same"): "self-review",
+         ("verify", "fresh"): "self-review after summarizing", ("first", "reproduce"): "reproduce the bug first",
+         ("plan", True): "plan first", ("on_fail", "reflect"): "find the cause after a failed check",
+         ("on_fail", "reset"): "start over after a failed check", ("retries", 3): "up to 3 retries",
+         ("retries", 1): "only 1 retry", ("compact_at", 16000): "summarize past 16k tokens",
+         ("compact_at", 32000): "summarize past 32k tokens", ("stall", "nudge"): "reminder after a stall",
+         ("stall", "reflect"): "find the cause after a stall", ("stall", "reset"): "start over after a stall",
+         ("stall", "compact"): "summarize after a stall"}
+PLAIN = {"plan": False, "first": "none", "checker_tool": False, "verify": "none", "gate": False, "on_fail": "continue",
+         "retries": 2, "compact_at": None, "stall": "none"}
+REPLAY = [("always", H01, "Always the plain loop", "plain"), ("uniform", None, "Uniform allocation", "other"),
+          ("linear_thompson", None, "Thompson sampling, linear model", "other"), ("thompson", None, "Thompson sampling", "other"),
+          ("successive_halving", None, "Successive halving", "other"), ("always", H04, "Always check-and-retry", "check")]
+LOCAL = [("local_search_guided", "Chosen from how the last runs failed"), ("local_search_random", "Chosen at random")]
+
+
+def fig_replay(rows, budget, n_splits) -> str:
+    """Rows: (label, class, value, text for the tooltip).  One dot per row; the axis does not start at zero."""
+    lo_v, hi_v = 0.70, 0.85
+    x = lambda v: 300 + 440 * (v - lo_v) / (hi_v - lo_v)
+    h = 62 + 30 * len(rows)
+    out = [f'<svg viewBox="0 0 880 {h + 44}" role="img" aria-label="Average held-out repair rate of the graph returned by '
+           f'each search procedure after {budget} table draws, next to always returning the plain loop or check-and-retry.">']
+    for i in range(4):
+        v = lo_v + 0.05 * i
+        out.append(f'<line class="gridl" x1="{x(v):.0f}" y1="24" x2="{x(v):.0f}" y2="{h}"/>'
+                   f'<text class="ax" x="{x(v):.0f}" y="{h + 18}" text-anchor="middle">{pct(v)}</text>')
+    out.append(f'<text class="ax" x="520" y="{h + 38}" text-anchor="middle">average repair rate of the returned graph on the '
+               f'held-out half (axis starts at {pct(lo_v)})</text>')
+    for i, (label, cls, v, tip) in enumerate(rows):
+        y = 48 + 30 * i
+        out.append(f'<text class="lab" x="20" y="{y + 5}">{label}</text>'
+                   f'<circle class="d-{cls}" cx="{x(v):.1f}" cy="{y}" r="7"><title>{label}: {tip}; {n_splits} halvings</title></circle>'
+                   f'<text class="val" x="800" y="{y + 5}" text-anchor="end">{pct1(v)}</text>')
+    return "".join(out) + "</svg>"
+
+
+def search_numbers(q, hand) -> dict:
+    """Section 4: the table (stage 1), replay on it (stage 2) and the live local searches (stage 3)."""
+    N = {}
+    tc, ls = load("table_claims.json"), load("live_search.json")
+    assert tc["n_tasks"] == q["n_tasks"] and tc["n_graphs"] == len(q["arms"])
+    N["q_runs"] = f'{tc["n_tasks"] * tc["n_graphs"]:,}'
+    for key, k in (("all_tasks", "q"), ("used_before", "u"), ("never_used_before", "w")):
+        c = tc["h04_minus_h01"][key]
+        d = c["difference"]
+        N.update({f"{k}_h01": pct1(c["h01"]), f"{k}_h04": pct1(c["h04"]), f"{k}_d": pts(d["mean"]), f"{k}_lo": num(d["lo"]),
+                  f"{k}_hi": num(d["hi"]), f"{k}_better": str(d["better"]), f"{k}_worse": str(d["worse"]), f"{k}_n": str(d["n_tasks"])})
+    a, u, w = (tc["h04_minus_h01"][k] for k in ("all_tasks", "used_before", "never_used_before"))
+    assert a["difference"]["lo"] > 0 and u["difference"]["lo"] > 0 and w["difference"]["lo"] < 0 < w["difference"]["mean"] < u["difference"]["mean"]
+    N.update(q_calls=more(a["model_calls"]["ratio"]), q_tokens=more(a["tokens"]["ratio"]))
+    hr = tc["headroom_over_h04"]
+    assert round(hr["top_minus_h04"] * tc["n_tasks"]) == 1 and hr["graphs_above_h04"] == 1 and hr["n_other_graphs"] == 31
+    assert hr["upper_bound_for_every_graph"] > 0.05, "the sentence on a five-point improvement no longer holds"
+    back = tc["with_replaced_episodes_put_back"]
+    assert back["h04_minus_h01"] == a["difference"] and back["headroom_over_h04"]["top_minus_h04"] == 0
+    N.update(q_top_d=pts(hr["top_minus_h04"]), q_bound=num(hr["upper_bound_for_every_graph"]), q_replaced=str(back["n_cells"]))
+
+    budget = 512
+    val = {(r["method"], r["budget"]): r for r in q["results"]}
+    rows, reuse = [], []
+    for method, graph, label, cls in REPLAY:
+        key = f"always {hand[graph]}" if graph else method
+        r = val[(key, budget)]
+        tip = ", ".join(f'{pct1(val[(key, b)]["value"])} at {b:,} draws' for b in (256, 512, 1024)) if not graph else pct1(r["value"])
+        rows.append((label, cls, r["value"], tip))
+        if not graph:
+            reuse.append(r["reused_share"])
+    lo_ref, hi_ref = rows[0][2], rows[-1][2]
+    assert all(lo_ref < v < hi_ref for _, _, v, _ in rows[1:-1]), "the replay heading no longer holds"
+    N.update(r_budget=str(budget), r_splits=str(len(q["splits"])), r_reuse_lo=pct1(min(reuse)), r_reuse_hi=pct1(max(reuse)))
+    N["fig_replay"] = fig_replay(rows, budget, len(q["splits"]))
+
+    runs = ls["runs"]
+    cfg = {r["run"]: json.loads((ROOT / "results" / "search" / r["run"] / "result.json").read_text())["recommendation_config"] for r in runs}
+    assert len(runs) == 10 and all(r["spent"] == r["scored_episodes"] == 512 and r["steps"] == 16 for r in runs)
+    assert all(r["engine_error_records"] == r["engine_errors_retried"] == r["past_deadline"] == 0 for r in runs)
+    assert all(c["gate"] for c in cfg.values()) and len({r["recommendation"] for r in runs}) == 10
+    gate_first = sum(r["first_move"] == ["gate=True"] for r in runs)
+    rejected_first = 0
+    for r in runs:
+        tries = [s["accepted"] for s in r["trace"] if "gate=True" in s["move"]]
+        assert any(tries)
+        rejected_first += not tries[0]
+    words = lambda n: ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n]
+    N.update(ls_runs=words(len(runs)), ls_budget="512", ls_steps="16", ls_gate_first=words(gate_first),
+             ls_gate_rejected=words(rejected_first), ls_retries3=words(sum(c["retries"] == 3 for c in cfg.values())),
+             ls_compact=words(sum(c["compact_at"] is not None for c in cfg.values())),
+             ls_nudge=words(sum(c["stall"] == "nudge" for c in cfg.values())))
+    js = {"checker_tool": "tool", "on_fail": "onfail", "compact_at": "compact"}
+    out = []
+    for method, label in LOCAL:
+        mine = sorted((r for r in runs if r["method"] == method), key=lambda r: r["seed"])
+        assert [r["seed"] for r in mine] == [0, 1, 2, 3, 4]
+        for i, r in enumerate(mine):
+            c = cfg[r["run"]]
+            extras = [WORDS[(k, v)] for k, v in c.items() if k != "gate" and v != PLAIN[k]]
+            setting = {}
+            for k, v in c.items():
+                if v != PLAIN[k]:
+                    setting[js.get(k, k)] = (f"{v // 1000}k" if k == "compact_at" else v == "reproduce" if k == "first" else v)
+            head = f'<td rowspan="5">{label}</td>' if i == 0 else ""
+            out.append(f'<tr>{head}<td class="num">{r["seed"] + 1}</td><td>{"; ".join(extras) or "nothing else"}</td>'
+                       f"<td><button type=\"button\" class=\"mini\" data-config='{json.dumps(setting)}' "
+                       f'aria-label="Draw the graph of search {r["seed"] + 1}, {label.lower()}, in the builder">draw</button></td></tr>')
+    N["search_rows"] = "".join(out)
+    return N
+
+
 def main():
     N = {"updated": datetime.date.today().strftime("%-d %B %Y")}
     three, main_, enf, space = load("h04_h01_three_seeds.json"), load("main.json"), load("enforcement.json"), load("space.json")
@@ -140,8 +251,8 @@ def main():
     t, hand = q["truth_all_tasks"], space["hand_written_points"]
     rest = [v for g, v in t.items() if g not in (hand[H01], hand[H04])]
     assert len(rest) == 30
-    N.update(q_h01=pct1(t[hand[H01]]), q_h04=pct1(t[hand[H04]]), q_best=pct1(max(rest)), q_tasks=str(q["n_tasks"]),
-             q_graphs=str(len(q["arms"])))
+    N.update(q_tasks=str(q["n_tasks"]), q_graphs=str(len(q["arms"])))
+    N.update(search_numbers(q, hand))
     N["fig_main"] = fig_main(rows_vis + rows_hid)
     N["fig_variants"] = fig_variants(main_["conditions"])
 
@@ -154,10 +265,10 @@ def main():
     (ROOT / "docs" / "index.html").write_text(page)
     (ROOT / "docs" / ".nojekyll").write_text("")
     (S / "site_numbers.json").write_text(json.dumps(
-        {"cost": cost, "numbers": {k: v for k, v in sorted(N.items()) if not k.startswith("fig_")}}, indent=1, ensure_ascii=False))
+        {"cost": cost, "numbers": {k: v for k, v in sorted(N.items()) if not k.startswith(("fig_", "search_rows"))}}, indent=1, ensure_ascii=False))
     print(f"wrote docs/index.html ({len(page):,} characters); unused numbers: {sorted(set(N) - used)}")
     for k, v in sorted(N.items()):
-        if not k.startswith("fig_"):
+        if not k.startswith(("fig_", "search_rows")):
             print(f"  {k:12s} {v}")
 
 

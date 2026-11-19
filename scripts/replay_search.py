@@ -71,7 +71,8 @@ def main(a):
             r = np.random.default_rng(5000 + rep)
             rp = Replay(rows, r, a.cost_weight)
             runs[name] = fn(arms, search, rp.pull, budgets[-1], r, checkpoints=budgets, **kw)
-            reuse[(name, budgets[-1])].append(rp.reused / max(rp.pulls, 1))
+            for b in budgets:                             # share of reused draws among the first b
+                reuse[(name, b)].append(rp.reused_after[b - 1] / b)
         for guided in ((False, True) if a.local else ()):
             r = np.random.default_rng(5000 + rep)
             res = local_search(a.start, search, Replay(rows, r, a.cost_weight).pull, budgets[-1], r,

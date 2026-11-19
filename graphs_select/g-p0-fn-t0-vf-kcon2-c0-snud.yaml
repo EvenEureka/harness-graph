@@ -1,0 +1,38 @@
+name: g-p0-fn-t0-vf-kcon2-c0-snud
+description: 'review segment on a compacted conversation; enforced check, on failure
+  continue with the feedback (up to 2 times); no edit after 20 steps: nudge'
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      edit_by: 20
+    max_visits: 4
+  check:
+    type: check
+    max_visits: 3
+  verify:
+    type: agent
+    params:
+      role: verify
+    max_visits: 3
+  verify_compact:
+    type: compact
+    max_visits: 3
+edges:
+- - solve
+  - verify_compact
+  - done
+- - solve
+  - solve
+  - stalled
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - verify
+  - check
+- - verify_compact
+  - verify

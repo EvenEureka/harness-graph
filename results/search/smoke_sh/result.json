@@ -1,0 +1,308 @@
+{
+ "args": {
+  "tasks": "data/dev_tasks.jsonl",
+  "panel": "hand",
+  "method": "successive_halving",
+  "budget": 68,
+  "checkpoints": "34:68",
+  "batch": 16,
+  "parallel": 24,
+  "seed": 0,
+  "cost_weight": 0.0,
+  "model": "qwen3.8-27b",
+  "base_url": "http://127.0.0.1:17717/v1",
+  "model_calls": 50,
+  "wall_s": 3600,
+  "no_thinking": true,
+  "thinking_headroom": 8192,
+  "api_key_env": "",
+  "reasoning_effort": "low",
+  "prices": [
+   0,
+   0,
+   0
+  ],
+  "max_usd": null,
+  "visible_tests": true,
+  "out": "results/search/smoke_sh"
+ },
+ "method": "successive_halving",
+ "recommendation": "g-p0-fn-t0-vn-kcon2-c0-snon",
+ "recommendation_config": {
+  "plan": false,
+  "first": "none",
+  "checker_tool": false,
+  "verify": "none",
+  "gate": true,
+  "on_fail": "continue",
+  "retries": 2,
+  "compact_at": null,
+  "stall": "none"
+ },
+ "recommendation_graph": {
+  "name": "g-p0-fn-t0-vn-kcon2-c0-snon",
+  "description": "enforced check, on failure continue with the feedback (up to 2 times)",
+  "entry": "solve",
+  "nodes": {
+   "solve": {
+    "type": "agent",
+    "max_visits": 3
+   },
+   "check": {
+    "type": "check",
+    "max_visits": 3
+   }
+  },
+  "edges": [
+   [
+    "solve",
+    "check",
+    "done"
+   ],
+   [
+    "check",
+    "END",
+    "pass"
+   ],
+   [
+    "check",
+    "solve",
+    "fail"
+   ]
+  ]
+ },
+ "checkpoints": {
+  "34": "g-p0-fn-t1-vn-kcon2-c0-snon",
+  "68": "g-p0-fn-t0-vn-kcon2-c0-snon"
+ },
+ "spent": 68,
+ "engine_errors": 0,
+ "pulls": {
+  "g-p0-fn-t0-vn-k0-c0-snon": 4,
+  "g-p1-fn-t0-vn-k0-c0-snon": 4,
+  "g-p0-fr-t0-vn-k0-c0-snon": 4,
+  "g-p0-fn-t0-vn-kcon2-c0-snon": 4,
+  "g-p0-fn-t0-vn-kref2-c0-snon": 4,
+  "g-p0-fn-t0-vn-kres2-c0-snon": 4,
+  "g-p0-fn-t0-vn-k0-c16-snon": 4,
+  "g-p0-fr-t0-vn-kcon2-c0-snon": 4,
+  "g-p1-fr-t0-vn-kref2-c16-snon": 4,
+  "g-p0-fn-t0-vn-k0-c0-snud": 4,
+  "g-p0-fn-t0-vn-k0-c0-sref": 4,
+  "g-p0-fn-t0-vn-k0-c0-sres": 4,
+  "g-p0-fn-t0-vn-k0-c0-scom": 4,
+  "g-p0-fn-t0-vs-k0-c0-snon": 4,
+  "g-p0-fn-t0-vf-k0-c0-snon": 4,
+  "g-p0-fn-t1-vn-k0-c0-snon": 4,
+  "g-p0-fn-t1-vn-kcon2-c0-snon": 4
+ },
+ "means": {
+  "g-p0-fn-t0-vn-k0-c0-snon": 0.75,
+  "g-p1-fn-t0-vn-k0-c0-snon": 0.75,
+  "g-p0-fr-t0-vn-k0-c0-snon": 0.75,
+  "g-p0-fn-t0-vn-kcon2-c0-snon": 1.0,
+  "g-p0-fn-t0-vn-kref2-c0-snon": 0.75,
+  "g-p0-fn-t0-vn-kres2-c0-snon": 1.0,
+  "g-p0-fn-t0-vn-k0-c16-snon": 0.75,
+  "g-p0-fr-t0-vn-kcon2-c0-snon": 0.75,
+  "g-p1-fr-t0-vn-kref2-c16-snon": 0.75,
+  "g-p0-fn-t0-vn-k0-c0-snud": 0.75,
+  "g-p0-fn-t0-vn-k0-c0-sref": 0.75,
+  "g-p0-fn-t0-vn-k0-c0-sres": 0.75,
+  "g-p0-fn-t0-vn-k0-c0-scom": 0.75,
+  "g-p0-fn-t0-vs-k0-c0-snon": 0.75,
+  "g-p0-fn-t0-vf-k0-c0-snon": 0.75,
+  "g-p0-fn-t1-vn-k0-c0-snon": 0.75,
+  "g-p0-fn-t1-vn-kcon2-c0-snon": 1.0
+ },
+ "trace": [],
+ "configs": {
+  "g-p0-fn-t0-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p1-fn-t0-vn-k0-c0-snon": {
+   "plan": true,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fr-t0-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-kcon2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-kref2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-kres2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reset",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-k0-c16-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fr-t0-vn-kcon2-c0-snon": {
+   "plan": false,
+   "first": "reproduce",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p1-fr-t0-vn-kref2-c16-snon": {
+   "plan": true,
+   "first": "reproduce",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "reflect",
+   "retries": 2,
+   "compact_at": 16000,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vn-k0-c0-snud": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "nudge"
+  },
+  "g-p0-fn-t0-vn-k0-c0-sref": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reflect"
+  },
+  "g-p0-fn-t0-vn-k0-c0-sres": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "reset"
+  },
+  "g-p0-fn-t0-vn-k0-c0-scom": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "compact"
+  },
+  "g-p0-fn-t0-vs-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "same",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t0-vf-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": false,
+   "verify": "fresh",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-k0-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": false,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  },
+  "g-p0-fn-t1-vn-kcon2-c0-snon": {
+   "plan": false,
+   "first": "none",
+   "checker_tool": true,
+   "verify": "none",
+   "gate": true,
+   "on_fail": "continue",
+   "retries": 2,
+   "compact_at": null,
+   "stall": "none"
+  }
+ }
+}

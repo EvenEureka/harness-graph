@@ -1,0 +1,31 @@
+name: g-p0-fn-t0-vn-kcon3-c16-snon
+description: enforced check, on failure continue with the feedback (up to 3 times);
+  compact the conversation above 16000 prompt tokens
+entry: solve
+nodes:
+  solve:
+    type: agent
+    params:
+      compact_at: 16000
+    max_visits: 11
+  check:
+    type: check
+    max_visits: 4
+  compact:
+    type: compact
+    max_visits: 7
+edges:
+- - solve
+  - check
+  - done
+- - solve
+  - compact
+  - context_high
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail
+- - compact
+  - solve

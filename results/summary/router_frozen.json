@@ -1,0 +1,119 @@
+{
+ "model": "qwen3.8-27b",
+ "graphs": [
+  "g-p0-fn-t0-vn-k0-c0-snon",
+  "g-p0-fn-t0-vn-kcon2-c0-snon",
+  "g-p0-fn-t0-vn-kref2-c0-scom"
+ ],
+ "fitted_on": {
+  "files": [
+   "results/raw/search_hidden/a/hidden/qwen3.8-27b.jsonl",
+   "results/raw/search_hidden/b/hidden/qwen3.8-27b.jsonl",
+   "results/raw/search_table/a/visible/qwen3.8-27b.jsonl",
+   "results/raw/search_table/b/visible/qwen3.8-27b.jsonl"
+  ],
+  "tasks": "data/v2/search.jsonl",
+  "n_units": 376,
+  "cells": {
+   "cells": 1128,
+   "scored_records": 1128,
+   "engine_error_records": 0,
+   "records_of_other_graphs": 5452,
+   "cut_off_lines": 0
+  },
+  "sha256": {
+   "results/raw/search_hidden/a/hidden/qwen3.8-27b.jsonl": "2b462e18adb49be2",
+   "results/raw/search_hidden/b/hidden/qwen3.8-27b.jsonl": "0c74fadc2fb9eaa3",
+   "results/raw/search_table/a/visible/qwen3.8-27b.jsonl": "89c163c914a28c98",
+   "results/raw/search_table/b/visible/qwen3.8-27b.jsonl": "359268d7fa9f27c5",
+   "data/v2/search.jsonl": "9b33ec99ce4eee2b",
+   "graphs_confirm/g-p0-fn-t0-vn-k0-c0-snon.yaml": "a072d011374df982",
+   "graphs_confirm/g-p0-fn-t0-vn-kcon2-c0-snon.yaml": "16fbdedfc3d9aaf4",
+   "graphs_confirm/g-p0-fn-t0-vn-kref2-c0-scom.yaml": "01458754f595e493"
+  },
+  "code_version": "bffefb6ae464d6db44c697a24d14695a00c889f6"
+ },
+ "cost_weight": 0.0,
+ "value_on_fit_data": {
+  "g-p0-fn-t0-vn-k0-c0-snon": 0.6276595744680851,
+  "g-p0-fn-t0-vn-kcon2-c0-snon": 0.6542553191489362,
+  "g-p0-fn-t0-vn-kref2-c0-scom": 0.651595744680851
+ },
+ "policies": {
+  "fixed_best": {
+   "kind": "fixed_best",
+   "graph": "g-p0-fn-t0-vn-kcon2-c0-snon"
+  },
+  "rule[tests_visible]": {
+   "kind": "rule",
+   "key": "tests_visible",
+   "default": "g-p0-fn-t0-vn-kcon2-c0-snon",
+   "table": [
+    [
+     false,
+     "g-p0-fn-t0-vn-k0-c0-snon"
+    ],
+    [
+     true,
+     "g-p0-fn-t0-vn-kref2-c0-scom"
+    ]
+   ]
+  },
+  "feature_router": {
+   "kind": "feature",
+   "ridge": 3.0,
+   "features": [
+    "tests_visible",
+    "issue_words",
+    "issue_has_code",
+    "issue_has_traceback",
+    "issue_names_file"
+   ],
+   "mu": [
+    0.5,
+    5.0470804680695815,
+    0.9840425531914894,
+    0.2127659574468085,
+    0.06382978723404255
+   ],
+   "sd": [
+    0.500000001,
+    0.3308991507811404,
+    0.12531084131265643,
+    0.4092634916738568,
+    0.2444494753207678
+   ],
+   "order": [
+    "g-p0-fn-t0-vn-k0-c0-snon",
+    "g-p0-fn-t0-vn-kcon2-c0-snon",
+    "g-p0-fn-t0-vn-kref2-c0-scom"
+   ],
+   "w": {
+    "g-p0-fn-t0-vn-k0-c0-snon": [
+     0.6276595744680845,
+     0.1002638524400972,
+     -0.08841885597276157,
+     0.06717835398989408,
+     -0.028427811135012172,
+     0.016685497956329228
+    ],
+    "g-p0-fn-t0-vn-kcon2-c0-snon": [
+     0.6542553191489355,
+     0.16358839082331647,
+     -0.08637981188892475,
+     0.026849651813797563,
+     -0.00740698432728267,
+     0.03203088574951602
+    ],
+    "g-p0-fn-t0-vn-kref2-c0-scom": [
+     0.6515957446808506,
+     0.17150395812121888,
+     -0.071174453161716,
+     0.06889390298718412,
+     0.02511484782792618,
+     0.029168847994215694
+    ]
+   }
+  }
+ }
+}

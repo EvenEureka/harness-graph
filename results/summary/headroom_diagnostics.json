@@ -1,0 +1,342 @@
+{
+ "note": "exploratory diagnostics on existing episodes; nothing here is a pre-specified contrast",
+ "table_ceiling": {
+  "graphs": 32,
+  "tasks": 188,
+  "graphs_with_enforced_check": 16,
+  "tasks_solved_by_every_graph": 103,
+  "tasks_solved_by_no_graph": 15,
+  "tasks_solved_by_every_graph_with_check": 117,
+  "tasks_solved_by_no_graph_with_check": 15,
+  "tasks_solved_by_10_to_90_percent_of_graphs": 39,
+  "h01": 0.7287234042553191,
+  "h04": 0.8191489361702128,
+  "best_graph": 0.824468085106383,
+  "hindsight_best_per_task": 0.9202127659574468,
+  "h04_fails_and_some_graph_solves": 19,
+  "h04_fails_and_at_least_a_quarter_of_graphs_solve": 5,
+  "solved_count_histogram": {
+   "0": 15,
+   "1": 6,
+   "2": 4,
+   "3": 2,
+   "4": 5,
+   "5": 2,
+   "6": 2,
+   "7": 3,
+   "9": 2,
+   "11": 1,
+   "12": 1,
+   "13": 3,
+   "15": 3,
+   "18": 1,
+   "21": 2,
+   "22": 2,
+   "23": 2,
+   "24": 1,
+   "25": 4,
+   "26": 2,
+   "27": 3,
+   "29": 1,
+   "30": 2,
+   "31": 16,
+   "32": 103
+  }
+ },
+ "selection_14_graphs_56_tasks": {
+  "graphs": 14,
+  "tasks": 56,
+  "disagreement_same_graph_two_runs": 0.06760204081632654,
+  "disagreement_two_graphs_two_runs": 0.09232731554160124,
+  "interaction_correlation_between_runs": 0.25602987611263706,
+  "pick_on_one_run_score_on_the_other": {
+   "fixed_best": 0.9196428571428572,
+   "best_per_task": 0.9196428571428572,
+   "hindsight_per_task": 0.9642857142857143
+  },
+  "tasks_every_graph_solves_in_both_runs": 37,
+  "tasks_no_graph_solves_in_any_run": 2,
+  "tasks_in_between": 17
+ },
+ "selection_13_graphs_with_check_56_tasks": {
+  "graphs": 13,
+  "tasks": 56,
+  "disagreement_same_graph_two_runs": 0.06868131868131869,
+  "disagreement_two_graphs_two_runs": 0.08585164835164834,
+  "interaction_correlation_between_runs": 0.19479579381259546,
+  "pick_on_one_run_score_on_the_other": {
+   "fixed_best": 0.9196428571428572,
+   "best_per_task": 0.9196428571428572,
+   "hindsight_per_task": 0.9642857142857143
+  },
+  "tasks_every_graph_solves_in_both_runs": 38,
+  "tasks_no_graph_solves_in_any_run": 2,
+  "tasks_in_between": 16
+ },
+ "confirmation_3_graphs_232_tasks_visible": {
+  "graphs": 3,
+  "tasks": 232,
+  "disagreement_same_graph_two_runs": 0.05172413793103448,
+  "disagreement_two_graphs_two_runs": 0.08333333333333333,
+  "interaction_correlation_between_runs": 0.3403242762998092,
+  "pick_on_one_run_score_on_the_other": {
+   "fixed_best": 0.9008620689655172,
+   "best_per_task": 0.9073275862068966,
+   "hindsight_per_task": 0.9439655172413793
+  },
+  "tasks_every_graph_solves_in_both_runs": 180,
+  "tasks_no_graph_solves_in_any_run": 9,
+  "tasks_in_between": 43
+ },
+ "confirmation_visible_failures": {
+  "by_graph": {
+   "h01": {
+    "runs": 464,
+    "unsolved": 73,
+    "unsolved_by_exit": {
+     "end": 42,
+     "model_call_budget": 30,
+     "format_errors": 1
+    },
+    "solved_by_exit": {
+     "end": 387,
+     "model_call_budget": 4
+    }
+   },
+   "h04": {
+    "runs": 464,
+    "unsolved": 43,
+    "unsolved_by_exit": {
+     "model_call_budget": 41,
+     "visit_cap": 1,
+     "format_errors": 1
+    },
+    "solved_by_exit": {
+     "end": 414,
+     "model_call_budget": 7
+    }
+   },
+   "searched": {
+    "runs": 464,
+    "unsolved": 40,
+    "unsolved_by_exit": {
+     "model_call_budget": 39,
+     "format_errors": 1
+    },
+    "solved_by_exit": {
+     "end": 419,
+     "model_call_budget": 5
+    }
+   }
+  },
+  "tasks_no_graph_solves_in_any_run": 9,
+  "repair_rate_by_repository": {
+   "Suor__funcy": {
+    "h01": 1.0,
+    "h04": 1.0,
+    "searched": 1.0
+   },
+   "agronholm__typeguard": {
+    "h01": 0.536,
+    "h04": 0.714,
+    "searched": 0.821
+   },
+   "andialbrecht__sqlparse": {
+    "h01": 0.964,
+    "h04": 0.964,
+    "searched": 0.964
+   },
+   "arrow-py__arrow": {
+    "h01": 0.857,
+    "h04": 0.929,
+    "searched": 0.929
+   },
+   "facelessuser__soupsieve": {
+    "h01": 0.786,
+    "h04": 0.929,
+    "searched": 0.857
+   },
+   "kayak__pypika": {
+    "h01": 1.0,
+    "h04": 1.0,
+    "searched": 1.0
+   },
+   "mahmoud__glom": {
+    "h01": 0.893,
+    "h04": 0.964,
+    "searched": 0.929
+   },
+   "marshmallow-code__marshmallow": {
+    "h01": 0.85,
+    "h04": 0.938,
+    "searched": 0.95
+   },
+   "oauthlib__oauthlib": {
+    "h01": 0.75,
+    "h04": 0.888,
+    "searched": 0.925
+   },
+   "pallets__jinja": {
+    "h01": 0.875,
+    "h04": 0.888,
+    "searched": 0.875
+   },
+   "seperman__deepdiff": {
+    "h01": 0.857,
+    "h04": 0.786,
+    "searched": 0.786
+   }
+  },
+  "model_calls_by_repository": {
+   "Suor__funcy": {
+    "h01": 10.6,
+    "h04": 9.8,
+    "searched": 9.8
+   },
+   "agronholm__typeguard": {
+    "h01": 20.3,
+    "h04": 28.2,
+    "searched": 28.7
+   },
+   "andialbrecht__sqlparse": {
+    "h01": 21.4,
+    "h04": 20.0,
+    "searched": 19.7
+   },
+   "arrow-py__arrow": {
+    "h01": 18.0,
+    "h04": 19.2,
+    "searched": 18.1
+   },
+   "facelessuser__soupsieve": {
+    "h01": 21.3,
+    "h04": 26.6,
+    "searched": 26.5
+   },
+   "kayak__pypika": {
+    "h01": 11.3,
+    "h04": 12.2,
+    "searched": 11.4
+   },
+   "mahmoud__glom": {
+    "h01": 19.6,
+    "h04": 19.0,
+    "searched": 18.2
+   },
+   "marshmallow-code__marshmallow": {
+    "h01": 16.2,
+    "h04": 16.2,
+    "searched": 17.4
+   },
+   "oauthlib__oauthlib": {
+    "h01": 18.2,
+    "h04": 21.3,
+    "searched": 21.4
+   },
+   "pallets__jinja": {
+    "h01": 22.4,
+    "h04": 22.7,
+    "searched": 23.1
+   },
+   "seperman__deepdiff": {
+    "h01": 28.6,
+    "h04": 26.7,
+    "searched": 27.7
+   }
+  }
+ },
+ "confirmation_hidden": {
+  "by_graph": {
+   "h01": {
+    "hidden_unsolved": 83,
+    "hidden_unsolved_by_exit": {
+     "end": 71,
+     "model_call_budget": 12
+    },
+    "solved_in_both_visible_runs_but_not_hidden": 46,
+    "solved_hidden_but_in_no_visible_run": 1
+   },
+   "h04": {
+    "hidden_unsolved": 82,
+    "hidden_unsolved_by_exit": {
+     "end": 73,
+     "model_call_budget": 9
+    },
+    "solved_in_both_visible_runs_but_not_hidden": 57,
+    "solved_hidden_but_in_no_visible_run": 1
+   },
+   "searched": {
+    "hidden_unsolved": 83,
+    "hidden_unsolved_by_exit": {
+     "end": 71,
+     "model_call_budget": 12
+    },
+    "solved_in_both_visible_runs_but_not_hidden": 59,
+    "solved_hidden_but_in_no_visible_run": 0
+   }
+  },
+  "agreement": {
+   "tasks_all_three_solve": 135,
+   "tasks_none_solves": 69,
+   "tasks_graphs_disagree": 28,
+   "hindsight_best_per_task": 0.7025862068965517
+  },
+  "repair_rate_by_repository": {
+   "Suor__funcy": {
+    "h01": 0.929,
+    "h04": 0.929,
+    "searched": 0.929
+   },
+   "agronholm__typeguard": {
+    "h01": 0.5,
+    "h04": 0.5,
+    "searched": 0.571
+   },
+   "andialbrecht__sqlparse": {
+    "h01": 0.714,
+    "h04": 0.714,
+    "searched": 0.786
+   },
+   "arrow-py__arrow": {
+    "h01": 0.786,
+    "h04": 0.786,
+    "searched": 0.786
+   },
+   "facelessuser__soupsieve": {
+    "h01": 0.5,
+    "h04": 0.5,
+    "searched": 0.286
+   },
+   "kayak__pypika": {
+    "h01": 0.857,
+    "h04": 0.786,
+    "searched": 0.929
+   },
+   "mahmoud__glom": {
+    "h01": 0.786,
+    "h04": 0.714,
+    "searched": 0.714
+   },
+   "marshmallow-code__marshmallow": {
+    "h01": 0.65,
+    "h04": 0.6,
+    "searched": 0.675
+   },
+   "oauthlib__oauthlib": {
+    "h01": 0.525,
+    "h04": 0.525,
+    "searched": 0.475
+   },
+   "pallets__jinja": {
+    "h01": 0.65,
+    "h04": 0.75,
+    "searched": 0.675
+   },
+   "seperman__deepdiff": {
+    "h01": 0.357,
+    "h04": 0.429,
+    "searched": 0.429
+   }
+  }
+ }
+}

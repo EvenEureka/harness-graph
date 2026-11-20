@@ -6,6 +6,7 @@ confidence interval reflects which tasks were drawn, not how many seeds were run
 from __future__ import annotations
 
 import json
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -57,6 +58,65 @@ def load_episodes(*paths: str | Path) -> pd.DataFrame:
 
 def scored(df: pd.DataFrame) -> pd.DataFrame:
     return df[df.status == "ok"]
+
+
+def audit_cells(files, model: str, graphs, tasks, seeds_of: dict[str, list[int]]) -> dict:
+    """Check the stored records against the cells an analysis expects, before duplicates of an episode are merged.
+
+    A cell is (graph, task, test condition, rollout); ``seeds_of`` maps a condition to its rollouts.  Every cell must
+    hold exactly one scored record of ``model``; a scored record of one of ``graphs`` outside the cells is an error.
+    Records that ended in an engine error (and were run again) and records of other graphs are counted, not used.
+    """
+    want = {(g, t, c, s) for g in graphs for t in tasks for c, ss in seeds_of.items() for s in ss}
+    n, seen, foreign = Counter(), Counter(), []
+    for path in files:
+        for line in open(path):
+            try:
+                e = json.loads(line)
+            except json.JSONDecodeError:              # a line cut off by a kill
+                n["cut_off_lines"] += 1
+                continue
+            if e.get("graph") not in graphs:
+                n["records_of_other_graphs"] += 1
+            elif e.get("status") != "ok":
+                n["engine_error_records"] += 1
+            else:
+                key = (e["graph"], e["task_id"], e.get("tests", "hidden"), e["seed"])
+                if key not in want or e.get("model") != model:
+                    foreign.append(e.get("episode_id"))
+                seen[key] += 1
+    missing = sorted(want - set(seen))
+    several = sorted(k for k, c in seen.items() if c > 1)
+    if missing or several or foreign:
+        raise ValueError(f"{len(want)} cells expected: {len(missing)} without a scored record (e.g. {missing[:2]}), "
+                         f"{len(several)} with several (e.g. {several[:2]}), {len(foreign)} scored records outside the "
+                         f"cells or of another model (e.g. {foreign[:2]})")
+    return {"cells": len(want), "scored_records": sum(seen.values()), "engine_error_records": n["engine_error_records"],
+            "records_of_other_graphs": n["records_of_other_graphs"], "cut_off_lines": n["cut_off_lines"]}
+
+
+def strat_index(order, stratum_of: dict, reps: int, seed: int) -> np.ndarray:
+    """Bootstrap indices into ``order`` (tasks): redrawn with replacement inside each stratum (repository)."""
+    strata = defaultdict(list)
+    for i, t in enumerate(order):
+        strata[stratum_of[t]].append(i)
+    rng = np.random.default_rng(seed)
+    return np.concatenate([rng.choice(ix, size=(reps, len(ix))) for ix in map(np.array, strata.values())], axis=1)
+
+
+def paired_diff(v, idx) -> dict:
+    """Mean of one paired difference per task with a 95% percentile interval over the replicates ``idx``."""
+    v = np.asarray(v, dtype=float)
+    lo, hi = np.percentile(v[idx].mean(1), [2.5, 97.5])
+    return {"mean": float(v.mean()), "lo": float(lo), "hi": float(hi), "better": int((v > 0).sum()),
+            "worse": int((v < 0).sum()), "n_tasks": int(len(v))}
+
+
+def paired_ratio(a, b, idx) -> dict:
+    """Ratio of totals a / b over tasks with a 95% percentile interval."""
+    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    r = a[idx].sum(1) / b[idx].sum(1)
+    return {"ratio": float(a.sum() / b.sum()), "lo": float(np.percentile(r, 2.5)), "hi": float(np.percentile(r, 97.5))}
 
 
 def task_matrix(df: pd.DataFrame, col: str = "resolved") -> pd.DataFrame:

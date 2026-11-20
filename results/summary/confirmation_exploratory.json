@@ -1,0 +1,32 @@
+{
+ "note": "exploratory: computed after the confirmation results were seen; not a frozen contrast",
+ "n_tasks": 232,
+ "reps": 4000,
+ "boot_seed": 0,
+ "visible_minus_hidden": {
+  "h04 - h01": {
+   "mean": 0.0603448275862069,
+   "lo": 0.01293103448275862,
+   "hi": 0.10775862068965517,
+   "better": 33,
+   "worse": 16,
+   "n_tasks": 232
+  },
+  "searched - h01": {
+   "mean": 0.07112068965517242,
+   "lo": 0.023706896551724137,
+   "hi": 0.11858836206896571,
+   "better": 38,
+   "worse": 16,
+   "n_tasks": 232
+  },
+  "searched - h04": {
+   "mean": 0.010775862068965518,
+   "lo": -0.03017241379310345,
+   "hi": 0.05172413793103448,
+   "better": 21,
+   "worse": 15,
+   "n_tasks": 232
+  }
+ }
+}

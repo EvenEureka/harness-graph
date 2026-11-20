@@ -13,12 +13,17 @@ A unit is one task under one test condition (tests hidden or visible); rollouts 
   python scripts/route_eval.py score CONFIRM_HIDDEN.jsonl CONFIRM_VISIBLE.jsonl --tasks data/v2/confirm.jsonl \
       --policies results/summary/router_frozen.json --out results/summary/route_confirm.json
 
-``fit`` and ``score`` stop if a unit lacks one of the graphs (``score --allow-incomplete`` leaves such units out
-and lists them).  Rewards are resolve rates; ``--cost-weight w``
+``fit`` and ``score`` first check the stored records: with ``--visible-seeds`` / ``--hidden-seeds`` every (graph,
+task, condition, rollout) must hold exactly one scored record of the model (harness_graph.analysis.audit_cells);
+the frozen protocol always passes them.  Without them a unit that lacks a graph still stops the run
+(``score --allow-incomplete`` leaves such units out and lists them; exploration only).  The two conditions weigh
+equally: rollouts are averaged inside a task and condition first.  Rewards are resolve rates; ``--cost-weight w``
 subtracts w x (model calls / 50) per episode.
 """
 import argparse
+import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 from harness_graph import analysis as A
@@ -29,6 +34,17 @@ task_of = lambda u: u.split("|")[0]
 
 def rewards(a, portfolio=None, allow_incomplete=False):
     tasks = {json.loads(l)["instance_id"]: json.loads(l) for l in open(a.tasks) if l.strip()}
+    seeds_of = {c: [int(x) for x in v.split(":")] for c, v in (("visible", getattr(a, "visible_seeds", "")),
+                                                              ("hidden", getattr(a, "hidden_seeds", ""))) if v}
+    a.audit = None
+    if seeds_of:
+        if not (portfolio and a.model):
+            raise SystemExit("the check of cells needs the graphs and --model")
+        try:
+            a.audit = A.audit_cells(a.files, a.model, portfolio, list(tasks), seeds_of)
+        except ValueError as e:
+            raise SystemExit(str(e))
+        print(f"cells: {a.audit}")
     df = A.scored(A.load_episodes(*a.files))
     df = df[df.task_id.isin(tasks)]
     if a.model:
@@ -57,7 +73,12 @@ def show(res):
 def fit(a):
     R, model, _ = rewards(a, portfolio=a.graphs.split(":"))
     pol = {"fixed_best": FixedBest(), "rule[tests_visible]": RuleRouter("tests_visible"), "feature_router": FeatureRouter()}
-    out = {"model": model, "graphs": R.graphs, "fitted_on": {"files": a.files, "tasks": a.tasks, "n_units": len(R.units)},
+    sha = lambda f: hashlib.sha256(Path(f).read_bytes()).hexdigest()[:16]
+    version = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, cwd=Path(__file__).parent).stdout.strip()
+    out = {"model": model, "graphs": R.graphs,
+           "fitted_on": {"files": a.files, "tasks": a.tasks, "n_units": len(R.units), "cells": a.audit,
+                         "sha256": {f: sha(f) for f in [*a.files, a.tasks, *sorted(map(str, Path(a.graph_dir).glob("*.yaml")))]}
+                         if a.graph_dir else {}, "code_version": version},
            "cost_weight": a.cost_weight, "value_on_fit_data": {g: R.value(g, R.units) for g in R.graphs},
            "policies": {name: freeze(p.fit(R, R.units)) for name, p in pol.items()}}
     Path(a.out).write_text(json.dumps(out, indent=1))
@@ -69,7 +90,12 @@ def score(a):
     frozen = json.loads(Path(a.policies).read_text())
     if a.cost_weight != frozen["cost_weight"]:
         raise SystemExit("--cost-weight differs from the one the policies were fitted with")
+    a.model = a.model or frozen["model"]
+    if a.allow_incomplete and (a.visible_seeds or a.hidden_seeds):
+        raise SystemExit("--allow-incomplete cannot be combined with the check of cells")
     R, model, tasks = rewards(a, portfolio=frozen["graphs"], allow_incomplete=a.allow_incomplete)
+    if a.audit and a.audit["records_of_other_graphs"]:
+        raise SystemExit(f"{a.audit['records_of_other_graphs']} records are of graphs outside the frozen portfolio")
     if model != frozen["model"]:
         raise SystemExit(f"policies were fitted on {frozen['model']}, episodes are from {model}")
     fitted = {json.loads(l)["instance_id"] for l in open(frozen["fitted_on"]["tasks"]) if l.strip()}
@@ -78,7 +104,7 @@ def score(a):
     res = held_out({n: thaw(d) for n, d in frozen["policies"].items()}, R, group_of=task_of,
                    stratum_of=lambda t: tasks[t]["repo_key"], reps=a.reps)
     res.update(model=model, policies_file=a.policies, graphs=R.graphs, units_left_out=R.dropped,
-               graph_values={g: R.value(g, R.units) for g in R.graphs})
+               graph_values={g: R.value(g, R.units) for g in R.graphs}, cells=a.audit, reps=a.reps)
     print(f"== {model}: {res['n_units']} units, {res['n_groups']} tasks, {res['n_strata']} repositories; "
           f"{len(R.dropped)} units left out")
     show(res)
@@ -112,6 +138,11 @@ if __name__ == "__main__":
         s.add_argument("--model", default="")
         s.add_argument("--cost-weight", type=float, default=0.0)
         s.add_argument("--out", default="", required=name == "fit")
+        if name != "crossfit":
+            s.add_argument("--visible-seeds", default="", help="rollouts every task must have with visible tests, e.g. 0:1")
+            s.add_argument("--hidden-seeds", default="", help="the same with hidden tests")
+        if name == "fit":
+            s.add_argument("--graph-dir", default="", help="folder of the graphs' YAML, to record their hashes")
         if name != "score":
             s.add_argument("--graphs", default="", required=name == "fit")
         if name == "score":

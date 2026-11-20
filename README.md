@@ -25,8 +25,8 @@ model calls. Making the check a node the patch must pass adds 7.4 points over of
 for both models. The page gives the figures, the comparison of all hand-designed graphs, and the limits of these
 results. Every number there and here comes from `results/summary/` through `scripts/build_site.py`.
 
-**Search over the 3,600 graphs, results so far** (Qwen3.8-27B, tests visible, search tasks only; none of this is a
-held-out result yet):
+**Search over the 3,600 graphs** (Qwen3.8-27B, thinking disabled; 188 tasks for search, 56 for selection, 232 held out
+for confirmation):
 
 - A table of 32 graphs on 188 search tasks: check-and-retry repaired 81.9%, the plain loop 72.9% (+9.0 points,
   4.3 to 13.8). On the 80 tasks new to this project the lead is +3.8 points (−1.3 to 8.8).
@@ -34,10 +34,23 @@ held-out result yet):
   repair rate than the plain loop and a lower one than check-and-retry.
 - Ten live local searches over the whole space, 512 agent runs each, all starting from the plain loop: all ten ended
   on a graph with the enforced check, and the ten graphs are all different.
+- Selection among 14 candidate graphs, including the two baselines, on 56 tasks: the selected graph came from the table procedures (93.8% against
+  92.0% for check-and-retry, +1.8 points, −0.9 to 5.4); none of the ten graphs from live search exceeded
+  check-and-retry.
+- Confirmation on 232 held-out tasks (2,088 runs): with visible tests the selected graph repaired 91.4% against 90.7%
+  for check-and-retry, +0.6 points (−1.3 to 2.8). Superiority was not established and a gain of five points or more
+  is excluded under the rule fixed in advance. Check-and-retry led the plain loop by 6.5 points (3.4 to 9.7), and by
+  7.9 points (3.3 to 12.9) on three repositories withheld from search and selection. With hidden tests the three
+  graphs repaired 64.2%, 64.7% and 64.2%.
+- A graph per task: neither frozen policy (a rule on test visibility, a model on test visibility and task-text features) demonstrated an
+  improvement over always using check-and-retry (+0.1 points, −1.8 to 2.2; 0.0 points, −1.7 to 1.7).
 
-Selection among the returned graphs (56 tasks) is running; confirmation on 232 held-out tasks follows. The protocol,
-with the deviations recorded so far, is `refine-logs/EXPERIMENT_PLAN.md` (the review records it cites are not part
-of this repository).
+Next phase: when no tests are given, does a graph that writes and enforces its own executable check repair more bugs
+than check-and-retry at the same total inference cost? It starts with premise tests that have stop rules written
+beforehand.
+
+The protocol, with the deviations recorded, is `refine-logs/EXPERIMENT_PLAN.md` (the review records it cites are not
+part of this repository). Scope and limits are listed on the project page.
 
 ## Layout
 

@@ -13,7 +13,6 @@ Tasks are redrawn with replacement inside repositories (paired across graphs), 9
 """
 import argparse
 import json
-from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -24,25 +23,7 @@ from harness_graph.grammar import Config
 H01, H04 = Config().name, Config(gate=True).name
 
 
-def strat_index(order, repo_of, reps, seed):
-    strata = defaultdict(list)
-    for i, t in enumerate(order):
-        strata[repo_of[t]].append(i)
-    rng = np.random.default_rng(seed)
-    return np.concatenate([rng.choice(ix, size=(reps, len(ix))) for ix in map(np.array, strata.values())], axis=1)
-
-
-def diff(v, idx):
-    v = np.asarray(v, dtype=float)
-    lo, hi = np.percentile(v[idx].mean(1), [2.5, 97.5])
-    return {"mean": float(v.mean()), "lo": float(lo), "hi": float(hi), "better": int((v > 0).sum()),
-            "worse": int((v < 0).sum()), "n_tasks": int(len(v))}
-
-
-def ratio(a, b, idx):
-    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
-    r = a[idx].sum(1) / b[idx].sum(1)
-    return {"ratio": float(a.sum() / b.sum()), "lo": float(np.percentile(r, 2.5)), "hi": float(np.percentile(r, 97.5))}
+strat_index, diff, ratio = A.strat_index, A.paired_diff, A.paired_ratio
 
 
 def h04_h01(df, tasks, repo_of, a):

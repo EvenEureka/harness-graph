@@ -1,0 +1,599 @@
+{
+ "note": "exploratory; the audit labels were written before outcomes were seen, the split by label was not pre-specified",
+ "search_tasks": {
+  "spec": {
+   "n_tasks": {
+    "full": 34,
+    "not audited": 80,
+    "partial": 74
+   },
+   "repair_rate": {
+    "full | hidden": {
+     "h01": 0.794,
+     "h04": 0.735,
+     "searched": 0.735
+    },
+    "full | visible": {
+     "h01": 0.912,
+     "h04": 0.941,
+     "searched": 0.882
+    },
+    "not audited | hidden": {
+     "h01": 0.662,
+     "h04": 0.612,
+     "searched": 0.6
+    },
+    "not audited | visible": {
+     "h01": 0.825,
+     "h04": 0.862,
+     "searched": 0.875
+    },
+    "partial | hidden": {
+     "h01": 0.257,
+     "h04": 0.243,
+     "searched": 0.23
+    },
+    "partial | visible": {
+     "h01": 0.541,
+     "h04": 0.716,
+     "searched": 0.743
+    }
+   }
+  },
+  "family": {
+   "n_tasks": {
+    "combine strategies": 65,
+    "lm_rewrite": 26,
+    "pr": 4,
+    "single-function strategies": 93
+   },
+   "repair_rate": {
+    "combine strategies | hidden": {
+     "h01": 0.231,
+     "h04": 0.185,
+     "searched": 0.185
+    },
+    "combine strategies | visible": {
+     "h01": 0.446,
+     "h04": 0.631,
+     "searched": 0.662
+    },
+    "lm_rewrite | hidden": {
+     "h01": 0.385,
+     "h04": 0.423,
+     "searched": 0.423
+    },
+    "lm_rewrite | visible": {
+     "h01": 0.692,
+     "h04": 0.769,
+     "searched": 0.731
+    },
+    "pr | hidden": {
+     "h01": 0.25,
+     "h04": 0.25,
+     "searched": 0.25
+    },
+    "pr | visible": {
+     "h01": 0.75,
+     "h04": 1.0,
+     "searched": 1.0
+    },
+    "single-function strategies | hidden": {
+     "h01": 0.785,
+     "h04": 0.731,
+     "searched": 0.71
+    },
+    "single-function strategies | visible": {
+     "h01": 0.935,
+     "h04": 0.957,
+     "searched": 0.957
+    }
+   }
+  },
+  "gold_files": {
+   "n_tasks": {
+    "1 file": 133,
+    "2+ files": 55
+   },
+   "repair_rate": {
+    "1 file | hidden": {
+     "h01": 0.669,
+     "h04": 0.639,
+     "searched": 0.624
+    },
+    "1 file | visible": {
+     "h01": 0.85,
+     "h04": 0.887,
+     "searched": 0.887
+    },
+    "2+ files | hidden": {
+     "h01": 0.182,
+     "h04": 0.127,
+     "searched": 0.127
+    },
+    "2+ files | visible": {
+     "h01": 0.436,
+     "h04": 0.655,
+     "searched": 0.673
+    }
+   }
+  }
+ },
+ "confirmation_tasks": {
+  "spec": {
+   "n_tasks": {
+    "not audited": 232
+   },
+   "repair_rate": {
+    "not audited | hidden": {
+     "h01": 0.642,
+     "h04": 0.647,
+     "searched": 0.642
+    },
+    "not audited | visible": {
+     "h01": 0.843,
+     "h04": 0.907,
+     "searched": 0.914
+    }
+   }
+  },
+  "family": {
+   "n_tasks": {
+    "combine strategies": 31,
+    "lm_rewrite": 29,
+    "pr": 3,
+    "single-function strategies": 169
+   },
+   "repair_rate": {
+    "combine strategies | hidden": {
+     "h01": 0.258,
+     "h04": 0.29,
+     "searched": 0.258
+    },
+    "combine strategies | visible": {
+     "h01": 0.435,
+     "h04": 0.726,
+     "searched": 0.806
+    },
+    "lm_rewrite | hidden": {
+     "h01": 0.379,
+     "h04": 0.345,
+     "searched": 0.414
+    },
+    "lm_rewrite | visible": {
+     "h01": 0.707,
+     "h04": 0.81,
+     "searched": 0.776
+    },
+    "pr | hidden": {
+     "h01": 0.667,
+     "h04": 0.667,
+     "searched": 0.667
+    },
+    "pr | visible": {
+     "h01": 1.0,
+     "h04": 1.0,
+     "searched": 1.0
+    },
+    "single-function strategies | hidden": {
+     "h01": 0.757,
+     "h04": 0.763,
+     "searched": 0.751
+    },
+    "single-function strategies | visible": {
+     "h01": 0.938,
+     "h04": 0.956,
+     "searched": 0.956
+    }
+   }
+  },
+  "gold_files": {
+   "n_tasks": {
+    "1 file": 221,
+    "2+ files": 11
+   },
+   "repair_rate": {
+    "1 file | hidden": {
+     "h01": 0.665,
+     "h04": 0.67,
+     "searched": 0.665
+    },
+    "1 file | visible": {
+     "h01": 0.876,
+     "h04": 0.921,
+     "searched": 0.919
+    },
+    "2+ files | hidden": {
+     "h01": 0.182,
+     "h04": 0.182,
+     "searched": 0.182
+    },
+    "2+ files | visible": {
+     "h01": 0.182,
+     "h04": 0.636,
+     "searched": 0.818
+    }
+   }
+  }
+ },
+ "visible_by_family": {
+  "note": "pointwise 95% intervals, unadjusted, exploratory; selection tasks helped choose the graph",
+  "combine strategies | selection": {
+   "n_tasks": 9,
+   "repositories": 5,
+   "repositories_with_a_task_where_searched_differs_from_h04": 0,
+   "rates": {
+    "h01": 0.6666666666666666,
+    "h04": 0.8888888888888888,
+    "searched": 0.8888888888888888
+   },
+   "model_calls": {
+    "h01": 18.38888888888889,
+    "h04": 26.38888888888889,
+    "searched": 22.833333333333332
+   },
+   "searched - h04": {
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "better": 0,
+    "worse": 0,
+    "n_tasks": 9
+   },
+   "h04 - h01": {
+    "mean": 0.2222222222222222,
+    "lo": 0.2222222222222222,
+    "hi": 0.2222222222222222,
+    "better": 2,
+    "worse": 0,
+    "n_tasks": 9
+   }
+  },
+  "combine strategies | confirmation": {
+   "n_tasks": 31,
+   "repositories": 9,
+   "repositories_with_a_task_where_searched_differs_from_h04": 3,
+   "rates": {
+    "h01": 0.43548387096774194,
+    "h04": 0.7258064516129032,
+    "searched": 0.8064516129032258
+   },
+   "model_calls": {
+    "h01": 21.93548387096774,
+    "h04": 28.967741935483872,
+    "searched": 29.274193548387096
+   },
+   "searched - h04": {
+    "mean": 0.08064516129032258,
+    "lo": 0.03225806451612903,
+    "hi": 0.12903225806451613,
+    "better": 5,
+    "worse": 0,
+    "n_tasks": 31
+   },
+   "h04 - h01": {
+    "mean": 0.2903225806451613,
+    "lo": 0.16129032258064516,
+    "hi": 0.43548387096774194,
+    "better": 11,
+    "worse": 0,
+    "n_tasks": 31
+   }
+  },
+  "combine strategies | pooled": {
+   "n_tasks": 40,
+   "repositories": 10,
+   "repositories_with_a_task_where_searched_differs_from_h04": 3,
+   "rates": {
+    "h01": 0.4875,
+    "h04": 0.7625,
+    "searched": 0.825
+   },
+   "model_calls": {
+    "h01": 21.1375,
+    "h04": 28.3875,
+    "searched": 27.825
+   },
+   "searched - h04": {
+    "mean": 0.0625,
+    "lo": 0.025,
+    "hi": 0.1125,
+    "better": 5,
+    "worse": 0,
+    "n_tasks": 40
+   },
+   "h04 - h01": {
+    "mean": 0.275,
+    "lo": 0.1625,
+    "hi": 0.3875,
+    "better": 13,
+    "worse": 0,
+    "n_tasks": 40
+   }
+  },
+  "lm_rewrite | selection": {
+   "n_tasks": 7,
+   "repositories": 6,
+   "repositories_with_a_task_where_searched_differs_from_h04": 2,
+   "rates": {
+    "h01": 0.5,
+    "h04": 0.7142857142857143,
+    "searched": 0.8571428571428571
+   },
+   "model_calls": {
+    "h01": 32.57142857142857,
+    "h04": 32.92857142857143,
+    "searched": 32.92857142857143
+   },
+   "searched - h04": {
+    "mean": 0.14285714285714285,
+    "lo": 0.14285714285714285,
+    "hi": 0.14285714285714285,
+    "better": 2,
+    "worse": 0,
+    "n_tasks": 7
+   },
+   "h04 - h01": {
+    "mean": 0.21428571428571427,
+    "lo": 0.21428571428571427,
+    "hi": 0.21428571428571427,
+    "better": 3,
+    "worse": 0,
+    "n_tasks": 7
+   }
+  },
+  "lm_rewrite | confirmation": {
+   "n_tasks": 29,
+   "repositories": 11,
+   "repositories_with_a_task_where_searched_differs_from_h04": 4,
+   "rates": {
+    "h01": 0.7068965517241379,
+    "h04": 0.8103448275862069,
+    "searched": 0.7758620689655172
+   },
+   "model_calls": {
+    "h01": 28.379310344827587,
+    "h04": 29.948275862068964,
+    "searched": 30.20689655172414
+   },
+   "searched - h04": {
+    "mean": -0.034482758620689655,
+    "lo": -0.1206896551724138,
+    "hi": 0.034482758620689655,
+    "better": 2,
+    "worse": 3,
+    "n_tasks": 29
+   },
+   "h04 - h01": {
+    "mean": 0.10344827586206896,
+    "lo": 0.0,
+    "hi": 0.22413793103448276,
+    "better": 7,
+    "worse": 3,
+    "n_tasks": 29
+   }
+  },
+  "lm_rewrite | pooled": {
+   "n_tasks": 36,
+   "repositories": 11,
+   "repositories_with_a_task_where_searched_differs_from_h04": 5,
+   "rates": {
+    "h01": 0.6666666666666666,
+    "h04": 0.7916666666666666,
+    "searched": 0.7916666666666666
+   },
+   "model_calls": {
+    "h01": 29.194444444444443,
+    "h04": 30.52777777777778,
+    "searched": 30.73611111111111
+   },
+   "searched - h04": {
+    "mean": 0.0,
+    "lo": -0.08333333333333333,
+    "hi": 0.06944444444444445,
+    "better": 4,
+    "worse": 3,
+    "n_tasks": 36
+   },
+   "h04 - h01": {
+    "mean": 0.125,
+    "lo": 0.027777777777777776,
+    "hi": 0.2222222222222222,
+    "better": 10,
+    "worse": 3,
+    "n_tasks": 36
+   }
+  },
+  "single-function strategies | selection": {
+   "n_tasks": 40,
+   "repositories": 8,
+   "repositories_with_a_task_where_searched_differs_from_h04": 2,
+   "rates": {
+    "h01": 0.9,
+    "h04": 0.9625,
+    "searched": 0.9625
+   },
+   "model_calls": {
+    "h01": 17.8625,
+    "h04": 17.0625,
+    "searched": 18.075
+   },
+   "searched - h04": {
+    "mean": 0.0,
+    "lo": -0.025,
+    "hi": 0.0375,
+    "better": 1,
+    "worse": 1,
+    "n_tasks": 40
+   },
+   "h04 - h01": {
+    "mean": 0.0625,
+    "lo": -0.0125,
+    "hi": 0.1375,
+    "better": 4,
+    "worse": 1,
+    "n_tasks": 40
+   }
+  },
+  "single-function strategies | confirmation": {
+   "n_tasks": 169,
+   "repositories": 11,
+   "repositories_with_a_task_where_searched_differs_from_h04": 5,
+   "rates": {
+    "h01": 0.9378698224852071,
+    "h04": 0.9556213017751479,
+    "searched": 0.9556213017751479
+   },
+   "model_calls": {
+    "h01": 16.816568047337277,
+    "h04": 16.949704142011836,
+    "searched": 17.118343195266274
+   },
+   "searched - h04": {
+    "mean": 0.0,
+    "lo": -0.01775147928994083,
+    "hi": 0.020710059171597635,
+    "better": 4,
+    "worse": 5,
+    "n_tasks": 169
+   },
+   "h04 - h01": {
+    "mean": 0.01775147928994083,
+    "lo": -0.005917159763313609,
+    "hi": 0.04437869822485207,
+    "better": 9,
+    "worse": 5,
+    "n_tasks": 169
+   }
+  },
+  "single-function strategies | pooled": {
+   "n_tasks": 209,
+   "repositories": 11,
+   "repositories_with_a_task_where_searched_differs_from_h04": 5,
+   "rates": {
+    "h01": 0.930622009569378,
+    "h04": 0.9569377990430622,
+    "searched": 0.9569377990430622
+   },
+   "model_calls": {
+    "h01": 17.016746411483254,
+    "h04": 16.971291866028707,
+    "searched": 17.301435406698566
+   },
+   "searched - h04": {
+    "mean": 0.0,
+    "lo": -0.01674641148325359,
+    "hi": 0.01674641148325359,
+    "better": 5,
+    "worse": 6,
+    "n_tasks": 209
+   },
+   "h04 - h01": {
+    "mean": 0.02631578947368421,
+    "lo": 0.0023923444976076554,
+    "hi": 0.05263157894736842,
+    "better": 13,
+    "worse": 6,
+    "n_tasks": 209
+   }
+  },
+  "several gold files (overlaps the others) | selection": {
+   "n_tasks": 2,
+   "repositories": 1,
+   "repositories_with_a_task_where_searched_differs_from_h04": 0,
+   "rates": {
+    "h01": 0.0,
+    "h04": 1.0,
+    "searched": 1.0
+   },
+   "model_calls": {
+    "h01": 15.75,
+    "h04": 32.25,
+    "searched": 30.5
+   },
+   "searched - h04": {
+    "mean": 0.0,
+    "lo": 0.0,
+    "hi": 0.0,
+    "better": 0,
+    "worse": 0,
+    "n_tasks": 2
+   },
+   "h04 - h01": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "better": 2,
+    "worse": 0,
+    "n_tasks": 2
+   }
+  },
+  "several gold files (overlaps the others) | confirmation": {
+   "n_tasks": 11,
+   "repositories": 3,
+   "repositories_with_a_task_where_searched_differs_from_h04": 2,
+   "rates": {
+    "h01": 0.18181818181818182,
+    "h04": 0.6363636363636364,
+    "searched": 0.8181818181818182
+   },
+   "model_calls": {
+    "h01": 19.954545454545453,
+    "h04": 33.09090909090909,
+    "searched": 33.5
+   },
+   "searched - h04": {
+    "mean": 0.18181818181818182,
+    "lo": 0.09090909090909091,
+    "hi": 0.2727272727272727,
+    "better": 4,
+    "worse": 0,
+    "n_tasks": 11
+   },
+   "h04 - h01": {
+    "mean": 0.45454545454545453,
+    "lo": 0.22727272727272727,
+    "hi": 0.6818181818181818,
+    "better": 6,
+    "worse": 0,
+    "n_tasks": 11
+   }
+  },
+  "several gold files (overlaps the others) | pooled": {
+   "n_tasks": 13,
+   "repositories": 3,
+   "repositories_with_a_task_where_searched_differs_from_h04": 2,
+   "rates": {
+    "h01": 0.15384615384615385,
+    "h04": 0.6923076923076923,
+    "searched": 0.8461538461538461
+   },
+   "model_calls": {
+    "h01": 19.307692307692307,
+    "h04": 32.96153846153846,
+    "searched": 33.03846153846154
+   },
+   "searched - h04": {
+    "mean": 0.15384615384615385,
+    "lo": 0.038461538461538464,
+    "hi": 0.2692307692307692,
+    "better": 4,
+    "worse": 0,
+    "n_tasks": 13
+   },
+   "h04 - h01": {
+    "mean": 0.5384615384615384,
+    "lo": 0.2692307692307692,
+    "hi": 0.7692307692307693,
+    "better": 8,
+    "worse": 0,
+    "n_tasks": 13
+   }
+  },
+  "(h04 - h01) combine minus single-function, pooled": {
+   "mean": 0.2486842105263158,
+   "lo": 0.12460652181313193,
+   "hi": 0.38618438723071635
+  }
+ }
+}

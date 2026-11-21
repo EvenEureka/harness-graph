@@ -45,9 +45,15 @@ for confirmation):
 - A graph per task: neither frozen policy (a rule on test visibility, a model on test visibility and task-text features) demonstrated an
   improvement over always using check-and-retry (+0.1 points, −1.8 to 2.2; 0.0 points, −1.7 to 1.7).
 
+- Follow-up on 900 fresh tasks (SWE-smith's `combine_file` and `combine_module` strategies, 15 unused repositories,
+  4,500 runs), run because a breakdown made after the fact had shown the selected graph ahead on 40 such tasks: the
+  selected graph repaired 81.5% against 81.3% for check-and-retry, +0.2 points (−1.3 to 1.7). Superiority was not
+  established and a five-point gain is excluded. Check-and-retry led the plain loop by 24.2 points (20.9 to 27.3).
+  As planned, no further test of these two graphs on another subset follows.
+
 Next phase: when no tests are given, does a graph that writes and enforces its own executable check repair more bugs
-than check-and-retry at the same total inference cost? It starts with premise tests that have stop rules written
-beforehand.
+than check-and-retry at the same total inference cost? It starts with a premise test that has a stop rule written
+beforehand: do model-written tests reject known wrong patches without rejecting correct ones?
 
 The protocol, with the deviations recorded, is `refine-logs/EXPERIMENT_PLAN.md` (the review records it cites are not
 part of this repository). Scope and limits are listed on the project page.

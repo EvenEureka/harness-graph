@@ -253,6 +253,46 @@ def confirm_numbers(hand) -> dict:
     return N
 
 
+def followup_numbers() -> dict:
+    """Section 4, follow-up: the selected graph against check-and-retry on fresh combine-strategy tasks (C1)."""
+    c, sg = load("c1.json"), load("spec_gap.json")
+    x = sg["visible_by_family"]["combine strategies | pooled"]
+    xs = sg["visible_by_family"]["combine strategies | selection"]
+    xd = x["searched - h04"]
+    assert xd["lo"] > 0 and x["n_tasks"] == 40 and xs["n_tasks"] == 9
+    cells = c["cells"]
+    assert all(v["cells"] == v["scored_records"] and v["engine_error_records"] == 0 and v["cut_off_lines"] == 0 for v in cells.values())
+    n_runs = sum(v["scored_records"] for v in cells.values())
+    p, k = c["primary"], c["secondary"]["h04 - h01, rollout 0"]
+    assert p["lo"] < 0 < p["hi"] < c["margin"] == 0.05 and not p["better_lower_bound_above_zero"] and p["margin_gain_excluded_upper_bound"], \
+        "the follow-up sentence no longer holds"
+    assert k["lo"] > 0
+    loo = [v["mean"] for v in c["secondary"]["leave_one_repository_out"].values()]
+    pool = json.loads((ROOT / "data" / "c1" / "pool.json").read_text())["repositories"]
+    assert set(pool) == set(c["repositories"]) and set(pool.values()) == {c["n_tasks"] // len(pool)}
+    tok = c["secondary"]["cost selected / h04"]["tokens"]
+    assert tok["hi"] < 1
+    g = c["graphs"]
+    late = {key: g[key]["past_deadline"] for key in ("h04", "selected")}
+    rows = [("Plain loop (graph A)", "plain", g["h01"]["resolved"], f'{pct1(g["h01"]["resolved"])} of {c["n_tasks"]} tasks, one run each', ""),
+            ("Check and retry (graph B)", "check", g["h04"]["resolved"], f'{pct1(g["h04"]["resolved"])} of {c["n_tasks"]} tasks, two runs each', ""),
+            ("Selected graph", "other", g["selected"]["resolved"], f'{pct1(g["selected"]["resolved"])} of {c["n_tasks"]} tasks, two runs each', "")]
+    sa = sg["search_tasks"]["spec"]["n_tasks"]
+    N = {"fig_followup": fig_dots(rows, 0.5, 0.9, "Repair rate of the plain loop, check-and-retry and the selected graph on the 900 "
+                                  "follow-up tasks, tests visible.", "share of the 900 follow-up tasks repaired", x0=350, x1=730)}
+    N.update(f_tasks=str(c["n_tasks"]), f_repos=str(len(c["repositories"])), f_per=str(c["n_tasks"] // len(c["repositories"])),
+             f_runs=f"{n_runs:,}", f_file=str(c["strategies"]["combine_file"]), f_module=str(c["strategies"]["combine_module"]),
+             f_top=pct1(p["rate_selected"]), f_h04=pct1(p["rate_h04"]), f_d=pts(p["mean"]), f_lo=num(p["lo"]), f_hi=num(p["hi"]),
+             f_better=str(p["better"]), f_worse=str(p["worse"]), f_loo_lo=pts(min(loo)), f_loo_hi=pts(max(loo)),
+             f_k=pts(k["mean"]), f_k_lo=num(k["lo"]), f_k_hi=num(k["hi"]), f_k_h04=pct1(k["rate_h04"]), f_k_h01=pct1(k["rate_h01"]),
+             f_tok=f'{(1 - tok["ratio"]) * 100:.1f}%', f_tok_lo=f'{(1 - tok["hi"]) * 100:.1f}%', f_tok_hi=f'{(1 - tok["lo"]) * 100:.1f}%',
+             f_late=str(sum(late.values())), f_late_h04=str(late["h04"]), f_late_top=str(late["selected"]),
+             x_n=str(x["n_tasks"]), x_sel=str(xs["n_tasks"]), x_d=pts(xd["mean"]), x_lo=num(xd["lo"]), x_hi=num(xd["hi"]),
+             a_n=str(sa["full"] + sa["partial"]), a_full=str(sa["full"]), a_part=str(sa["partial"]))
+    assert g["h01"]["past_deadline"] == 0
+    return N
+
+
 def search_numbers(q, hand) -> dict:
     """Section 4: the table (stage 1), replay on it (stage 2) and the live local searches (stage 3)."""
     N = {}
@@ -368,6 +408,7 @@ def main():
     N.update(search_numbers(q, hand))
     N.update(selection_numbers(hand))
     N.update(confirm_numbers(hand))
+    N.update(followup_numbers())
     N["fig_main"] = fig_main(rows_vis + rows_hid)
     N["fig_variants"] = fig_variants(main_["conditions"])
 

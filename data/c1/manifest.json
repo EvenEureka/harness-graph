@@ -1,0 +1,80 @@
+{
+ "written": "2026-11-20T14:01:57",
+ "tasks": "data/c1/confirm.jsonl",
+ "sha256_tasks": "98133df03bd20b9d",
+ "n_tasks": 900,
+ "repositories": {
+  "cantools__cantools.0c6a7871": 60,
+  "life4__textdistance.c3aca916": 60,
+  "rsalmei__alive-progress.35853799": 60,
+  "python-openxml__python-docx.0cf6d71f": 60,
+  "lepture__mistune.bf54ef67": 60,
+  "django-money__django-money.835c1ab8": 60,
+  "theskumar__python-dotenv.2b8635b7": 60,
+  "scanny__python-pptx.278b47b1": 60,
+  "tobymao__sqlglot.036601ba": 60,
+  "Mimino666__langdetect.a1598f1a": 60,
+  "pygments__pygments.27649ebb": 60,
+  "lincolnloop__python-qrcode.456b01d4": 60,
+  "pylint-dev__astroid.b114f6b5": 60,
+  "marshmallow-code__apispec.8b421526": 60,
+  "gweis__isodate.17cb25eb": 60
+ },
+ "strategies": {
+  "combine_file": 480,
+  "combine_module": 420
+ },
+ "graphs": {
+  "graphs_c1/g-p0-fn-t0-vn-kcon2-c0-snon.yaml": "16fbdedfc3d9aaf4",
+  "graphs_c1/g-p0-fn-t0-vn-kref2-c0-scom.yaml": "01458754f595e493",
+  "graphs_c1_plain/g-p0-fn-t0-vn-k0-c0-snon.yaml": "a072d011374df982"
+ },
+ "selected_graph": "g-p0-fn-t0-vn-kref2-c0-scom",
+ "sha256_scripts": {
+  "scripts/c1_analysis.py": "5c53c6f98da146b0",
+  "scripts/make_c1_pool.py": "3ffb163b7e9895ef",
+  "harness_graph/analysis.py": "5b0a61e693b3c590",
+  "harness_graph/executor.py": "11f6c42df8f9d22e",
+  "harness_graph/check.py": "8953647675afb31c",
+  "harness_graph/runner.py": "debfefb5294cc479"
+ },
+ "code_version": "06521c85bd87a6e8c794101e288d5e9f34ff2d7d",
+ "uncommitted_changes": [],
+ "model": "Qwen/Qwen3.8-27B",
+ "model_snapshot": [
+  "37561816e66b5b9153b1b64c10968c18c1e6f4a0"
+ ],
+ "images": {
+  "jyangballin/swesmith.x86_64.cantools_1776_cantools.0c6a7871": "sha256:1e631be5f6198502f1b68c5c27a6b9adcdf9fda3912e8419ebd9d3c488c60261",
+  "jyangballin/swesmith.x86_64.life4_1776_textdistance.c3aca916": "sha256:fec01b87c3b2f84e42ebb6f97ed3486850089e69338956e0bd63e9fce979da3e",
+  "jyangballin/swesmith.x86_64.rsalmei_1776_alive-progress.35853799": "sha256:44aa9ac482a721c33ff0be6dc6dd26886091ee3f28d8f390860dfcda010e2257",
+  "jyangballin/swesmith.x86_64.python-openxml_1776_python-docx.0cf6d71f": "sha256:70735926a41ffb37e7bb742a61f8aa89d198a681a33627c6a7234264c77d631c",
+  "jyangballin/swesmith.x86_64.lepture_1776_mistune.bf54ef67": "sha256:a67f9e022c88d9d1d53a635ec413d00be3674d934c6724359681a56c5b66301c",
+  "jyangballin/swesmith.x86_64.django-money_1776_django-money.835c1ab8": "sha256:2653217b0ea34cb6ceddbe6e61b9ae2f1eee94bac202990dbdfef901e15691b5",
+  "jyangballin/swesmith.x86_64.theskumar_1776_python-dotenv.2b8635b7": "sha256:88ab2e25fa213ba774e8662c0416c6e878af2dc07d904b71dfe903a413e811a5",
+  "jyangballin/swesmith.x86_64.scanny_1776_python-pptx.278b47b1": "sha256:743fb721779bbc8e5771f6c5ac61f7b4e9ea9e3f4717d9f06ed2b650e181afe1",
+  "jyangballin/swesmith.x86_64.tobymao_1776_sqlglot.036601ba": "sha256:08bbf9a13106425b251b10cb7b77fe469c228d59d665a53086aab545b76c8b1f",
+  "jyangballin/swesmith.x86_64.mimino666_1776_langdetect.a1598f1a": "sha256:1e0b261aa07f1439bd4a858b8168f7e313619d225cc40d7238bb6f82b11e4c13",
+  "jyangballin/swesmith.x86_64.pygments_1776_pygments.27649ebb": "sha256:ba403c3f4f52fb6ed76c0809b541f2a78ff7147a978a665c962ae11313002dd9",
+  "jyangballin/swesmith.x86_64.lincolnloop_1776_python-qrcode.456b01d4": "sha256:a1c5942d72cccd58e49d1cc948dd6439b659c90260229e1e262d9b5ad73423ac",
+  "jyangballin/swesmith.x86_64.pylint-dev_1776_astroid.b114f6b5": "sha256:c79266f577138ae60c9d0769e182f658763f838cd5b85b4228f696794699d4d0",
+  "jyangballin/swesmith.x86_64.marshmallow-code_1776_apispec.8b421526": "sha256:27694ac338f1c495e62f898937f33a5b93fc999868bbe4406de25b8641676065",
+  "jyangballin/swesmith.x86_64.gweis_1776_isodate.17cb25eb": "sha256:8f9bb0bac789e8e9ab64fe0bc20d6bc9169d7b1020c66fdcba6d8bfb91febe35"
+ },
+ "run": {
+  "thinking": false,
+  "model_calls": 50,
+  "deadline_s": 3600,
+  "workers_per_gpu": 16,
+  "tests": "visible",
+  "rollouts": {
+   "selected and h04": [
+    0,
+    1
+   ],
+   "h01": [
+    0
+   ]
+  }
+ }
+}

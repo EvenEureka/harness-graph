@@ -1,0 +1,10 @@
+name: g-p0-fn-t0-vn-k0-c0-snon
+description: plain loop
+entry: solve
+nodes:
+  solve:
+    type: agent
+edges:
+- - solve
+  - END
+  - done

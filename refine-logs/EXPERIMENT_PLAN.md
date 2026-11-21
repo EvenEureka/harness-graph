@@ -114,3 +114,86 @@ Checked by Codex (thread 01a1f4aa; record in REVIEW_STAGE4_RESULTS.md): go with 
 - Exploratory, added after the results were seen: `scripts/confirm_interaction.py` (a contrast with visible tests minus
   the same contrast with hidden tests) -> `results/summary/confirmation_exploratory.json`. Not a frozen contrast.
 
+
+## C1: one confirmatory test of an exploratory subgroup observation (written 2026-11-20, before any C1 task was run)
+
+Origin. After stages 5-6, an exploratory split by injection strategy (`scripts/spec_gap.py`, not pre-specified, four
+overlapping groups looked at, intervals pointwise and unadjusted) showed the selected graph ahead of check-and-retry on
+combine-strategy tasks with visible tests: +8.1 points on 31 confirmation tasks (five tasks better, none worse, in three
+repositories), 0 on 9 selection tasks, +6.2 [2.5, 11.3] pooled. On single-function-strategy tasks (209) the difference
+was 0.0 [-1.7, 1.7]. C1 tests this one observation on fresh tasks. Codex review: `REVIEW_NEXT_PHASE.md`.
+
+16. **Hypothesis.** On combine-strategy tasks with visible tests, the selected graph `g-p0-fn-t0-vn-kref2-c0-scom`
+    repairs more tasks than check-and-retry `g-p0-fn-t0-vn-kcon2-c0-snon`. The graphs are the YAML files of
+    `graphs_confirm/`, unchanged (their hashes are recorded by the analysis). Nothing is searched, tuned or re-selected.
+17. **Population and pool** (`scripts/make_c1_pool.py`; no rule looks at an agent outcome). SWE-smith tasks with
+    strategy exactly `combine_module` or `combine_file`, an issue text, gradable, at least one failing test, every
+    listed test (failing and passing) in a test file, from repositories whose name (any revision) appears in no task
+    file of this project and that have at least 60 such tasks. The repositories are put in a random order (seed 0)
+    and probed in that order by one job, one repository at a time. A repository is accepted if (1) its image can be
+    pulled and a workspace set up, (2) the full suite of the healthy repository finishes (tests may fail) in under
+    120 s (unrounded) with nothing else running in the probe job, (3) at least 40 of up to 90 randomly drawn tasks pass
+    both grader controls: the reference fix applies, does not time out and resolves; on the unchanged repository the
+    run does not time out, the defect applies and at least one failing test is observed to fail or error. An accepted
+    repository gives min(60, passing) randomly drawn tasks; repositories are added in the random order until 900 tasks;
+    the last one is cut at random. An exception inside a control is retried once for that task and then counts as a
+    failed control; a repository that fails step (1) is probed once more with the same candidates; the probe log is
+    append-only. The inputs of the random draws (dataset file hashes, exclusion list, repository order, candidate ids,
+    NumPy version, rules) are written to `data/c1/pool_inputs.json` before the first probe and checked by every later
+    step; the registry digest of every image is recorded.
+    The pool is therefore a repository-capped sample of computationally tractable, grader-validated combine-strategy
+    tasks from unused repositories with enough such tasks; its strategy proportions are whatever this sampling gives
+    and are reported. A suite under 120 s alone does not guarantee that a check finishes inside its 300 s limit under
+    16 concurrent episodes; such runs are kept and counted.
+    Sample size: the target is 900 tasks; feasibility may reduce the sample to at least 600 from at least 10
+    repositories (below that C1 is not run, and that is reported). Sample size is determined before agent outcomes
+    are available. The fallback reduces precision and power; inconclusive results remain possible. (Planning
+    approximation with variance 0.10 of the task-averaged paired difference: power for a three-point effect about 81%
+    at 900 tasks and 64% at 600.)
+18. **Runs.** Qwen3.8-27B, thinking off, 50 model calls, deadline 3,600 s, 16 concurrent episodes per GPU, at most two
+    GPU jobs, visible tests. Job A: rollout 0 of the selected graph and check-and-retry, their episodes interleaved.
+    Job B: rollout 1 of the same two graphs. Job C: rollout 0 of the plain loop, started after job A (secondary; it
+    runs later than the episodes it is compared with). Engine errors are rerun by resuming the same job; a scored
+    episode is never rerun; an image that cannot be pulled at run time is retried unchanged, and a task is never
+    dropped or replaced silently. If required cells cannot be completed there is no confirmatory verdict: no
+    complete-case decision. Episodes that end on the deadline or run past it are kept and counted. No interim analysis
+    of any contrast: until every cell is complete only counts of stored records and engine errors are looked at.
+    Before the first episode `data/c1/manifest.json` records the hashes of the pool file, the three graph files and
+    the analysis script, the code version, the model snapshot and the image digests.
+19. **Completeness.** `audit_cells`: exactly one scored record per (graph, task, rollout) cell (two rollouts for the
+    selected graph and check-and-retry, one for the plain loop), none outside.
+20. **Analysis** (`scripts/c1_analysis.py`, written and tested before the first C1 episode). Rollouts are averaged
+    inside a task. Primary contrast: selected - check-and-retry, all C1 tasks, each task once; tasks redrawn inside
+    repositories, 4,000 replicates, seed 0, 95% percentile interval. Verdicts, reported independently:
+    lower bound > 0 -> the selected graph is better on the sampled repository mixture under these eligibility and
+    execution rules; lower bound > 0.05 -> a gain above five points; upper bound < 0.05 -> a five-point gain is
+    excluded; otherwise inconclusive about five points. If the lower bound is not above 0 this line of work stops;
+    that is an operational stop, not a claim of no effect.
+    Secondary, descriptive: check-and-retry rollout 0 - plain loop rollout 0, task by task (same bootstrap); model
+    calls and tokens of the primary pair (equal call caps are not matched cost); the primary contrast by strategy and
+    by repository; the primary contrast with repositories redrawn with replacement and all tasks of a drawn repository
+    kept (task-weighted mean, 4,000 replicates, seed 0); the primary contrast with each repository left out in turn.
+21. **Scope of a positive result.** It supports this fixed graph on combine-strategy tasks of the sampled repositories
+    with visible tests. It is not evidence for routing, for other strategies, or for hidden tests. Whatever the
+    outcome, the sequence (stages 1-6, the exploratory split, C1) is reported.
+
+Amendments to the design first reviewed (all made before any C1 probe or episode; Codex check GO WITH CHANGES,
+`REVIEW_NEXT_PHASE.md`): repositories need 60 instead of 120 population tasks and give up to 60 tasks each, because
+only 18 unused repositories reach 120 and several of those are too heavy; fallback to at least 600 tasks; the plain
+loop gets one rollout instead of two; stricter negative control, append-only retries, pinned inputs, image digests,
+exclusion by repository name at any revision.
+
+Run-layout change, 2026-11-20 22:42 (made while jobs A and B were running, with only record counts and engine
+errors looked at): job C (plain loop, rollout 0) was split into two jobs over the odd and even lines of
+`data/c1/confirm.jsonl` (`confirm_a.jsonl`, `confirm_b.jsonl`, 450 tasks each), one behind job A and one behind
+job B, so that both GPUs are used. Same graph file, same settings, same cells; the analysis reads four files and
+still audits every cell against the full task file. Also recorded: the task file was committed about eight minutes
+after the first episode started; its hash was written to `data/c1/manifest.json` before the first episode and
+matches the committed file.
+
+C1 result, 2026-11-21: all 4,500 cells scored, no engine errors. selected - h04 = +0.2 points [-1.3, +1.7]
+(80 better / 75 worse of 900): superiority not established, five-point gain excluded. h04 - h01 (rollout 0) =
++24.2 points [20.9, 27.3]. By the rule in item 20 this line stops. 15 episodes ran past the deadline (9 h04,
+6 selected) and were kept. Disclosed: four per-episode outcomes were seen by accident in the first health check;
+nothing was changed afterwards. File: `results/summary/c1.json`.
+

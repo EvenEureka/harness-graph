@@ -4,3 +4,5 @@ __pycache__/
 .pytest_cache/
 logs/
 results/raw/
+data/c1/confirm_a.jsonl
+data/c1/confirm_b.jsonl

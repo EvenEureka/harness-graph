@@ -293,6 +293,63 @@ def followup_numbers() -> dict:
     return N
 
 
+def premise_numbers() -> dict:
+    """Section 4, premise test: can a check written by the model tell wrong patches from correct ones (P1)."""
+    g1, g2, fr = load("p1_G1.json"), load("p1_G2.json"), load("p1_G1_fixed_runner.json")
+    ts = json.loads((ROOT / "data" / "p1" / "tasks.summary.json").read_text())
+    ps = json.loads((ROOT / "data" / "p1" / "patches.summary.json").read_text())["counts"]
+    audit, lab = load("p1_leak_audit.json"), load("p1_G1_rejection_labels_rater2.json")
+    th = g2["thresholds"]
+    assert g1["generator"] == ["G1"] and g2["generator"] == ["G2"] and fr["generator"] == ["G1"] and fr["runner_of"] == "G2"
+    assert g1["thresholds"] == th == fr["thresholds"] and g1["n_tasks"] == g2["n_tasks"] == ts["kept"]
+    for d in (g1, g2, fr):
+        v, m = d["decision"], d["measures"]
+        assert v["verdict"] == "fail" and not any(v["thresholds_met"].values()) and all(v["denominators_at_least_94_tasks"].values())
+        assert not d["stored_record_problems"] and not m["patches_left_out_not_applied"]
+        assert m["false_rejection_reference"]["lo"] > th["reference_rejection_max"], "the false-rejection sentence no longer holds"
+        assert m["false_rejection_accepted"]["lo"] > th["accepted_patch_rejection_max"]
+        assert m["detection_primary"]["lo"] < th["detection_min"] < m["detection_primary"]["hi"], "the limit on detection no longer holds"
+        assert m["false_rejection_reference"]["two_runs_disagree"] == 0 and m["still_rejects_unrepaired_tree"]["mean"] == 1
+    c1, c2 = g1["generator_cost"], g2["generator_cost"]
+    assert c1["episodes"] == c2["episodes"] == 2 * ts["kept"] and c2["exit_reasons"].get("abstained", 0) == 0
+    assert c1["changed_the_repository"] == c2["changed_the_repository"] == 0
+    tot = lab["totals"]
+    ag = lab["agreement_with_rater1"]
+    N = {}
+    for k, d in (("1", g1), ("2", g2)):
+        m, c = d["measures"], d["generator_cost"]
+        for key, name in (("validity", "valid"), ("detection_primary", "det"), ("false_rejection_reference", "ref"),
+                          ("false_rejection_accepted", "acc")):
+            N.update({f"pt{k}_{name}": pct1(m[key]["mean"]), f"pt{k}_{name}_lo": num(m[key]["lo"]), f"pt{k}_{name}_hi": num(m[key]["hi"])})
+        N.update({f"pt{k}_first": pct1(m["validity_at_first_validation"]["mean"]), f"pt{k}_calls": f'{c["model_calls_mean"]:.1f}',
+                  f"pt{k}_tok": f'{round(c["tokens_mean"], -3):,.0f}', f"pt{k}_nocheck": str(c["episodes"] - c["exit_reasons"]["valid"])})
+    m2 = g2["measures"]
+    # tasks whose container held the answer, in the task sets of the earlier sections
+    parso = next(r for r in audit if "parso" in r)
+    assert set(ts["repositories_with_a_healthy_copy"]) == {parso}
+
+    def touched(path):
+        rows = [json.loads(l) for l in open(ROOT / path) if l.strip()]
+        hit = sum(t["repo_key"] == parso or (t["repo_key"] in audit and any(
+            b.startswith(f) for b in audit[t["repo_key"]]["stray_backup_files"] for f in t["f2p_files"])) for t in rows)
+        return hit, len(rows), sum(t["repo_key"] not in audit for t in rows)
+    s2, s5, sel = touched("data/confirm_tasks.jsonl"), touched("data/v2/confirm.jsonl"), touched("data/v2/select.jsonl")
+    assert sel[0] == 0 and sel[2] == 0 and s2[2] == 0 and len(ts["left_out"]) == ts["tasks"] - ts["kept"]
+    N.update(pt_tasks=str(ts["kept"]), pt_all=str(ts["tasks"]), pt_out=str(ts["tasks"] - ts["kept"]),
+             pt_repos=str(len(audit) - 1), pt_eps=str(c2["episodes"]),
+             pt_wrong=str(ps["primary"]), pt_wrong_tasks=str(ps["tasks with primary"]),
+             pt_acc=str(ps["correct"]), pt_acc_tasks=str(ps["tasks with correct"]),
+             pt_ref_n=str(m2["false_rejection_reference"]["n_tasks"]), pt_acc_n=str(m2["false_rejection_accepted"]["n_tasks"]),
+             pt_th_det=pct(th["detection_min"]), pt_th_ref=pct(th["reference_rejection_max"]), pt_th_acc=pct(th["accepted_patch_rejection_max"]),
+             pt_fr_ref=pct1(fr["measures"]["false_rejection_reference"]["mean"]),
+             pt_fr_det=pct1(fr["measures"]["detection_primary"]["mean"]), pt_fr_acc=pct1(fr["measures"]["false_rejection_accepted"]["mean"]),
+             pt_cases=str(sum(tot.values())), pt_issue=str(tot["I"]), pt_issue_tasks=str(lab["tasks_with_an_I_case"]),
+             pt_gen=str(tot["G"]), pt_runner=str(tot["H"]), pt_unclear=str(tot["U"]), pt_agree=str(ag["same"]), pt_both=str(ag["of"]),
+             lk_s2=str(s2[0]), lk_s2_n=str(s2[1]), lk_search=str(ts["tasks"] - ts["kept"]), lk_s5=str(s5[0]), lk_s5_n=str(s5[1]),
+             lk_s5_unaudited=str(s5[2]), lk_audited=str(len(audit)))
+    return N
+
+
 def search_numbers(q, hand) -> dict:
     """Section 4: the table (stage 1), replay on it (stage 2) and the live local searches (stage 3)."""
     N = {}
@@ -409,6 +466,7 @@ def main():
     N.update(selection_numbers(hand))
     N.update(confirm_numbers(hand))
     N.update(followup_numbers())
+    N.update(premise_numbers())
     N["fig_main"] = fig_main(rows_vis + rows_hid)
     N["fig_variants"] = fig_variants(main_["conditions"])
 

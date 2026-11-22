@@ -1,0 +1,35 @@
+{
+ "rater": "Claude (not blind to the hypothesis; labels written before seeing the second rater's)",
+ "labels": {
+  "I": "the issue text states this expected behaviour and the healthy code does not have it",
+  "G": "the expectation is the generator's own: not stated in the issue, or the issue's example was changed",
+  "H": "artefact of the check runner",
+  "U": "cannot tell from the excerpt"
+ },
+ "cases": {
+  "0": "G",
+  "1": "H",
+  "6": "H",
+  "8": "I",
+  "15": "G",
+  "17": "I",
+  "24": "I",
+  "26": "G",
+  "27": "G",
+  "28": "G",
+  "31": "I",
+  "32": "I",
+  "38": "I",
+  "44": "G",
+  "46": "G",
+  "48": "I",
+  "49": "I",
+  "53": "I",
+  "57": "I",
+  "60": "U",
+  "63": "G",
+  "64": "G",
+  "66": "G",
+  "71": "I"
+ }
+}

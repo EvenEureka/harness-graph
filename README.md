@@ -51,9 +51,17 @@ for confirmation):
   established and a five-point gain is excluded. Check-and-retry led the plain loop by 24.2 points (20.9 to 27.3).
   As planned, no further test of these two graphs on another subset follows.
 
-Next phase: when no tests are given, does a graph that writes and enforces its own executable check repair more bugs
-than check-and-retry at the same total inference cost? It starts with a premise test that has a stop rule written
-beforehand: do model-written tests reject known wrong patches without rejecting correct ones?
+- Premise test for the mechanism planned next (a graph that writes its own executable check when no tests are
+  given): can a check written by the model tell wrong patches from correct ones? 173 search tasks, two checks per
+  task, two versions of the check writer, pass rule fixed in advance (reject at least 30% of known wrong patches, at
+  most 2% of bug-free repositories, at most 5% of grader-accepted patches). Neither version passed. Version 2
+  rejected 28.6% of the wrong patches (22.0 to 35.7), the bug-free repository in 18.9% of cases (14.0 to 23.8) and
+  accepted patches in 15.5% (11.1 to 20.1); version 1: 27.2%, 21.3% and 19.3%. A check that fails on the buggy
+  program was not necessarily a reliable judge of a fix. As planned, the generated-check approach was stopped before
+  a repair experiment (`results/summary/p1_G1.json`, `p1_G2.json`; code in `harness_graph/gencheck.py`,
+  `scripts/p1_*.py`).
+
+No further experiment is scheduled at the time of this update.
 
 The protocol, with the deviations recorded, is `refine-logs/EXPERIMENT_PLAN.md` (the review records it cites are not
 part of this repository). Scope and limits are listed on the project page.
@@ -67,6 +75,7 @@ part of this repository). Scope and limits are listed on the project page.
 | `harness_graph/search.py`, `runner.py` | five search procedures, offline replay, live episodes |
 | `harness_graph/router.py` | choosing a graph per task: fit, freeze, score on other tasks |
 | `harness_graph/swe/` | SWE-smith tasks in Apptainer containers, test check, grader |
+| `harness_graph/gencheck.py` | premise test: the two-node check writer, the trusted check runner, evaluation on known patches |
 | `graphs/` | the 17 hand-designed graphs (YAML) |
 | `graphs_panel/` | the 32-graph panel used by the search experiment |
 | `data/` | task lists and splits |

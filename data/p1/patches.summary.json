@@ -1,0 +1,27 @@
+{
+ "tasks": 173,
+ "per_kind": 3,
+ "seed": 0,
+ "counts": {
+  "graded differently with hidden and visible tests": 0,
+  "correct": 398,
+  "tasks with primary": 89,
+  "tasks with secondary": 68,
+  "tasks with correct": 159,
+  "primary": 169,
+  "secondary": 164
+ },
+ "inputs_sha256": {
+  "data/p1/tasks.jsonl": "5c0ac3964ec28b4f",
+  "results/raw/search_hidden/a/hidden/qwen3.8-27b.jsonl": "2b462e18adb49be2",
+  "results/raw/search_hidden/b/hidden/qwen3.8-27b.jsonl": "0c74fadc2fb9eaa3",
+  "results/raw/search_table/a/visible/qwen3.8-27b.jsonl": "89c163c914a28c98",
+  "results/raw/search_table/b/visible/qwen3.8-27b.jsonl": "359268d7fa9f27c5"
+ },
+ "dropped_same_diff_graded_both_ways": {
+  "hidden": 0,
+  "visible": 0
+ },
+ "primary_wrong_with_failing_target_tests": 165,
+ "sha256": "bae6c2544001610e"
+}

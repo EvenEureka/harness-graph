@@ -1,0 +1,31 @@
+{
+ "source": "data/v2/search.jsonl",
+ "tasks": 188,
+ "kept": 173,
+ "left_out": {
+  "Suor__funcy.207a7810.func_basic__jqqluqpw": "backup copy of a hidden test file: tests/test_decorators.py.orig",
+  "Suor__funcy.207a7810.func_basic__wgy03qfk": "backup copy of a hidden test file: tests/test_decorators.py.orig",
+  "davidhalter__parso.338a5760.combine_module__fwwgeb3u": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__9l48yn7l": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__69y84hjh": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__b5bncza9": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__tmybnnwo": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__hcr9ebm4": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__4kwy7gm5": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__6f6ehr6n": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__37rde4wq": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__b9yu4vs7": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__huke58uj": "healthy copy of the package on disk",
+  "davidhalter__parso.338a5760.combine_module__vwukqqrw": "healthy copy of the package on disk",
+  "Suor__funcy.207a7810.lm_rewrite__s4m5gfwj": "backup copy of a hidden test file: tests/test_decorators.py.orig"
+ },
+ "repositories_with_a_healthy_copy": {
+  "davidhalter__parso.338a5760": [
+   "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/diff.py",
+   "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/pep8.py",
+   "/testbed/build/lib/parso/python/diff.py",
+   "/testbed/build/lib/parso/python/pep8.py"
+  ]
+ },
+ "sha256": "5c0ac3964ec28b4f"
+}

@@ -197,3 +197,171 @@ C1 result, 2026-11-21: all 4,500 cells scored, no engine errors. selected - h04 
 6 selected) and were kept. Disclosed: four per-episode outcomes were seen by accident in the first health check;
 nothing was changed afterwards. File: `results/summary/c1.json`.
 
+
+## P1: can a generated check tell wrong patches from correct ones? (premise test, written 2026-11-21 before any generator run)
+
+Why: stage 5, stage 6 and C1 found no gain beyond check-and-retry among graphs that reuse the supplied tests. With
+hidden tests most unsolved runs end with a wrong patch submitted. The next mechanism is a check the graph writes
+itself. Before any repair experiment, P1 measures the check alone. P1 uses the 188 search tasks (development
+tasks); nothing held out is touched. A pass here is a premise, not a result about repair.
+
+22. Generator G1, a frozen graph with two nodes (Qwen3.8-27B, thinking off, at most 30 model calls, hidden-test
+    workspace: defect applied, files with the failing tests removed):
+    - node `write_check`: an agent conversation (at most 15 commands per visit). It reads the issue and the
+      repository and writes `/tmp/hg_check.py`, which must print `HG_CHECK: PROBLEM_PRESENT` and exit with status 1
+      while the reported behaviour is wrong, and print `HG_CHECK: FIXED` and exit with status 0 once it is right. It
+      may not change the repository. Returns `done` (finish command) or `step_cap`.
+    - node `validate_check`: a program. It puts the repository back to its initial state, runs the script (120 s),
+      and returns `valid` if the script exits with 1 and its last marker line is `PROBLEM_PRESENT`, else `invalid`,
+      writing the reason (no script, crashed, says FIXED on the unrepaired code, timed out) into the feedback.
+    - edges: `write_check` -> `validate_check` on `done` or `step_cap` (carries nothing; the script is a file);
+      `validate_check` -> END on `valid`; `validate_check` -> `write_check` on `invalid` (the feedback text is added
+      to the conversation), at most once.
+    A (task, seed) whose last validation is not `valid` has no check. The gold fix, the tests and stored patches
+    are never shown to the generator and never used to pick or filter its scripts.
+23. Runs: 188 tasks x generation seeds 0 and 1 = 376 generator episodes. Pipeline debugging uses 8 selection tasks
+    (first 8 of a seed-0 shuffle of `data/v2/select.jsonl`), not the 188. At most two generator versions are ever
+    evaluated on the 188 tasks: G1, and one revision G2 only if G1 fails; both are reported. If G2 fails the
+    generated-check line stops.
+24. Trees a check is run on (program only, fresh hidden-test workspace each, 120 s, the candidate patch applied
+    with test and test-runner files left out as the grader does):
+    - unrepaired: the defect, no patch;
+    - reference: the healthy repository;
+    - correct alternatives: stored model patches the grader accepted, distinct, at most 3 per task (hidden-run
+      patches first, the rest drawn with seed 0);
+    - wrong, primary pool: stored model patches from hidden-test runs that the agent ended itself and the grader
+      rejected with a complete grade (189 patches on 102 tasks);
+    - wrong, secondary pool: other rejected hidden-run patches and up to 3 rejected visible-run patches per task
+      (198 patches on 80 tasks).
+    The pool is `data/p1/patches.jsonl` (`scripts/p1_patches.py`), fixed before any generator run.
+    A check accepts a tree if it exits with 0 and its last marker line is `FIXED`; anything else (problem present,
+    crash, time-out) is a rejection, with the reason recorded. A patch that does not apply is left out and counted.
+25. Measures (tasks redrawn inside repositories, 4,000 replicates, seed 0; a task's value is the mean over its
+    seeds and patches):
+    - validity: share of (task, seed) with a check;
+    - detection, primary: share of (task, seed, primary wrong patch) rejected; no check counts as not rejected;
+    - false rejection of the reference: among (task, seed) with a check, share that reject the healthy repository;
+    - false rejection of correct alternatives: among (task, seed, correct patch) with a check, share rejected.
+    Secondary: detection on the secondary pool; all of the above by issue-audit label (full / partial / not
+    audited), by strategy family, and by whether the wrong patch leaves target tests failing; agreement of the two
+    seeds; model calls and tokens per generator episode.
+26. Rule, on point estimates, intervals reported: P1 passes if detection >= 30%, false rejection of the reference
+    <= 2% and false rejection of correct alternatives <= 5%. Pass -> design the repair comparison (P2: hidden tests,
+    check-and-retry with and without the generated check, matched total inference budget, reviewed before any
+    run). Fail -> G2 or stop, as in item 23.
+27. Scope: P1 says how well this generator's checks separate stored patches of this model on these tasks. It does
+    not say that enforcing the check repairs more bugs, and a pass on development tasks needs fresh tasks later.
+
+P1 amendments after the design check (Codex: GO WITH CHANGES; all made before any generator run on the P1 tasks;
+record in REVIEW_P1_DESIGN.md). Where they differ from items 22-26 above, these hold.
+
+- Check format and verdict. The generated file defines `check()` with plain `assert` statements and begins with a
+  comment block `# ISSUE -> ASSERTIONS`. A trusted runner (text in `harness_graph/gencheck.py`), not the generated
+  file, decides: `fixed` if `check()` returns; `problem_present` if an `assert` written in the check file fails;
+  `invalid` for anything else (import error, any other exception, an assertion raised in other code, no `check()`,
+  time-out, no result). Mechanically accepted checks are not called correct specifications.
+- Validation. `validate_check` copies only the check file into a fresh workspace with the defect and runs it twice;
+  both runs must say `problem_present`, and the file must carry the comment block and be under 30,000 characters.
+  The generator's own workspace, scratch files and repository changes are never used; the repository in the
+  generator's workspace is reset before the one retry. Budgets: 15 model calls per visit, 30 in all.
+- What the generator can see: the issue, the repository with the defect, and the repository's remaining tests. The
+  files with the hidden grading tests are removed, in the same way on every tree a check is run on.
+- Healthy-copy audit (`scripts/p1_leak_audit.py`, containers only, no outcomes) and task file
+  (`scripts/p1_tasks.py`): 15 of the 188 search tasks are left out, by rules written in that script: the 12 parso
+  tasks (the image holds the healthy package as an installed egg and under `build/lib` inside the repository) and 3
+  funcy tasks (a backup copy `tests/test_decorators.py.orig` of their hidden test file remains). P1 uses the other
+  173 tasks (`data/p1/tasks.jsonl`). Recorded, not a reason to leave out: setuptools vendors another version of
+  typeguard; a few stale `.pyc` files. The same leftovers were present in every earlier hidden-test run of this
+  project (12 + 3 of 188 search tasks, and 2 funcy tasks of the 232 confirmation tasks): a limit of those results.
+- Patch pool (`scripts/p1_patches.py`, rebuilt on the 173 tasks: 169 primary wrong patches on 89 tasks, 164
+  secondary on 68, 398 grader-accepted on 159). A patch needs a complete grade (grader v2, applied, suite finished,
+  no missing designated test). Occurrences of the same diff are merged first: primary = rejected and produced by at
+  least one hidden-test run the agent ended itself; a diff graded both ways is dropped and counted (none).
+  Secondary = every other rejected hidden-run patch, then rejected visible-run patches up to three per task in all.
+  "Correct alternatives" are grader-accepted patches, not proofs of correctness.
+- Evaluation: the reference tree is run twice per check in independent fresh workspaces (primary rate = mean of the
+  two; any-rejection and disagreement also reported); the unrepaired tree once more. Rejections are split into
+  behavioural (an assert of the check failed) and crash or time-out. Patches are applied as the grader does (same
+  file filter, `git apply`, then GNU patch with fuzz 5); a patch that does not apply is left out and counted by pool
+  and reason. A run whose workspace cannot be built is tried once more, then stored as an infrastructure error.
+- Estimands. For each eligible task, average over its generation seeds and patches; then average equally over
+  tasks; whole tasks are redrawn inside repositories. Detection: tasks with a primary patch; no check = not
+  detected. False rejection of the reference: tasks with at least one delivered check, averaged over delivered
+  seeds. False rejection of accepted patches: tasks with a delivered check and an accepted patch. Also reported:
+  the denominators, false rejection of the reference per generation attempt, validity overall, at the first
+  validation and on the primary-pool tasks, generator calls and tokens.
+- Verdict (`scripts/p1_analysis.py`): pass = detection >= 30%, reference false rejection <= 2%, accepted-patch
+  false rejection <= 5% on point estimates, every expected run stored, each conditional rate resting on at least 94
+  tasks. Inconclusive = thresholds met where they can be judged but runs missing or fewer than 94 tasks behind a
+  conditional rate. Fail otherwise. The thresholds are engineering screens: a pass permits designing P2, it does not
+  show that the true rates meet the limits, and it does not by itself authorise P2. Before P2: an explicit argument
+  on cost and recovery (the generator may use up to 30 of an episode's 50 model calls; five points of repair gain
+  would need roughly 40% detection at a 40% chance of repair after a rejection).
+- What P1 adds over the existing reproduce-first graphs (h03, h08): a separate generation conversation, an enforced
+  validation by a program, a trusted runner, and a frozen file. None of these is claimed to be an improvement
+  until measured.
+- Issue-audit labels are single-model judgments, used only for a secondary, exploratory split.
+- Manifest: `scripts/p1_manifest.py` writes prompt, runner, script, pool and task hashes, model snapshot, images,
+  budgets and the decision rule to `data/p1/manifest_G1.json` before the first episode. Pipeline debugging used the
+  8 selection tasks in `data/p1/debug_ids.txt` (one seed): all 8 delivered a check at the first validation; one
+  check rejected the healthy repository (it asserts a behaviour the issue does not report). The G1 prompt was not
+  changed after this run.
+
+P1, second confirmation round (Codex: three fixes required before launch; all made before any generator run on the
+P1 tasks):
+- the two validation runs each get their own fresh workspace;
+- every P1 workspace (generation, validation, evaluation) has compiled `.pyc` files under the repository removed
+  before its initial commit (the audit found bytecode of a module that reference fixes touch, in soupsieve);
+- analysis: a missing or foreign record, a run made with another check than the stored one, or a patch that did not
+  apply makes the verdict inconclusive (never a fail from partial data, never a pass with a silent exclusion);
+- the runner counts an AssertionError raised by code in the check file, whether from an `assert` statement or an
+  explicit `raise AssertionError`: a mechanical rule, not a judgment that the assertion is the right one;
+- the audit records where the runner imports each package from (all nine repositories: from the repository under
+  test, including the `src/` layout of typeguard); a repository imported from elsewhere would be left out;
+- the manifest pins the image files by content hash, not by name.
+- Debugging after these fixes: the same 8 selection tasks with seed 1, to exercise the changed code: 8 of 8 delivered
+  a check, 6 at the first validation and 2 after the retry. No prompt change. In all, 16 generator episodes and 43
+  evaluation runs were spent on debugging, none on the P1 tasks.
+
+P1 result, generator G1 (2026-11-21): FAIL. 346 generator episodes, 2,425 evaluation runs, no missing or unusable
+record. Validity 97.4%; detection of primary wrong patches 27.2% [19.3, 35.0] (89 tasks); false rejection of the
+reference 21.3% [16.1, 26.9] (171 tasks); false rejection of grader-accepted patches 19.3% [14.2, 24.7] (159 tasks).
+File: `results/summary/p1_G1.json`; verdict and wording: REVIEW_P1_G1_RESULT.md. Exploratory reading of the 72 checks
+that reject the healthy repository (`results/summary/p1_G1_reference_rejections.json`, two model raters, 20 of 24
+shared labels equal): in 35 the issue states an expectation the reference code does not have (22 tasks), in 31 the
+expectation is the generator's own or the issue's example was altered, 5 are a defect of the check runner (the
+check module was not registered in `sys.modules`; typeguard), 1 unclear.
+
+P1, generator G2: the one permitted revision (frozen before any G2 run on the P1 tasks; Codex: GO WITH CHANGES,
+applied; record in REVIEW_P1_DESIGN.md). Same 173 tasks, seeds, patch pool, budgets, validation, evaluation,
+analysis and thresholds as G1. What changes, all from reading G1's reference rejections, with no correction aimed
+at a particular task:
+- the runner registers the check module in `sys.modules`;
+- prompt: the issue's own examples unchanged (calls, values, quoting, escaping; shell commands as argument lists);
+  expected values are to be looked up in the repository's remaining tests, docstrings and documentation, which win
+  over the issue in details; the present output of the code is not evidence; "no longer raises" is enough only
+  where the issue reports an unwanted exception; the evidence is named per assert ("issue only" is allowed, so
+  corroboration is asked for, not enforced);
+- the generator may decline: a file with exactly one line `# NO CHECK: <reason>` ends the episode with no check
+  (no retry; counts as not detected);
+- the prompt states the budget (at most 15 responses, a first version of the file by about the tenth).
+Debugging, 8 selection tasks x 2 seeds, twice: round 1 (no budget sentence) 14 of 16 delivered a check, 5 at the
+first validation, 9 had no file when their 15 responses ran out; 1 of 14 delivered checks rejected the healthy
+repository. Then the budget sentence was added ("You have 15 commands ..."). Round 2: 16 of 16 delivered, 11 at the
+first validation. After round 2 the sentence was reworded to match the implementation ("at most 15 responses, the
+finish response included") and the decline rule was made strict; no run was made between that rewording and the
+freeze. These are development observations, not results.
+Also: evaluation records now carry the runner's hash; a file with runs made by different runners is refused. As a
+separately labelled sensitivity result, all frozen G1 checks are re-evaluated with the fixed runner
+(`results/summary/p1_G1_fixed_runner.json`); the G1 result above stands as the G1 result.
+If G2 fails, the generated-check line stops before any repair experiment. If G2 passes, P2 still needs its own
+cost-and-recovery argument and review.
+
+P1 result, generator G2 (2026-11-21 16:12; 346 episodes, 2,431 evaluation runs, no problems in the records): FAIL on
+all three thresholds. Valid check 97.7% (first validation 77.5%); detection of primary wrong patches 28.6%
+[22.0, 35.7]; false rejection of the reference 18.9% [14.0, 23.8] (172 tasks); of grader-accepted patches 15.5%
+[11.1, 20.1] (158 tasks); 14.2 model calls and 78k tokens per episode; the decline option was never used (0 of 346);
+two seeds agree on a patch 79.3%. Sensitivity, frozen G1 checks with the corrected runner: detection 25.7%, reference
+19.9%, accepted 17.7% (the runner defect does not explain G1's failure). Files: `results/summary/p1_G2.json`,
+`results/summary/p1_G1_fixed_runner.json`; verdict and wording: REVIEW_P1_G2_RESULT.md.
+By the rule above the generated-check line stops here: no third generator, no repair experiment (P2).

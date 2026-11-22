@@ -1,0 +1,167 @@
+{
+ "written": "2026-11-21T15:12:40",
+ "generator": "G2",
+ "tasks": "data/p1/tasks.jsonl",
+ "sha256_tasks": "5c0ac3964ec28b4f",
+ "n_tasks": 173,
+ "generation_seeds": [
+  0,
+  1
+ ],
+ "patches": {
+  "file": "data/p1/patches.jsonl",
+  "tasks": 173,
+  "per_kind": 3,
+  "seed": 0,
+  "counts": {
+   "graded differently with hidden and visible tests": 0,
+   "correct": 398,
+   "tasks with primary": 89,
+   "tasks with secondary": 68,
+   "tasks with correct": 159,
+   "primary": 169,
+   "secondary": 164
+  },
+  "inputs_sha256": {
+   "data/p1/tasks.jsonl": "5c0ac3964ec28b4f",
+   "results/raw/search_hidden/a/hidden/qwen3.8-27b.jsonl": "2b462e18adb49be2",
+   "results/raw/search_hidden/b/hidden/qwen3.8-27b.jsonl": "0c74fadc2fb9eaa3",
+   "results/raw/search_table/a/visible/qwen3.8-27b.jsonl": "89c163c914a28c98",
+   "results/raw/search_table/b/visible/qwen3.8-27b.jsonl": "359268d7fa9f27c5"
+  },
+  "dropped_same_diff_graded_both_ways": {
+   "hidden": 0,
+   "visible": 0
+  },
+  "primary_wrong_with_failing_target_tests": 165,
+  "sha256": "bae6c2544001610e"
+ },
+ "sha256_text": {
+  "task prompt": "2b3866bb82c4676e",
+  "feedback prompt": "c94e3135220e72d3",
+  "feedback reasons": "bc648577c94a833d",
+  "trusted runner": "350067652832e997"
+ },
+ "may_decline_to_write_a_check": true,
+ "sha256_files": {
+  "harness_graph/gencheck.py": "d564486f001ff9aa",
+  "harness_graph/prompts.py": "35f887385b706db7",
+  "harness_graph/swe/container.py": "71f7d71646f9c875",
+  "harness_graph/swe/grading.py": "8db00e15023d77fb",
+  "harness_graph/llm.py": "aa779cad2d73be63",
+  "harness_graph/analysis.py": "5b0a61e693b3c590",
+  "scripts/p1_generate.py": "d9d2edf82f92b966",
+  "scripts/p1_evaluate.py": "71fb9bb4d95d36db",
+  "scripts/p1_analysis.py": "031ebb90f7daa042",
+  "scripts/p1_patches.py": "039eba881c782e09",
+  "scripts/p1_tasks.py": "889d56215ee873d7",
+  "scripts/p1_leak_audit.py": "ba145dce6efd2821"
+ },
+ "task_file_rules": {
+  "source": "data/v2/search.jsonl",
+  "tasks": 188,
+  "kept": 173,
+  "left_out": {
+   "Suor__funcy.207a7810.func_basic__jqqluqpw": "backup copy of a hidden test file: tests/test_decorators.py.orig",
+   "Suor__funcy.207a7810.func_basic__wgy03qfk": "backup copy of a hidden test file: tests/test_decorators.py.orig",
+   "davidhalter__parso.338a5760.combine_module__fwwgeb3u": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__9l48yn7l": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__69y84hjh": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__b5bncza9": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__tmybnnwo": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__hcr9ebm4": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__4kwy7gm5": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__6f6ehr6n": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__37rde4wq": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__b9yu4vs7": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__huke58uj": "healthy copy of the package on disk",
+   "davidhalter__parso.338a5760.combine_module__vwukqqrw": "healthy copy of the package on disk",
+   "Suor__funcy.207a7810.lm_rewrite__s4m5gfwj": "backup copy of a hidden test file: tests/test_decorators.py.orig"
+  },
+  "repositories_with_a_healthy_copy": {
+   "davidhalter__parso.338a5760": [
+    "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/diff.py",
+    "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/pep8.py",
+    "/testbed/build/lib/parso/python/diff.py",
+    "/testbed/build/lib/parso/python/pep8.py"
+   ]
+  },
+  "sha256": "5c0ac3964ec28b4f"
+ },
+ "code_version": "bcc32eb37f141dd1ddcde7a72e4fcf35e908fc9f",
+ "uncommitted_changes": [],
+ "model": "Qwen/Qwen3.8-27B",
+ "model_snapshot": [
+  "37561816e66b5b9153b1b64c10968c18c1e6f4a0"
+ ],
+ "images": {
+  "jyangballin/swesmith.x86_64.agronholm_1776_typeguard.b6a7e438": {
+   "sif_sha256": "464fdf173bcc2280",
+   "sif_bytes": 1337270272,
+   "registry_digest_now": "sha256:0d9c7d256a3a28ac2e16898be471df03bbeb4b66e6c63a5a1b7e796f31b35c56"
+  },
+  "jyangballin/swesmith.x86_64.andialbrecht_1776_sqlparse.e57923b3": {
+   "sif_sha256": "d22585173a3facaf",
+   "sif_bytes": 1260789760,
+   "registry_digest_now": "sha256:f891cf0bd09856bc81c7397b0031b4c3aa55709242769771f87db61e804a68fc"
+  },
+  "jyangballin/swesmith.x86_64.arrow-py_1776_arrow.1d70d009": {
+   "sif_sha256": "a8a1f69f53557b51",
+   "sif_bytes": 1330495488,
+   "registry_digest_now": "sha256:b6ee7b19255d3810e7eeff59a954b27002dde4d7991ca7f9555c0a5b99993f17"
+  },
+  "jyangballin/swesmith.x86_64.facelessuser_1776_soupsieve.a8080d97": {
+   "sif_sha256": "dda41ea967d0e5a5",
+   "sif_bytes": 1299771392,
+   "registry_digest_now": "sha256:1adae70570f57ef516bf0d2b1da4286dff6f680454b47d6e8bac696ef24ee907"
+  },
+  "jyangballin/swesmith.x86_64.kayak_1776_pypika.1c9646f0": {
+   "sif_sha256": "ba175643debc1630",
+   "sif_bytes": 1307987968,
+   "registry_digest_now": "sha256:7f43837d9d99e7ad119cc49c71445b8aeffedb1753b90eccbdf50eb5b3bb9669"
+  },
+  "jyangballin/swesmith.x86_64.mahmoud_1776_glom.fb3c4e76": {
+   "sif_sha256": "306c1a5490b90708",
+   "sif_bytes": 1278963712,
+   "registry_digest_now": "sha256:5fe91c5d1431b88f49568c4381b37b9dd701b8339248690598f498db360f3683"
+  },
+  "jyangballin/swesmith.x86_64.seperman_1776_deepdiff.ed252022": {
+   "sif_sha256": "708f1fa3d0e8a1a3",
+   "sif_bytes": 1417953280,
+   "registry_digest_now": "sha256:379d2d260edd71ddc04f4cf2a3ef8c221a2b2b4d74a45fc8e67affbe58ef087d"
+  },
+  "jyangballin/swesmith.x86_64.suor_1776_funcy.207a7810": {
+   "sif_sha256": "135ba77a6b16f039",
+   "sif_bytes": 1260359680,
+   "registry_digest_now": "sha256:cff3ac9dcd54338c8413ca3b84e4a4826ed82b0a519c432e642f2680ee24589a"
+  }
+ },
+ "generator_settings": {
+  "thinking": false,
+  "temperature": 0.7,
+  "top_p": 0.8,
+  "top_k": 20,
+  "model_calls": 30,
+  "model_calls_per_visit": 15,
+  "visits": 2,
+  "command_timeout_s": 180,
+  "validation_runs": 2,
+  "check_timeout_s": 120,
+  "max_check_characters": 30000,
+  "workers_per_gpu": 16
+ },
+ "evaluation_settings": {
+  "reference_runs": 2,
+  "check_timeout_s": 120,
+  "fresh_workspace_per_run": true,
+  "patch_application": "grader v2 file filter, git apply, then GNU patch --fuzz=5",
+  "infrastructure_error": "one more attempt, then stored as an error and reported; never scored"
+ },
+ "decision": {
+  "pass": "detection >= 0.30, reference false rejection <= 0.02, accepted-patch false rejection <= 0.05 (point estimates), each conditional rate on >= 94 tasks, and no problem in the stored records",
+  "inconclusive": "any missing, foreign or unusable record (a run made with another check or runner, a patch that did not apply); or thresholds met where they can be judged but a conditional rate on < 94 tasks",
+  "fail": "with complete records: detection < 0.30, or a conditional rate with >= 94 tasks above its limit"
+ },
+ "runner_sha_in_evaluation_records": "350067652832e997",
+ "development_history": "refine-logs/EXPERIMENT_PLAN.md, section P1 (debugging rounds and prompt changes of this generator)"
+}

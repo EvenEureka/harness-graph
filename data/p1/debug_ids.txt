@@ -1,0 +1,8 @@
+mahmoud__glom.fb3c4e76.func_basic__ud2me55v
+agronholm__typeguard.b6a7e438.func_pm_ctrl_shuffle__rw2zp0ga
+andialbrecht__sqlparse.e57923b3.func_basic__fgwu3w6z
+agronholm__typeguard.b6a7e438.func_pm_ctrl_shuffle__4zx01hfx
+arrow-py__arrow.1d70d009.func_basic__w1skinei
+facelessuser__soupsieve.a8080d97.func_basic__2iebtpd0
+Suor__funcy.207a7810.func_basic__thpitv9q
+kayak__pypika.1c9646f0.func_basic__4osxmqev

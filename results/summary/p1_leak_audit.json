@@ -1,0 +1,421 @@
+{
+ "Suor__funcy.207a7810": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 8,
+  "other_copies": [],
+  "other_copies_with_different_content": 0,
+  "editable_installs_from_testbed": "{}",
+  "pyc_files_in_testbed": "0",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/funcy.egg-info",
+   "/testbed/tests/test_decorators.py.orig",
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "funcy": "/testbed/funcy/__init__.py"
+  },
+  "stray_backup_files": [
+   "tests/test_decorators.py.orig"
+  ]
+ },
+ "agronholm__typeguard.b6a7e438": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 9,
+  "other_copies": [
+   {
+    "file": "src/typeguard/__init__.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/__init__.py",
+    "content": "SAME"
+   },
+   {
+    "file": "src/typeguard/__init__.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/__init__.py",
+    "content": "SAME"
+   },
+   {
+    "file": "src/typeguard/_checkers.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_checkers.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_checkers.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_checkers.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_decorators.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_decorators.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_decorators.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_decorators.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_importhook.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_importhook.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_importhook.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_importhook.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_memo.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_memo.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_memo.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_memo.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_pytest_plugin.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_pytest_plugin.py",
+    "content": "SAME"
+   },
+   {
+    "file": "src/typeguard/_pytest_plugin.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_pytest_plugin.py",
+    "content": "SAME"
+   },
+   {
+    "file": "src/typeguard/_suppression.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_suppression.py",
+    "content": "SAME"
+   },
+   {
+    "file": "src/typeguard/_suppression.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_suppression.py",
+    "content": "SAME"
+   },
+   {
+    "file": "src/typeguard/_transformer.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_transformer.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_transformer.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_transformer.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_utils.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_utils.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "src/typeguard/_utils.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/setuptools/_vendor/typeguard/_utils.py",
+    "content": "DIFFERENT"
+   }
+  ],
+  "other_copies_with_different_content": 12,
+  "editable_installs_from_testbed": "{\"typeguard\": {\"dir_info\": {\"editable\": true}, \"url\": \"file:///testbed\"}}",
+  "pyc_files_in_testbed": "0",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/src/typeguard.egg-info",
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "typeguard": "/testbed/src/typeguard/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "andialbrecht__sqlparse.e57923b3": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 7,
+  "other_copies": [],
+  "other_copies_with_different_content": 0,
+  "editable_installs_from_testbed": "{\"sqlparse\": {\"dir_info\": {\"editable\": true}, \"url\": \"file:///testbed\"}}",
+  "pyc_files_in_testbed": "0",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "sqlparse": "/testbed/sqlparse/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "arrow-py__arrow.1d70d009": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 6,
+  "other_copies": [],
+  "other_copies_with_different_content": 0,
+  "editable_installs_from_testbed": "{\"arrow\": {\"dir_info\": {\"editable\": true}, \"url\": \"file:///testbed\"}}",
+  "pyc_files_in_testbed": "0",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "arrow": "/testbed/arrow/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "davidhalter__parso.338a5760": {
+  "tasks": 12,
+  "files_touched_by_reference_fixes": 3,
+  "other_copies": [
+   {
+    "file": "parso/python/diff.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/diff.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "parso/python/diff.py",
+    "copy": "/testbed/build/lib/parso/python/diff.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "parso/python/pep8.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/pep8.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "parso/python/pep8.py",
+    "copy": "/testbed/build/lib/parso/python/pep8.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "parso/python/token.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/parso-0.8.4-py3.10.egg/parso/python/token.py",
+    "content": "SAME"
+   },
+   {
+    "file": "parso/python/token.py",
+    "copy": "/testbed/build/lib/parso/python/token.py",
+    "content": "SAME"
+   }
+  ],
+  "other_copies_with_different_content": 4,
+  "editable_installs_from_testbed": "{}",
+  "pyc_files_in_testbed": "21",
+  "touched_modules_with_pyc": 3,
+  "leftovers": [
+   "/testbed/build",
+   "/testbed/dist",
+   "/testbed/parso.egg-info",
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "parso": "/testbed/parso/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "facelessuser__soupsieve.a8080d97": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 5,
+  "other_copies": [],
+  "other_copies_with_different_content": 0,
+  "editable_installs_from_testbed": "{\"soupsieve\": {\"dir_info\": {\"editable\": true}, \"url\": \"file:///testbed\"}}",
+  "pyc_files_in_testbed": "2",
+  "touched_modules_with_pyc": 1,
+  "leftovers": [
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "soupsieve": "/testbed/soupsieve/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "kayak__pypika.1c9646f0": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 8,
+  "other_copies": [],
+  "other_copies_with_different_content": 0,
+  "editable_installs_from_testbed": "{\"PyPika\": {\"dir_info\": {\"editable\": true}, \"url\": \"file:///testbed\"}}",
+  "pyc_files_in_testbed": "0",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/PyPika.egg-info",
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "pypika": "/testbed/pypika/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "mahmoud__glom.fb3c4e76": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 8,
+  "other_copies": [
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pkg_resources/tests/data/my-test-package-source/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.15-he870216_1/info/recipe/parent/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.15-he870216_1/info/test/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.16-he870216_1/info/recipe/parent/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.16-he870216_1/info/test/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.1.0-py310h06a4308_0/lib/python3.10/site-packages/pkg_resources/tests/data/my-test-package-source/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/usr/lib/python3.10/test/libregrtest/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/usr/lib/python3/dist-packages/pkg_resources/tests/data/my-test-package-source/setup.py",
+    "content": "DIFFERENT"
+   }
+  ],
+  "other_copies_with_different_content": 8,
+  "editable_installs_from_testbed": "{}",
+  "pyc_files_in_testbed": "1",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/glom.egg-info",
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "glom": "/testbed/glom/__init__.py"
+  },
+  "stray_backup_files": []
+ },
+ "seperman__deepdiff.ed252022": {
+  "tasks": 22,
+  "files_touched_by_reference_fixes": 13,
+  "other_copies": [
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/IPython/testing/plugin/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/numpy/_core/tests/examples/cython/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/numpy/_core/tests/examples/limited_api/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/envs/testbed/lib/python3.10/site-packages/pkg_resources/tests/data/my-test-package-source/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.16-he870216_1/info/recipe/parent/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.16-he870216_1/info/test/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.18-h1a3bd86_0/info/recipe/parent/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/python-3.10.18-h1a3bd86_0/info/test/tests/distutils/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/opt/miniconda3/pkgs/setuptools-75.8.0-py310h06a4308_0/lib/python3.10/site-packages/pkg_resources/tests/data/my-test-package-source/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/usr/lib/python3.10/test/libregrtest/setup.py",
+    "content": "DIFFERENT"
+   },
+   {
+    "file": "setup.py",
+    "copy": "/usr/lib/python3/dist-packages/pkg_resources/tests/data/my-test-package-source/setup.py",
+    "content": "DIFFERENT"
+   }
+  ],
+  "other_copies_with_different_content": 11,
+  "editable_installs_from_testbed": "{}",
+  "pyc_files_in_testbed": "0",
+  "touched_modules_with_pyc": 0,
+  "leftovers": [
+   "/testbed/deepdiff.egg-info",
+   "/testbed/.git"
+  ],
+  "git_commits_stashes_branches": [
+   "1",
+   "0",
+   "1"
+  ],
+  "import_origin": {
+   "deepdiff": "/testbed/deepdiff/__init__.py"
+  },
+  "stray_backup_files": []
+ }
+}

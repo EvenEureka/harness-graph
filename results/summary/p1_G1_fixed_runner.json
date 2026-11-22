@@ -1,0 +1,593 @@
+{
+ "generator": [
+  "G1"
+ ],
+ "runner_of": "G2",
+ "n_tasks": 173,
+ "seeds": [
+  0,
+  1
+ ],
+ "reps": 4000,
+ "boot_seed": 0,
+ "thresholds": {
+  "detection_min": 0.3,
+  "reference_rejection_max": 0.02,
+  "accepted_patch_rejection_max": 0.05,
+  "min_tasks_for_a_conditional_rate": 94
+ },
+ "stored_record_problems": [],
+ "measures": {
+  "validity": {
+   "mean": 0.9739884393063584,
+   "lo": 0.953757225433526,
+   "hi": 0.9913294797687862,
+   "n_tasks": 173
+  },
+  "validity_at_first_validation": {
+   "mean": 0.8208092485549133,
+   "lo": 0.7687861271676301,
+   "hi": 0.869942196531792,
+   "n_tasks": 173
+  },
+  "detection_primary": {
+   "mean": 0.25655430711610483,
+   "lo": 0.18164794007490637,
+   "hi": 0.3333333333333333,
+   "n_tasks": 89,
+   "behavioural": 0.24531835205992508,
+   "crash_or_timeout": 0.011235955056179775
+  },
+  "validity_on_primary_tasks": {
+   "mean": 0.9606741573033708,
+   "lo": 0.9213483146067416,
+   "hi": 0.9887640449438202,
+   "n_tasks": 89
+  },
+  "detection_secondary": {
+   "mean": 0.29534313725490197,
+   "lo": 0.20952818627450978,
+   "hi": 0.3860294117647059,
+   "n_tasks": 68,
+   "behavioural": 0.2806372549019608,
+   "crash_or_timeout": 0.014705882352941176
+  },
+  "false_rejection_accepted": {
+   "mean": 0.1771488469601677,
+   "lo": 0.12788259958071277,
+   "hi": 0.23060796645702306,
+   "n_tasks": 159,
+   "behavioural": 0.1656184486373166,
+   "crash_or_timeout": 0.011530398322851153
+  },
+  "false_rejection_reference": {
+   "mean": 0.19883040935672514,
+   "lo": 0.14912280701754385,
+   "hi": 0.25146198830409355,
+   "n_tasks": 171,
+   "any_of_two_runs": 0.19883040935672514,
+   "two_runs_disagree": 0.0
+  },
+  "false_rejection_reference_per_attempt": {
+   "mean": 0.1936416184971098,
+   "lo": 0.1416184971098266,
+   "hi": 0.24566473988439305,
+   "n_tasks": 173
+  },
+  "still_rejects_unrepaired_tree": {
+   "mean": 1.0,
+   "lo": 1.0,
+   "hi": 1.0,
+   "n_tasks": 171
+  },
+  "patches_left_out_not_applied": {}
+ },
+ "decision": {
+  "verdict": "fail",
+  "thresholds_met": {
+   "detection_at_least_0.30": false,
+   "reference_rejection_at_most_0.02": false,
+   "accepted_patch_rejection_at_most_0.05": false
+  },
+  "denominators_at_least_94_tasks": {
+   "reference": true,
+   "accepted_patches": true
+  },
+  "stored_record_problems": 0
+ },
+ "by_group": {
+  "issue audit: full": {
+   "validity": {
+    "mean": 0.9852941176470589,
+    "lo": 0.9558823529411765,
+    "hi": 1.0,
+    "n_tasks": 34
+   },
+   "validity_at_first_validation": {
+    "mean": 0.7647058823529411,
+    "lo": 0.6617647058823529,
+    "hi": 0.8676470588235294,
+    "n_tasks": 34
+   },
+   "detection_primary": {
+    "mean": 0.4629629629629629,
+    "lo": 0.2777777777777778,
+    "hi": 0.6481481481481481,
+    "n_tasks": 9,
+    "behavioural": 0.4629629629629629,
+    "crash_or_timeout": 0.0
+   },
+   "validity_on_primary_tasks": {
+    "mean": 0.9444444444444444,
+    "lo": 0.8333333333333334,
+    "hi": 1.0,
+    "n_tasks": 9
+   },
+   "detection_secondary": {
+    "mean": 0.4333333333333334,
+    "lo": 0.23333333333333334,
+    "hi": 0.65,
+    "n_tasks": 10,
+    "behavioural": 0.4333333333333334,
+    "crash_or_timeout": 0.0
+   },
+   "false_rejection_accepted": {
+    "mean": 0.16666666666666666,
+    "lo": 0.07352941176470588,
+    "hi": 0.2745098039215686,
+    "n_tasks": 34,
+    "behavioural": 0.16666666666666666,
+    "crash_or_timeout": 0.0
+   },
+   "false_rejection_reference": {
+    "mean": 0.20588235294117646,
+    "lo": 0.10294117647058823,
+    "hi": 0.3235294117647059,
+    "n_tasks": 34,
+    "any_of_two_runs": 0.20588235294117646,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.20588235294117646,
+    "lo": 0.10294117647058823,
+    "hi": 0.3235294117647059,
+    "n_tasks": 34
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 34
+   },
+   "patches_left_out_not_applied": {}
+  },
+  "issue audit: partial": {
+   "validity": {
+    "mean": 0.975,
+    "lo": 0.9333333333333333,
+    "hi": 1.0,
+    "n_tasks": 60
+   },
+   "validity_at_first_validation": {
+    "mean": 0.825,
+    "lo": 0.7416666666666667,
+    "hi": 0.9,
+    "n_tasks": 60
+   },
+   "detection_primary": {
+    "mean": 0.2424242424242424,
+    "lo": 0.15151515151515152,
+    "hi": 0.3333333333333333,
+    "n_tasks": 44,
+    "behavioural": 0.23106060606060605,
+    "crash_or_timeout": 0.011363636363636364
+   },
+   "validity_on_primary_tasks": {
+    "mean": 0.9659090909090909,
+    "lo": 0.9090909090909091,
+    "hi": 1.0,
+    "n_tasks": 44
+   },
+   "detection_secondary": {
+    "mean": 0.24494949494949492,
+    "lo": 0.148989898989899,
+    "hi": 0.345959595959596,
+    "n_tasks": 33,
+    "behavioural": 0.22474747474747472,
+    "crash_or_timeout": 0.0202020202020202
+   },
+   "false_rejection_accepted": {
+    "mean": 0.20754716981132076,
+    "lo": 0.12264150943396226,
+    "hi": 0.2955974842767295,
+    "n_tasks": 53,
+    "behavioural": 0.18553459119496854,
+    "crash_or_timeout": 0.0220125786163522
+   },
+   "false_rejection_reference": {
+    "mean": 0.22033898305084745,
+    "lo": 0.13559322033898305,
+    "hi": 0.3135593220338983,
+    "n_tasks": 59,
+    "any_of_two_runs": 0.22033898305084745,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.21666666666666667,
+    "lo": 0.13333333333333333,
+    "hi": 0.30833333333333335,
+    "n_tasks": 60
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 59
+   },
+   "patches_left_out_not_applied": {}
+  },
+  "issue audit: not audited": {
+   "validity": {
+    "mean": 0.9683544303797469,
+    "lo": 0.9367088607594937,
+    "hi": 0.9936708860759493,
+    "n_tasks": 79
+   },
+   "validity_at_first_validation": {
+    "mean": 0.8417721518987342,
+    "lo": 0.7721518987341772,
+    "hi": 0.9050632911392406,
+    "n_tasks": 79
+   },
+   "detection_primary": {
+    "mean": 0.2222222222222222,
+    "lo": 0.11574074074074073,
+    "hi": 0.3333333333333333,
+    "n_tasks": 36,
+    "behavioural": 0.20833333333333331,
+    "crash_or_timeout": 0.013888888888888888
+   },
+   "validity_on_primary_tasks": {
+    "mean": 0.9583333333333334,
+    "lo": 0.9027777777777778,
+    "hi": 1.0,
+    "n_tasks": 36
+   },
+   "detection_secondary": {
+    "mean": 0.30666666666666664,
+    "lo": 0.16666666666666669,
+    "hi": 0.44,
+    "n_tasks": 25,
+    "behavioural": 0.29333333333333333,
+    "crash_or_timeout": 0.013333333333333332
+   },
+   "false_rejection_accepted": {
+    "mean": 0.1597222222222222,
+    "lo": 0.09259259259259259,
+    "hi": 0.23148148148148145,
+    "n_tasks": 72,
+    "behavioural": 0.15046296296296294,
+    "crash_or_timeout": 0.009259259259259259
+   },
+   "false_rejection_reference": {
+    "mean": 0.1794871794871795,
+    "lo": 0.10897435897435898,
+    "hi": 0.25,
+    "n_tasks": 78,
+    "any_of_two_runs": 0.1794871794871795,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.17088607594936708,
+    "lo": 0.10743670886075955,
+    "hi": 0.24050632911392406,
+    "n_tasks": 79
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 78
+   },
+   "patches_left_out_not_applied": {}
+  },
+  "strategy: combine strategies": {
+   "validity": {
+    "mean": 0.9528301886792453,
+    "lo": 0.8962264150943396,
+    "hi": 1.0,
+    "n_tasks": 53
+   },
+   "validity_at_first_validation": {
+    "mean": 0.7830188679245284,
+    "lo": 0.6886792452830188,
+    "hi": 0.8679245283018868,
+    "n_tasks": 53
+   },
+   "detection_primary": {
+    "mean": 0.32926829268292684,
+    "lo": 0.2276422764227642,
+    "hi": 0.43902439024390244,
+    "n_tasks": 41,
+    "behavioural": 0.3170731707317073,
+    "crash_or_timeout": 0.012195121951219513
+   },
+   "validity_on_primary_tasks": {
+    "mean": 0.9390243902439024,
+    "lo": 0.8658536585365854,
+    "hi": 1.0,
+    "n_tasks": 41
+   },
+   "detection_secondary": {
+    "mean": 0.319047619047619,
+    "lo": 0.20952380952380953,
+    "hi": 0.43809523809523804,
+    "n_tasks": 35,
+    "behavioural": 0.3,
+    "crash_or_timeout": 0.019047619047619046
+   },
+   "false_rejection_accepted": {
+    "mean": 0.26744186046511625,
+    "lo": 0.1744186046511628,
+    "hi": 0.3682170542635659,
+    "n_tasks": 43,
+    "behavioural": 0.2441860465116279,
+    "crash_or_timeout": 0.023255813953488372
+   },
+   "false_rejection_reference": {
+    "mean": 0.24509803921568626,
+    "lo": 0.1568627450980392,
+    "hi": 0.3333333333333333,
+    "n_tasks": 51,
+    "any_of_two_runs": 0.24509803921568626,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.2358490566037736,
+    "lo": 0.1509433962264151,
+    "hi": 0.32075471698113206,
+    "n_tasks": 53
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 51
+   },
+   "patches_left_out_not_applied": {}
+  },
+  "strategy: lm_rewrite": {
+   "validity": {
+    "mean": 0.98,
+    "lo": 0.94,
+    "hi": 1.0,
+    "n_tasks": 25
+   },
+   "validity_at_first_validation": {
+    "mean": 0.7,
+    "lo": 0.56,
+    "hi": 0.84,
+    "n_tasks": 25
+   },
+   "detection_primary": {
+    "mean": 0.23333333333333334,
+    "lo": 0.1,
+    "hi": 0.36666666666666664,
+    "n_tasks": 15,
+    "behavioural": 0.23333333333333334,
+    "crash_or_timeout": 0.0
+   },
+   "validity_on_primary_tasks": {
+    "mean": 0.9666666666666667,
+    "lo": 0.9333333333333333,
+    "hi": 1.0,
+    "n_tasks": 15
+   },
+   "detection_secondary": {
+    "mean": 0.4236111111111111,
+    "lo": 0.3125,
+    "hi": 0.5555555555555555,
+    "n_tasks": 12,
+    "behavioural": 0.39583333333333326,
+    "crash_or_timeout": 0.027777777777777776
+   },
+   "false_rejection_accepted": {
+    "mean": 0.1349206349206349,
+    "lo": 0.03968253968253968,
+    "hi": 0.2462301587301594,
+    "n_tasks": 21,
+    "behavioural": 0.1349206349206349,
+    "crash_or_timeout": 0.0
+   },
+   "false_rejection_reference": {
+    "mean": 0.24,
+    "lo": 0.14,
+    "hi": 0.36,
+    "n_tasks": 25,
+    "any_of_two_runs": 0.24,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.24,
+    "lo": 0.14,
+    "hi": 0.36,
+    "n_tasks": 25
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 25
+   },
+   "patches_left_out_not_applied": {}
+  },
+  "strategy: pr": {
+   "validity": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 4
+   },
+   "validity_at_first_validation": {
+    "mean": 0.875,
+    "lo": 0.75,
+    "hi": 1.0,
+    "n_tasks": 4
+   },
+   "detection_primary": {
+    "mean": 0.3333333333333333,
+    "lo": 0.3333333333333333,
+    "hi": 0.3333333333333333,
+    "n_tasks": 3,
+    "behavioural": 0.3333333333333333,
+    "crash_or_timeout": 0.0
+   },
+   "validity_on_primary_tasks": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 3
+   },
+   "detection_secondary": {
+    "mean": 0.16666666666666666,
+    "lo": 0.16666666666666666,
+    "hi": 0.16666666666666666,
+    "n_tasks": 2,
+    "behavioural": 0.16666666666666666,
+    "crash_or_timeout": 0.0
+   },
+   "false_rejection_accepted": {
+    "mean": 0.5,
+    "lo": 0.5,
+    "hi": 0.5,
+    "n_tasks": 4,
+    "behavioural": 0.5,
+    "crash_or_timeout": 0.0
+   },
+   "false_rejection_reference": {
+    "mean": 0.5,
+    "lo": 0.5,
+    "hi": 0.5,
+    "n_tasks": 4,
+    "any_of_two_runs": 0.5,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.5,
+    "lo": 0.5,
+    "hi": 0.5,
+    "n_tasks": 4
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 4
+   },
+   "patches_left_out_not_applied": {}
+  },
+  "strategy: single-function strategies": {
+   "validity": {
+    "mean": 0.9835164835164835,
+    "lo": 0.967032967032967,
+    "hi": 1.0,
+    "n_tasks": 91
+   },
+   "validity_at_first_validation": {
+    "mean": 0.8736263736263736,
+    "lo": 0.8131868131868132,
+    "hi": 0.9285714285714286,
+    "n_tasks": 91
+   },
+   "detection_primary": {
+    "mean": 0.1611111111111111,
+    "lo": 0.05,
+    "hi": 0.2833333333333333,
+    "n_tasks": 30,
+    "behavioural": 0.14444444444444443,
+    "crash_or_timeout": 0.016666666666666666
+   },
+   "validity_on_primary_tasks": {
+    "mean": 0.9833333333333333,
+    "lo": 0.95,
+    "hi": 1.0,
+    "n_tasks": 30
+   },
+   "detection_secondary": {
+    "mean": 0.18421052631578946,
+    "lo": 0.05263157894736842,
+    "hi": 0.34210526315789475,
+    "n_tasks": 19,
+    "behavioural": 0.18421052631578946,
+    "crash_or_timeout": 0.0
+   },
+   "false_rejection_accepted": {
+    "mean": 0.13003663003663002,
+    "lo": 0.07142857142857142,
+    "hi": 0.19230769230769232,
+    "n_tasks": 91,
+    "behavioural": 0.12087912087912087,
+    "crash_or_timeout": 0.009157509157509156
+   },
+   "false_rejection_reference": {
+    "mean": 0.14835164835164835,
+    "lo": 0.08791208791208792,
+    "hi": 0.21428571428571427,
+    "n_tasks": 91,
+    "any_of_two_runs": 0.14835164835164835,
+    "two_runs_disagree": 0.0
+   },
+   "false_rejection_reference_per_attempt": {
+    "mean": 0.14285714285714285,
+    "lo": 0.08241758241758242,
+    "hi": 0.2087912087912088,
+    "n_tasks": 91
+   },
+   "still_rejects_unrepaired_tree": {
+    "mean": 1.0,
+    "lo": 1.0,
+    "hi": 1.0,
+    "n_tasks": 91
+   },
+   "patches_left_out_not_applied": {}
+  }
+ },
+ "primary_by_patch_kind": {
+  "leaves target tests failing": {
+   "mean": 0.2596899224806201,
+   "lo": 0.18410852713178294,
+   "hi": 0.3391957364341087,
+   "n_tasks": 86,
+   "behavioural": 0.24806201550387597,
+   "crash_or_timeout": 0.011627906976744186
+  },
+  "breaks only other tests": {
+   "mean": 0.16666666666666666,
+   "lo": 0.0,
+   "hi": 0.3333333333333333,
+   "n_tasks": 3,
+   "behavioural": 0.16666666666666666,
+   "crash_or_timeout": 0.0
+  }
+ },
+ "two_seeds_agree_on_a_patch": {
+  "share": 0.862914862914863,
+  "n_patch_pairs": 693,
+  "tasks_with_two_checks": 166
+ },
+ "generator_cost": {
+  "episodes": 346,
+  "model_calls_mean": 12.265895953757225,
+  "tokens_mean": 67424.83815028901,
+  "exit_reasons": {
+   "valid": 337,
+   "invalid": 9
+  },
+  "why_first_validation_failed": {
+   "no_script": 60,
+   "invalid": 1,
+   "fixed": 1
+  },
+  "changed_the_repository": 0
+ }
+}

@@ -29,6 +29,7 @@ pct1 = lambda x: f"{r1(x):.1f}%"
 pts = lambda x: "0.0" if abs(x) < 5e-4 else minus(f"{r1(x):+.1f}")
 num = lambda x: minus(f"{r1(x):.1f}")
 more = lambda r: f"{100 * (r - 1):.0f}%"
+nw = lambda n: ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n]
 
 
 def costs() -> dict:
@@ -183,6 +184,8 @@ def selection_numbers(hand) -> dict:
     assert d4["lo"] < 0 < d4["hi"] and d1["lo"] > 0 and gr["lo"] < 0 < gr["hi"]
     assert all(r["minus_h01"]["mean"] > 0 for r in sel["candidates"] if r["graph"] != h01)
     c = cand["configs"][top]
+    assert {k: v for k, v in c.items() if v != PLAIN[k]} == {"gate": True, "on_fail": "reflect", "stall": "compact"}, \
+        "the node-and-edge description of the selected graph on the page no longer holds"
     extras = [WORDS[(k, v)] for k, v in c.items() if k != "gate" and v != PLAIN[k]]
     js = {"checker_tool": "tool", "on_fail": "onfail", "compact_at": "compact"}
     setting = {js.get(k, k): (f"{v // 1000}k" if k == "compact_at" else v == "reproduce" if k == "first" else v)
@@ -224,6 +227,11 @@ def confirm_numbers(hand) -> dict:
                                  "confirmation tasks, with visible and with hidden tests.",
                                  "share of the 232 confirmation tasks repaired", x0=350, x1=730)}
     g = vis["graphs"]
+    repos = lambda f: {json.loads(l)["repo_key"] for l in open(ROOT / "data" / "v2" / f) if l.strip()}
+    conf, srch = repos("confirm.jsonl"), repos("search.jsonl")
+    assert sorted(r.split("__")[1].split(".")[0] for r in conf - srch) == ["jinja", "marshmallow", "oauthlib"], \
+        "the names of the withheld repositories on the page no longer hold"
+    N.update(c_old_repos=nw(len(conf & srch)), c_new_repos=nw(len(conf - srch)))
     N.update(c_tasks=str(c["n_tasks"]), c_runs=f"{n_runs:,}", c_old=str(c["n_tasks_by_group"]["old_repositories"]),
              c_new=str(c["n_tasks_by_group"]["new_repositories"]),
              c_top=pct1(g["searched"]["resolved"]), c_h04=pct1(g["h04"]["resolved"]), c_h01=pct1(g["h01"]["resolved"]),
@@ -237,6 +245,13 @@ def confirm_numbers(hand) -> dict:
              c_tok_top=f'{round(g["searched"]["tokens"], -3):,.0f}', c_tok_h04=f'{round(g["h04"]["tokens"], -3):,.0f}',
              c_tok_ratio=f'{pa["tokens"]["ratio"]:.2f}', c_tok_lo=f'{pa["tokens"]["lo"]:.2f}', c_tok_hi=f'{pa["tokens"]["hi"]:.2f}')
     assert pa["tokens"]["lo"] < 1 < pa["tokens"]["hi"], "the token sentence no longer holds"
+    N["c_margin"] = f'{100 * c["sesoi"]:.0f}'
+    names = {"h04 - h01": "Check and retry minus plain loop", "searched - h04": "Selected graph minus check and retry",
+             "searched - h01": "Selected graph minus plain loop"}
+    assert set(kh) == set(names)
+    N["hid_rows"] = "".join(f'<tr><td>{label}</td><td class="num">{pts(kh[key]["all"]["mean"])} [{num(kh[key]["all"]["lo"])}, '
+                            f'{num(kh[key]["all"]["hi"])}]</td><td class="num">{kh[key]["all"]["better"]} / {kh[key]["all"]["worse"]}</td></tr>'
+                            for key, label in names.items())
     hd = load("headroom_diagnostics.json")["confirmation_hidden"]["by_graph"]
     uns, wrong = [v["hidden_unsolved"] for v in hd.values()], [v["hidden_unsolved_by_exit"]["end"] for v in hd.values()]
     assert len(hd) == 3 and [v["hidden_unsolved"] for v in hd.values()] == [round((1 - hid["graphs"][k]["resolved"]) * c["n_tasks"]) for k in hd]
@@ -280,6 +295,7 @@ def followup_numbers() -> dict:
     sa = sg["search_tasks"]["spec"]["n_tasks"]
     N = {"fig_followup": fig_dots(rows, 0.5, 0.9, "Repair rate of the plain loop, check-and-retry and the selected graph on the 900 "
                                   "follow-up tasks, tests visible.", "share of the 900 follow-up tasks repaired", x0=350, x1=730)}
+    N["f_margin"] = f'{100 * c["margin"]:.0f}'
     N.update(f_tasks=str(c["n_tasks"]), f_repos=str(len(c["repositories"])), f_per=str(c["n_tasks"] // len(c["repositories"])),
              f_runs=f"{n_runs:,}", f_file=str(c["strategies"]["combine_file"]), f_module=str(c["strategies"]["combine_module"]),
              f_top=pct1(p["rate_selected"]), f_h04=pct1(p["rate_h04"]), f_d=pts(p["mean"]), f_lo=num(p["lo"]), f_hi=num(p["hi"]),
@@ -350,6 +366,23 @@ def premise_numbers() -> dict:
     return N
 
 
+def stage1_overruns(n_cells) -> str:
+    """Stage-1 table runs kept although they went past the 3,600 s deadline.  Counted from the raw episodes when they are
+    present (results/raw is not in the repository), otherwise taken from the last build."""
+    files = sorted((ROOT / "results" / "raw" / "search_table").glob("*/visible/qwen3.8-27b.jsonl"))
+    if not files:
+        return json.loads((S / "site_numbers.json").read_text())["numbers"]["q_overruns"]
+    last = {}
+    for f in files:
+        for line in open(f):
+            if line.strip():
+                r = json.loads(line)
+                if r.get("status") == "ok":
+                    last[r["episode_id"]] = r
+    assert len(last) == n_cells, f"stage-1 raw episodes: {len(last)} scored cells, expected {n_cells}"
+    return str(sum(r["latency_s"] > 3600 for r in last.values()))
+
+
 def search_numbers(q, hand) -> dict:
     """Section 4: the table (stage 1), replay on it (stage 2) and the live local searches (stage 3)."""
     N = {}
@@ -369,7 +402,9 @@ def search_numbers(q, hand) -> dict:
     assert hr["upper_bound_for_every_graph"] > 0.05, "the sentence on a five-point improvement no longer holds"
     back = tc["with_replaced_episodes_put_back"]
     assert back["h04_minus_h01"] == a["difference"] and back["headroom_over_h04"]["top_minus_h04"] == 0
-    N.update(q_top_d=pts(hr["top_minus_h04"]), q_bound=num(hr["upper_bound_for_every_graph"]), q_replaced=str(back["n_cells"]))
+    N.update(q_cmp=str(hr["n_other_graphs"]), q_top_n=nw(round(hr["top_minus_h04"] * tc["n_tasks"])), q_top_d=pts(hr["top_minus_h04"]), q_bound=num(hr["upper_bound_for_every_graph"]),
+             q_replaced=str(back["n_cells"]),
+             q_overruns=stage1_overruns(tc["n_tasks"] * tc["n_graphs"]))
 
     budget = 512
     val = {(r["method"], r["budget"]): r for r in q["results"]}
@@ -400,6 +435,10 @@ def search_numbers(q, hand) -> dict:
         assert any(tries)
         rejected_first += not tries[0]
     words = lambda n: ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][n]
+    per = {m: sum(r["method"] == m for r in runs) for m, _ in LOCAL}
+    assert len(set(per.values())) == 1 and len({r["spent"] // r["steps"] // 2 for r in runs}) == 1
+    N.update(ls_per=words(next(iter(per.values()))).capitalize(), ls_per_l=words(next(iter(per.values()))),
+             ls_step_tasks=str(runs[0]["spent"] // runs[0]["steps"] // 2))
     N.update(ls_runs=words(len(runs)), ls_budget="512", ls_steps="16", ls_gate_first=words(gate_first),
              ls_gate_rejected=words(rejected_first), ls_retries3=words(sum(c["retries"] == 3 for c in cfg.values())),
              ls_compact=words(sum(c["compact_at"] is not None for c in cfg.values())),
@@ -445,6 +484,7 @@ def main():
         others = [r for name, r in g.items() if name != H01]
         assert len(others) == 8 and all(r["dlo"] <= 0 <= r["dhi"] for r in others), "the hidden-test sentence no longer holds"
         hid += [r["delta"] for r in others]
+        N["n_hid_others"] = nw(len(others))
         e = {(r["a"], r["b"]): r for r in enf["contrasts"] if r["model"] == m and r["tests"] == "visible"}
         forced, offered = e[("h17_checker_tool_gate", "h16_checker_tool")], e[("h16_checker_tool", H01)]
         N.update({f"e_{k}_plain": pct1(offered["rate_b"]), f"e_{k}_tool": pct1(offered["rate_a"]), f"e_{k}_gate": pct1(forced["rate_a"]),
@@ -461,7 +501,12 @@ def main():
     t, hand = q["truth_all_tasks"], space["hand_written_points"]
     rest = [v for g, v in t.items() if g not in (hand[H01], hand[H04])]
     assert len(rest) == 30
-    N.update(q_tasks=str(q["n_tasks"]), q_graphs=str(len(q["arms"])))
+    N.update(q_tasks=str(q["n_tasks"]), q_graphs=str(len(q["arms"])), q_rand=str(len(rest)), n_hand=str(len(hand)),
+             n_dev=str(sum(1 for l in open(ROOT / "data" / "dev_tasks.jsonl") if l.strip())))
+    first = main_["models"][next(iter(MODELS))]["confirm"]["graphs"]
+    assert len({len(main_["models"][m]["confirm"]["graphs"]) for m in MODELS}) == 1
+    N.update(n_conf_graphs=str(len(first)),
+             n_conf_repos=str(len({json.loads(l)["repo"] for l in open(ROOT / "data" / "confirm_tasks.jsonl") if l.strip()})))
     N.update(search_numbers(q, hand))
     N.update(selection_numbers(hand))
     N.update(confirm_numbers(hand))

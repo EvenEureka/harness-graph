@@ -17,7 +17,7 @@ from pathlib import Path
 from harness_graph import Budget, OpenAIChat, load_battery, run_episode
 from harness_graph.llm import Prices
 from harness_graph.check import visible_failures
-from harness_graph.executor import episode_id
+from harness_graph.executor import budget_meta, episode_id
 from harness_graph.swe.container import Workspace, ensure_sif
 from harness_graph.swe.grading import grade, ungradable_reason
 
@@ -72,7 +72,7 @@ async def main(a):
         # with thinking on, the reasoning is part of the completion: leave room for it beside the answer
         llm = OpenAIChat(a.model, a.base_url, concurrency=a.workers, extra_body=extra,
                          token_headroom=0 if a.no_thinking else a.thinking_headroom)
-    budget = Budget(model_calls=a.model_calls, wall_s=a.wall_s)
+    budget = Budget(model_calls=a.model_calls, wall_s=a.wall_s, snapshot_at=a.snapshot_at)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     have = done_ids(out)
@@ -131,7 +131,7 @@ async def main(a):
                     await asyncio.to_thread(ws.close)
             rec["task"] = {k: t.get(k) for k in ("repo_key", "strategy", "gold_files")}
             rec["tests"] = "visible" if a.visible_tests else "hidden"
-            rec["budget"] = {"model_calls": budget.model_calls, "wall_s": budget.wall_s}
+            rec["budget"] = budget_meta(budget)
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
             f.flush()
             n += 1
@@ -164,6 +164,8 @@ if __name__ == "__main__":
     p.add_argument("--workers", type=int, default=12, help="episodes in flight")
     p.add_argument("--model-calls", type=int, default=50)
     p.add_argument("--wall-s", type=float, default=3600)
+    p.add_argument("--snapshot-at", type=int, default=None,
+                   help="also grade the diff as it stands after this many model calls (the agent is not told)")
     p.add_argument("--no-thinking", action="store_true", help="send enable_thinking=false (Qwen chat template)")
     p.add_argument("--thinking-headroom", type=int, default=8192, help="extra output tokens when thinking is on")
     p.add_argument("--api-key-env", default="", help="name of the env var holding the key of a hosted API")

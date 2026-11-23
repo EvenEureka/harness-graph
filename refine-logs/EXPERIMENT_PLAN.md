@@ -365,3 +365,45 @@ two seeds agree on a patch 79.3%. Sensitivity, frozen G1 checks with the correct
 19.9%, accepted 17.7% (the runner defect does not explain G1's failure). Files: `results/summary/p1_G2.json`,
 `results/summary/p1_G1_fixed_runner.json`; verdict and wording: REVIEW_P1_G2_RESULT.md.
 By the rule above the generated-check line stops here: no third generator, no repair experiment (P2).
+
+## Failure audit and the multi-agent line (2026-11-23)
+
+Audit of the four negative results from stored episodes: `scripts/audit_failures.py` ->
+`results/summary/failure_audit.json` (exploratory). Draft attributions, Codex's verdicts (all four "partly supported")
+and the wording allowed: REVIEW_FAILURE_AUDIT.md.
+
+Multi-agent graphs (several agent conversations, parallel branches): debated with Codex over three rounds, Codex proposing
+and its proposal then attacked in review. Codex advanced one candidate, branching two repair conversations from a shared checkpoint against one
+uninterrupted continuation, and withdrew it after the review: emulations from stored runs favoured continuing over
+splitting the remaining calls at every checkpoint (follow-up tasks, checkpoint after 20 calls: 76.1% against 59.0%).
+The emulation does not reproduce shared-checkpoint branches or intermediate patch correctness; it was judged
+insufficient evidence to build and test branching. Status: paused before implementation; no prospective multi-agent
+comparison was run. Record: REVIEW_MULTIAGENT.md.
+
+### A1: cap-extension audit (failure-analysis follow-up; written before any A1 run)
+
+Question. Does the 50-call cap stop repairs that more calls in the same conversation would complete? The audit found
+that most unsolved check-and-retry runs end on the cap; that says where a run stopped, not whether more calls help.
+- Tasks: 200 of the 900 follow-up tasks (`data/a1/tasks.jsonl`, `scripts/a1_sample.py`): 13 or 14 per repository,
+  drawn with a fixed seed from sorted task ids, no outcome read. The sample is not enlarged after results are seen.
+- Runs: check-and-retry (`graphs_c1/g-p0-fn-t0-vn-kcon2-c0-snon.yaml`), tests visible, Qwen3.8-27B with thinking off,
+  cap 100 model calls, every other setting as in the follow-up (3,600 s limit, 65,536-token context, 16 runs in
+  flight per GPU), seeds 2 and 3: 400 runs.
+- Measurement: `Budget.snapshot_at = 50`. When the 51st model call is about to be made the engine stores the diff as
+  it stands, without telling the agent or adding feedback; this is the state in which a 50-call run would have ended.
+  It is graded with the normal rules. A run that ends before call 51 contributes its final state to both outcomes.
+  The stored diff equals the final diff when nothing changed after call 50, and is then not graded twice.
+- Read-out (`scripts/a1_analysis.py`): primary, descriptive: repair at the end of the 100-call run minus repair of the
+  state after call 50, mean over seeds within task, tasks redrawn inside repositories (4,000 draws, seed 0), 95%
+  interval; gains and losses both reported. Also: runs reaching call 51, how they end (call cap, context limit, visit
+  cap, time limit), calls and tokens after call 50, runs finishing solved per block of ten calls (finishing is not the
+  moment a correct patch first existed), and the stored 50-call runs of the same tasks beside the state after call 50.
+- After the freeze check (REVIEW_MULTIAGENT.md, round 3; applied before the first run): the snapshot diff is read
+  without leaving a file in the workspace and a failed read is an engine error (`Workspace.peek_diff`); runs that
+  reach the boundary after call 50 are reported apart from runs with a completed further call, and both stay in the
+  primary read-out; the time limit is read from `exec_s`, taken before the final diff and grading; the read-out also
+  checks model, time limit, unique task ids and that each snapshot agrees with its run, and counts engine errors.
+- No pass or fail: nothing is built on it. A clear gain supports "the 50-call cap prevented recoverable repairs in
+  this setting"; it does not support branching or any multi-agent design, and it says nothing about how extra calls
+  should be allocated. No gain supports "little benefit from this increase of the cap", not impossibility.
+- A missing, doubled or foreign record makes the read-out incomplete; an engine error is rerun by resuming the job.

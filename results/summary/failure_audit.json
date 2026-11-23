@@ -1,0 +1,896 @@
+{
+ "note": "exploratory audit of stored episodes; nothing here is a pre-specified contrast",
+ "hidden": {
+  "qwen3.8-27b, 232 confirmation tasks": {
+   "tasks": 232,
+   "attempts_per_task": {
+    "3": 232
+   },
+   "graphs": [
+    "g-p0-fn-t0-vn-k0-c0-snon",
+    "g-p0-fn-t0-vn-kcon2-c0-snon",
+    "g-p0-fn-t0-vn-kref2-c0-scom"
+   ],
+   "mean_repair_rate": 0.6436781609195402,
+   "tasks_every_attempt_solves": 135,
+   "tasks_no_attempt_solves": 69,
+   "tasks_some_attempts_solve": 28,
+   "best_of_k_with_a_perfect_selector": {
+    "1": 0.6436781609195402,
+    "2": 0.6839080459770114,
+    "3": 0.7025862068965517
+   },
+   "label_free_selection_over_all_attempts": {
+    "attempts_used": "all attempts of a task",
+    "random_attempt": 0.6436781609195402,
+    "largest_group_with_the_same_files_and_changed_lines": 0.6451149425287357,
+    "largest_group_editing_the_same_files": 0.6436781609195401,
+    "perfect_selector": 0.7025862068965517
+   },
+   "unsolved_attempts": {
+    "n": 248,
+    "by_exit": {
+     "end": 215,
+     "model_call_budget": 33
+    },
+    "files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 212,
+     "edits some files of the defect": 21,
+     "no source file edited": 14,
+     "edits none of the files of the defect": 1
+    },
+    "the_same_by_number_of_files_of_the_defect": {
+     "1 file": {
+      "edits every file of the defect": 207,
+      "no source file edited": 13,
+      "edits none of the files of the defect": 1
+     },
+     "2+ files": {
+      "edits some files of the defect": 21,
+      "edits every file of the defect": 5,
+      "no source file edited": 1
+     }
+    },
+    "with_a_complete_grade": 233,
+    "share_passing_no_target_test": 0.18025751072961374,
+    "share_passing_some_target_tests": 0.7811158798283262,
+    "share_passing_all_target_tests_but_breaking_others": 0.03862660944206009,
+    "share_breaking_a_test_that_passed_before": 0.12017167381974249
+   },
+   "repair_rate_by_group": {
+    "defect in 1 file": {
+     "rate": 0.6666666666666666,
+     "attempts": 663
+    },
+    "defect in 2+ files": {
+     "rate": 0.18181818181818182,
+     "attempts": 33
+    },
+    "strategy: combine": {
+     "rate": 0.26881720430107525,
+     "attempts": 93
+    },
+    "strategy: other": {
+     "rate": 0.7014925373134329,
+     "attempts": 603
+    }
+   }
+  },
+  "qwen3.8-27b, 188 search tasks": {
+   "tasks": 188,
+   "attempts_per_task": {
+    "3": 188
+   },
+   "graphs": [
+    "g-p0-fn-t0-vn-k0-c0-snon",
+    "g-p0-fn-t0-vn-kcon2-c0-snon",
+    "g-p0-fn-t0-vn-kref2-c0-scom"
+   ],
+   "mean_repair_rate": 0.4982269503546099,
+   "tasks_every_attempt_solves": 82,
+   "tasks_no_attempt_solves": 83,
+   "tasks_some_attempts_solve": 23,
+   "best_of_k_with_a_perfect_selector": {
+    "1": 0.4982269503546099,
+    "2": 0.5390070921985816,
+    "3": 0.5585106382978723
+   },
+   "label_free_selection_over_all_attempts": {
+    "attempts_used": "all attempts of a task",
+    "random_attempt": 0.4982269503546099,
+    "largest_group_with_the_same_files_and_changed_lines": 0.5,
+    "largest_group_editing_the_same_files": 0.49911347517730503,
+    "perfect_selector": 0.5585106382978723
+   },
+   "unsolved_attempts": {
+    "n": 283,
+    "by_exit": {
+     "end": 243,
+     "model_call_budget": 40
+    },
+    "files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 177,
+     "edits some files of the defect": 98,
+     "no source file edited": 8
+    },
+    "the_same_by_number_of_files_of_the_defect": {
+     "1 file": {
+      "edits every file of the defect": 141,
+      "no source file edited": 1
+     },
+     "2+ files": {
+      "edits some files of the defect": 98,
+      "edits every file of the defect": 36,
+      "no source file edited": 7
+     }
+    },
+    "with_a_complete_grade": 274,
+    "share_passing_no_target_test": 0.20072992700729927,
+    "share_passing_some_target_tests": 0.7773722627737226,
+    "share_passing_all_target_tests_but_breaking_others": 0.021897810218978103,
+    "share_breaking_a_test_that_passed_before": 0.10218978102189781
+   },
+   "repair_rate_by_group": {
+    "defect in 1 file": {
+     "rate": 0.6441102756892231,
+     "attempts": 399
+    },
+    "defect in 2+ files": {
+     "rate": 0.14545454545454545,
+     "attempts": 165
+    },
+    "strategy: combine": {
+     "rate": 0.2,
+     "attempts": 195
+    },
+    "strategy: other": {
+     "rate": 0.6558265582655827,
+     "attempts": 369
+    }
+   }
+  },
+  "gpt-6.1-terra, 81 confirmation tasks of section 2": {
+   "tasks": 81,
+   "attempts_per_task": {
+    "8": 4,
+    "9": 77
+   },
+   "graphs": [
+    "h01_react",
+    "h02_plan",
+    "h03_reproduce_first",
+    "h04_check_retry",
+    "h05_check_reflect",
+    "h06_check_reset",
+    "h07_compact",
+    "h14_verify",
+    "h15_fresh_verify"
+   ],
+   "mean_repair_rate": 0.4705075445816186,
+   "tasks_every_attempt_solves": 33,
+   "tasks_no_attempt_solves": 39,
+   "tasks_some_attempts_solve": 9,
+   "best_of_k_with_a_perfect_selector": {
+    "1": 0.4705075445816186,
+    "2": 0.4886831275720165,
+    "3": 0.49617871840094063,
+    "4": 0.5012737605330198,
+    "5": 0.5054869684499314,
+    "6": 0.5092592592592593,
+    "7": 0.5126886145404664,
+    "8": 0.5157750342935529
+   },
+   "label_free_selection_over_all_attempts": {
+    "attempts_used": "all attempts of a task",
+    "random_attempt": 0.4705075445816186,
+    "largest_group_with_the_same_files_and_changed_lines": 0.4773662551440329,
+    "largest_group_editing_the_same_files": 0.4759945130315501,
+    "perfect_selector": 0.5185185185185185
+   },
+   "unsolved_attempts": {
+    "n": 383,
+    "by_exit": {
+     "end": 383
+    },
+    "files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 212,
+     "edits some files of the defect": 171
+    },
+    "the_same_by_number_of_files_of_the_defect": {
+     "1 file": {
+      "edits every file of the defect": 132
+     },
+     "2+ files": {
+      "edits some files of the defect": 171,
+      "edits every file of the defect": 80
+     }
+    },
+    "with_a_complete_grade": 380,
+    "share_passing_no_target_test": 0.09473684210526316,
+    "share_passing_some_target_tests": 0.8578947368421053,
+    "share_passing_all_target_tests_but_breaking_others": 0.04736842105263158,
+    "share_breaking_a_test_that_passed_before": 0.10526315789473684
+   },
+   "repair_rate_by_group": {
+    "defect in 1 file": {
+     "rate": 0.6732673267326733,
+     "attempts": 404
+    },
+    "defect in 2+ files": {
+     "rate": 0.21806853582554517,
+     "attempts": 321
+    },
+    "strategy: combine": {
+     "rate": 0.23303834808259588,
+     "attempts": 339
+    },
+    "strategy: other": {
+     "rate": 0.6813471502590673,
+     "attempts": 386
+    }
+   }
+  },
+  "gpt-6-luna, 81 confirmation tasks of section 2": {
+   "tasks": 81,
+   "attempts_per_task": {
+    "8": 3,
+    "9": 78
+   },
+   "graphs": [
+    "h01_react",
+    "h02_plan",
+    "h03_reproduce_first",
+    "h04_check_retry",
+    "h05_check_reflect",
+    "h06_check_reset",
+    "h07_compact",
+    "h14_verify",
+    "h15_fresh_verify"
+   ],
+   "mean_repair_rate": 0.39523319615912206,
+   "tasks_every_attempt_solves": 26,
+   "tasks_no_attempt_solves": 39,
+   "tasks_some_attempts_solve": 16,
+   "best_of_k_with_a_perfect_selector": {
+    "1": 0.39523319615912206,
+    "2": 0.43621399176954734,
+    "3": 0.460978835978836,
+    "4": 0.4776601998824221,
+    "5": 0.489981383499902,
+    "6": 0.49970605526161077,
+    "7": 0.5077160493827161,
+    "8": 0.51440329218107
+   },
+   "label_free_selection_over_all_attempts": {
+    "attempts_used": "all attempts of a task",
+    "random_attempt": 0.39523319615912206,
+    "largest_group_with_the_same_files_and_changed_lines": 0.39934842249657065,
+    "largest_group_editing_the_same_files": 0.39797668038408784,
+    "perfect_selector": 0.5185185185185185
+   },
+   "unsolved_attempts": {
+    "n": 439,
+    "by_exit": {
+     "end": 431,
+     "model_call_budget": 8
+    },
+    "files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 234,
+     "edits none of the files of the defect": 1,
+     "edits some files of the defect": 202,
+     "no source file edited": 2
+    },
+    "the_same_by_number_of_files_of_the_defect": {
+     "1 file": {
+      "edits every file of the defect": 156,
+      "edits none of the files of the defect": 1,
+      "no source file edited": 1
+     },
+     "2+ files": {
+      "edits some files of the defect": 202,
+      "edits every file of the defect": 78,
+      "no source file edited": 1
+     }
+    },
+    "with_a_complete_grade": 436,
+    "share_passing_no_target_test": 0.1720183486238532,
+    "share_passing_some_target_tests": 0.7981651376146789,
+    "share_passing_all_target_tests_but_breaking_others": 0.02981651376146789,
+    "share_breaking_a_test_that_passed_before": 0.09862385321100918
+   },
+   "repair_rate_by_group": {
+    "defect in 1 file": {
+     "rate": 0.607940446650124,
+     "attempts": 403
+    },
+    "defect in 2+ files": {
+     "rate": 0.13003095975232198,
+     "attempts": 323
+    },
+    "strategy: combine": {
+     "rate": 0.1436950146627566,
+     "attempts": 341
+    },
+    "strategy: other": {
+     "rate": 0.6181818181818182,
+     "attempts": 385
+    }
+   }
+  }
+ },
+ "visible": {
+  "qwen3.8-27b, 232 confirmation tasks, two runs": {
+   "plain loop": {
+    "runs": 464,
+    "unsolved": 73,
+    "unsolved_by_exit": {
+     "end": 42,
+     "model_call_budget": 30,
+     "format_errors": 1
+    },
+    "unsolved_files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 51,
+     "edits some files of the defect": 15,
+     "no source file edited": 6,
+     "edits none of the files of the defect": 1
+    },
+    "unsolved_share_of_target_tests_passed": {
+     "mean": 0.5883975699982759,
+     "none": 6,
+     "some": 60,
+     "all": 1
+    },
+    "unsolved_with_a_complete_grade": 67,
+    "unsolved_by_checks_reached": {
+     "no check": 73
+    },
+    "unsolved_with_two_counted_checks": {},
+    "model_calls": {
+     "solved": 16.29923273657289,
+     "unsolved": 32.917808219178085
+    },
+    "largest_prompt_tokens": {
+     "solved": 7484.874680306905,
+     "unsolved": 16868.383561643837
+    },
+    "by_number_of_files_of_the_defect": {
+     "defect in 1 file": {
+      "runs": 442,
+      "repair_rate": 0.8755656108597285,
+      "model_calls": 18.861990950226243,
+      "ended_on_the_call_budget": 0.07239819004524888
+     },
+     "defect in 2 files": {
+      "runs": 22,
+      "repair_rate": 0.18181818181818182,
+      "model_calls": 19.954545454545453,
+      "ended_on_the_call_budget": 0.09090909090909091
+     }
+    }
+   },
+   "check and retry": {
+    "runs": 464,
+    "unsolved": 43,
+    "unsolved_by_exit": {
+     "model_call_budget": 41,
+     "visit_cap": 1,
+     "format_errors": 1
+    },
+    "unsolved_files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 34,
+     "edits some files of the defect": 5,
+     "no source file edited": 4
+    },
+    "unsolved_share_of_target_tests_passed": {
+     "mean": 0.7198248277594563,
+     "none": 4,
+     "some": 33,
+     "all": 2
+    },
+    "unsolved_with_a_complete_grade": 39,
+    "unsolved_by_checks_reached": {
+     "one check": 12,
+     "no check": 28,
+     "two or more checks": 3
+    },
+    "unsolved_with_two_counted_checks": {
+     "fewer failing tests at the last counted check than at the first": 1,
+     "as many or more failing tests at the last counted check": 2
+    },
+    "model_calls": {
+     "solved": 17.14251781472684,
+     "unsolved": 49.48837209302326
+    },
+    "largest_prompt_tokens": {
+     "solved": 8096.788598574822,
+     "unsolved": 24248.53488372093
+    },
+    "by_number_of_files_of_the_defect": {
+     "defect in 1 file": {
+      "runs": 442,
+      "repair_rate": 0.920814479638009,
+      "model_calls": 19.495475113122172,
+      "ended_on_the_call_budget": 0.08823529411764706
+     },
+     "defect in 2 files": {
+      "runs": 22,
+      "repair_rate": 0.6363636363636364,
+      "model_calls": 33.09090909090909,
+      "ended_on_the_call_budget": 0.4090909090909091
+     }
+    }
+   },
+   "selected graph": {
+    "runs": 464,
+    "unsolved": 40,
+    "unsolved_by_exit": {
+     "model_call_budget": 39,
+     "format_errors": 1
+    },
+    "unsolved_files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 36,
+     "no source file edited": 4
+    },
+    "unsolved_share_of_target_tests_passed": {
+     "mean": 0.6232118234350627,
+     "none": 6,
+     "some": 28,
+     "all": 2
+    },
+    "unsolved_with_a_complete_grade": 36,
+    "unsolved_by_checks_reached": {
+     "one check": 14,
+     "no check": 25,
+     "two or more checks": 1
+    },
+    "unsolved_with_two_counted_checks": {
+     "as many or more failing tests at the last counted check": 1
+    },
+    "model_calls": {
+     "solved": 17.587264150943398,
+     "unsolved": 49.625
+    },
+    "largest_prompt_tokens": {
+     "solved": 7894.86320754717,
+     "unsolved": 22244.5
+    },
+    "by_number_of_files_of_the_defect": {
+     "defect in 1 file": {
+      "runs": 442,
+      "repair_rate": 0.918552036199095,
+      "model_calls": 19.694570135746606,
+      "ended_on_the_call_budget": 0.08597285067873303
+     },
+     "defect in 2 files": {
+      "runs": 22,
+      "repair_rate": 0.8181818181818182,
+      "model_calls": 33.5,
+      "ended_on_the_call_budget": 0.2727272727272727
+     }
+    }
+   }
+  },
+  "qwen3.8-27b, 900 follow-up tasks, two runs": {
+   "check and retry": {
+    "runs": 1800,
+    "unsolved": 336,
+    "unsolved_by_exit": {
+     "model_call_budget": 302,
+     "visit_cap": 15,
+     "context_exceeded": 3,
+     "wall_time": 9,
+     "format_errors": 2,
+     "end": 5
+    },
+    "unsolved_files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 243,
+     "no source file edited": 22,
+     "edits some files of the defect": 70,
+     "edits none of the files of the defect": 1
+    },
+    "unsolved_share_of_target_tests_passed": {
+     "mean": 0.6220467122950436,
+     "none": 18,
+     "some": 281,
+     "all": 7
+    },
+    "unsolved_with_a_complete_grade": 306,
+    "unsolved_by_checks_reached": {
+     "no check": 193,
+     "one check": 102,
+     "two or more checks": 41
+    },
+    "unsolved_with_two_counted_checks": {
+     "as many or more failing tests at the last counted check": 31,
+     "fewer failing tests at the last counted check than at the first": 8
+    },
+    "model_calls": {
+     "solved": 27.441939890710383,
+     "unsolved": 48.589285714285715
+    },
+    "largest_prompt_tokens": {
+     "solved": 15165.717896174863,
+     "unsolved": 26973.60119047619
+    },
+    "by_number_of_files_of_the_defect": {
+     "defect in 1 file": {
+      "runs": 958,
+      "repair_rate": 0.8110647181628392,
+      "model_calls": 30.43528183716075,
+      "ended_on_the_call_budget": 0.21294363256784968
+     },
+     "defect in 2 files": {
+      "runs": 808,
+      "repair_rate": 0.8081683168316832,
+      "model_calls": 32.74628712871287,
+      "ended_on_the_call_budget": 0.20668316831683167
+     },
+     "defect in 3+ files": {
+      "runs": 34,
+      "repair_rate": 1.0,
+      "model_calls": 26.029411764705884,
+      "ended_on_the_call_budget": 0.029411764705882353
+     }
+    }
+   },
+   "selected graph": {
+    "runs": 1800,
+    "unsolved": 333,
+    "unsolved_by_exit": {
+     "model_call_budget": 300,
+     "wall_time": 5,
+     "context_exceeded": 2,
+     "end": 5,
+     "visit_cap": 19,
+     "format_errors": 2
+    },
+    "unsolved_files_edited_against_files_of_the_defect": {
+     "edits every file of the defect": 242,
+     "edits some files of the defect": 75,
+     "no source file edited": 15,
+     "edits none of the files of the defect": 1
+    },
+    "unsolved_share_of_target_tests_passed": {
+     "mean": 0.5878859360218734,
+     "none": 29,
+     "some": 279,
+     "all": 2
+    },
+    "unsolved_with_a_complete_grade": 310,
+    "unsolved_by_checks_reached": {
+     "one check": 89,
+     "no check": 192,
+     "two or more checks": 52
+    },
+    "unsolved_with_two_counted_checks": {
+     "fewer failing tests at the last counted check than at the first": 7,
+     "as many or more failing tests at the last counted check": 40
+    },
+    "model_calls": {
+     "solved": 27.593047034764826,
+     "unsolved": 48.62162162162162
+    },
+    "largest_prompt_tokens": {
+     "solved": 14771.989093387867,
+     "unsolved": 25188.891891891893
+    },
+    "by_number_of_files_of_the_defect": {
+     "defect in 1 file": {
+      "runs": 958,
+      "repair_rate": 0.8121085594989561,
+      "model_calls": 30.3643006263048,
+      "ended_on_the_call_budget": 0.22233820459290188
+     },
+     "defect in 2 files": {
+      "runs": 808,
+      "repair_rate": 0.8106435643564357,
+      "model_calls": 32.834158415841586,
+      "ended_on_the_call_budget": 0.2042079207920792
+     },
+     "defect in 3+ files": {
+      "runs": 34,
+      "repair_rate": 1.0,
+      "model_calls": 30.91176470588235,
+      "ended_on_the_call_budget": 0.029411764705882353
+     }
+    }
+   }
+  }
+ },
+ "parallel_branches_replay_visible": {
+  "qwen3.8-27b, 232 confirmation tasks, two runs": {
+   "tasks": 232,
+   "runs_per_task": 4,
+   "total_model_calls": 50,
+   "one_branch_full_budget": 0.9105603448275862,
+   "note": "a stored run counts for a cutoff only if it finished solved within it; this is not the repair rate of a branch stopped at the cutoff, and the agent was never told a budget",
+   "some_stored_run_finished_solved_within_cutoff": {
+    "1 runs, cutoff 50 calls": 0.9105603448275862,
+    "2 runs, cutoff 25 calls": 0.7916666666666667,
+    "3 runs, cutoff 16 calls": 0.646551724137931,
+    "4 runs, cutoff 12 calls": 0.5258620689655172
+   },
+   "some_stored_run_finished_solved": {
+    "1 runs, cutoff 50 calls": 0.9105603448275862,
+    "2 runs, cutoff 50 calls": 0.9346264367816093,
+    "3 runs, cutoff 50 calls": 0.9450431034482759,
+    "4 runs, cutoff 50 calls": 0.9525862068965517
+   },
+   "check_and_retry_only": {
+    "1 x 50": 0.9073275862068966,
+    "2 x 25": 0.8017241379310345,
+    "2 x 50": 0.9267241379310345
+   },
+   "share_of_runs_solved_within_calls": {
+    "10": 0.2984913793103448,
+    "12": 0.4084051724137931,
+    "16": 0.552801724137931,
+    "20": 0.646551724137931,
+    "25": 0.7359913793103449,
+    "30": 0.7952586206896551,
+    "40": 0.8696120689655172,
+    "50": 0.9105603448275862
+   },
+   "tasks_by_number_of_solved_runs_of_four": {
+    "0": 11,
+    "1": 7,
+    "2": 4,
+    "3": 10,
+    "4": 200
+   }
+  },
+  "qwen3.8-27b, 900 follow-up tasks, two runs": {
+   "tasks": 900,
+   "runs_per_task": 4,
+   "total_model_calls": 50,
+   "one_branch_full_budget": 0.8141666666666667,
+   "note": "a stored run counts for a cutoff only if it finished solved within it; this is not the repair rate of a branch stopped at the cutoff, and the agent was never told a budget",
+   "some_stored_run_finished_solved_within_cutoff": {
+    "1 runs, cutoff 50 calls": 0.8141666666666667,
+    "2 runs, cutoff 25 calls": 0.486296296296296,
+    "3 runs, cutoff 16 calls": 0.2386111111111111,
+    "4 runs, cutoff 12 calls": 0.1322222222222222
+   },
+   "some_stored_run_finished_solved": {
+    "1 runs, cutoff 50 calls": 0.8141666666666667,
+    "2 runs, cutoff 50 calls": 0.872777777777778,
+    "3 runs, cutoff 50 calls": 0.895,
+    "4 runs, cutoff 50 calls": 0.9077777777777778
+   },
+   "check_and_retry_only": {
+    "1 x 50": 0.8133333333333334,
+    "2 x 25": 0.49,
+    "2 x 50": 0.8755555555555555
+   },
+   "share_of_runs_solved_within_calls": {
+    "10": 0.04138888888888889,
+    "12": 0.07333333333333333,
+    "16": 0.15694444444444444,
+    "20": 0.25805555555555554,
+    "25": 0.4036111111111111,
+    "30": 0.5125,
+    "40": 0.6730555555555555,
+    "50": 0.8141666666666667
+   },
+   "tasks_by_number_of_solved_runs_of_four": {
+    "0": 83,
+    "1": 46,
+    "2": 51,
+    "3": 97,
+    "4": 623
+   }
+  }
+ },
+ "checkpoint_split_visible": {
+  "qwen3.8-27b, 232 confirmation tasks, two runs": {
+   "runs": 928,
+   "hazard_by_calls": {
+    "1-5": {
+     "runs_not_yet_solved": 928,
+     "finish_solved_in_the_next_5_calls": 0.003232758620689655
+    },
+    "6-10": {
+     "runs_not_yet_solved": 925,
+     "finish_solved_in_the_next_5_calls": 0.29621621621621624
+    },
+    "11-15": {
+     "runs_not_yet_solved": 651,
+     "finish_solved_in_the_next_5_calls": 0.31643625192012287
+    },
+    "16-20": {
+     "runs_not_yet_solved": 445,
+     "finish_solved_in_the_next_5_calls": 0.26292134831460673
+    },
+    "21-25": {
+     "runs_not_yet_solved": 328,
+     "finish_solved_in_the_next_5_calls": 0.2530487804878049
+    },
+    "26-30": {
+     "runs_not_yet_solved": 245,
+     "finish_solved_in_the_next_5_calls": 0.22448979591836735
+    },
+    "31-35": {
+     "runs_not_yet_solved": 190,
+     "finish_solved_in_the_next_5_calls": 0.20526315789473684
+    },
+    "36-40": {
+     "runs_not_yet_solved": 151,
+     "finish_solved_in_the_next_5_calls": 0.1986754966887417
+    },
+    "41-45": {
+     "runs_not_yet_solved": 121,
+     "finish_solved_in_the_next_5_calls": 0.09090909090909091
+    },
+    "46-50": {
+     "runs_not_yet_solved": 110,
+     "finish_solved_in_the_next_5_calls": 0.24545454545454545
+    }
+   },
+   "split_emulation_by_checkpoint": {
+    "10": {
+     "tasks_with_two_or_more_open_runs": 173,
+     "branch_cutoff_calls": 30,
+     "continue": 0.880057803468208,
+     "split_in_two": 0.7842003853564546
+    },
+    "15": {
+     "tasks_with_two_or_more_open_runs": 120,
+     "branch_cutoff_calls": 32,
+     "continue": 0.8270833333333333,
+     "split_in_two": 0.7250000000000001
+    },
+    "20": {
+     "tasks_with_two_or_more_open_runs": 87,
+     "branch_cutoff_calls": 35,
+     "continue": 0.7634099616858236,
+     "split_in_two": 0.653256704980843
+    },
+    "25": {
+     "tasks_with_two_or_more_open_runs": 65,
+     "branch_cutoff_calls": 37,
+     "continue": 0.6807692307692308,
+     "split_in_two": 0.5846153846153846
+    },
+    "30": {
+     "tasks_with_two_or_more_open_runs": 51,
+     "branch_cutoff_calls": 40,
+     "continue": 0.5882352941176471,
+     "split_in_two": 0.5130718954248367
+    },
+    "35": {
+     "tasks_with_two_or_more_open_runs": 40,
+     "branch_cutoff_calls": 42,
+     "continue": 0.4833333333333334,
+     "split_in_two": 0.3375
+    },
+    "40": {
+     "tasks_with_two_or_more_open_runs": 34,
+     "branch_cutoff_calls": 45,
+     "continue": 0.3946078431372549,
+     "split_in_two": 0.24509803921568624
+    }
+   },
+   "prompt_plus_completion_tokens_at_the_end": {
+    "solved": {
+     "n": 845,
+     "p10": 15323,
+     "median": 51459,
+     "p90": 288446,
+     "max": 1097083
+    },
+    "unsolved": {
+     "n": 83,
+     "p10": 411968,
+     "median": 561919,
+     "p90": 789179,
+     "max": 1434399
+    }
+   }
+  },
+  "qwen3.8-27b, 900 follow-up tasks, two runs": {
+   "runs": 3600,
+   "hazard_by_calls": {
+    "1-5": {
+     "runs_not_yet_solved": 3600,
+     "finish_solved_in_the_next_5_calls": 0.0
+    },
+    "6-10": {
+     "runs_not_yet_solved": 3600,
+     "finish_solved_in_the_next_5_calls": 0.04138888888888889
+    },
+    "11-15": {
+     "runs_not_yet_solved": 3451,
+     "finish_solved_in_the_next_5_calls": 0.09620399884091568
+    },
+    "16-20": {
+     "runs_not_yet_solved": 3119,
+     "finish_solved_in_the_next_5_calls": 0.14363578069894198
+    },
+    "21-25": {
+     "runs_not_yet_solved": 2671,
+     "finish_solved_in_the_next_5_calls": 0.19618120554099588
+    },
+    "26-30": {
+     "runs_not_yet_solved": 2147,
+     "finish_solved_in_the_next_5_calls": 0.18258034466697717
+    },
+    "31-35": {
+     "runs_not_yet_solved": 1755,
+     "finish_solved_in_the_next_5_calls": 0.18575498575498575
+    },
+    "36-40": {
+     "runs_not_yet_solved": 1429,
+     "finish_solved_in_the_next_5_calls": 0.17634709587123862
+    },
+    "41-45": {
+     "runs_not_yet_solved": 1177,
+     "finish_solved_in_the_next_5_calls": 0.16567544604927784
+    },
+    "46-50": {
+     "runs_not_yet_solved": 982,
+     "finish_solved_in_the_next_5_calls": 0.31873727087576376
+    }
+   },
+   "split_emulation_by_checkpoint": {
+    "10": {
+     "tasks_with_two_or_more_open_runs": 875,
+     "branch_cutoff_calls": 30,
+     "continue": 0.8088571428571428,
+     "split_in_two": 0.5860952380952373
+    },
+    "15": {
+     "tasks_with_two_or_more_open_runs": 811,
+     "branch_cutoff_calls": 32,
+     "continue": 0.7938758734073161,
+     "split_in_two": 0.5963830661734475
+    },
+    "20": {
+     "tasks_with_two_or_more_open_runs": 704,
+     "branch_cutoff_calls": 35,
+     "continue": 0.760535037878788,
+     "split_in_two": 0.5899621212121207
+    },
+    "25": {
+     "tasks_with_two_or_more_open_runs": 571,
+     "branch_cutoff_calls": 37,
+     "continue": 0.7051955633391712,
+     "split_in_two": 0.534442498540572
+    },
+    "30": {
+     "tasks_with_two_or_more_open_runs": 482,
+     "branch_cutoff_calls": 40,
+     "continue": 0.645746887966805,
+     "split_in_two": 0.49343015214384506
+    },
+    "35": {
+     "tasks_with_two_or_more_open_runs": 393,
+     "branch_cutoff_calls": 42,
+     "continue": 0.5602205258693808,
+     "split_in_two": 0.37531806615776064
+    },
+    "40": {
+     "tasks_with_two_or_more_open_runs": 312,
+     "branch_cutoff_calls": 45,
+     "continue": 0.4415064102564102,
+     "split_in_two": 0.27724358974358976
+    }
+   },
+   "prompt_plus_completion_tokens_at_the_end": {
+    "solved": {
+     "n": 2931,
+     "p10": 53439,
+     "median": 197662,
+     "p90": 611442,
+     "max": 1548721
+    },
+    "unsolved": {
+     "n": 669,
+     "p10": 365555,
+     "median": 632635,
+     "p90": 1091039,
+     "max": 1744018
+    }
+   }
+  }
+ }
+}

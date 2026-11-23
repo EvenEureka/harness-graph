@@ -35,6 +35,16 @@ class Budget:
     max_tokens: int = 4096
     max_format_errors: int = 3       # consecutive
     usd: float | None = None         # spend allowed for this episode (hosted APIs); the episode ends when it is used up
+    snapshot_at: int | None = None   # keep the diff as it stands once this many model calls and their actions are done:
+                                     # the state an episode with that call budget would end in; the agent is not told
+
+
+def budget_meta(b: Budget) -> dict:
+    """What a stored record says about the budget it ran under."""
+    meta = {"model_calls": b.model_calls, "wall_s": b.wall_s}
+    if b.snapshot_at is not None:
+        meta["snapshot_at"] = b.snapshot_at
+    return meta
 
 
 class EpisodeStop(Exception):
@@ -83,7 +93,9 @@ class Episode:
     cost_usd: float = 0.0            # 0 for a local model
     max_prompt_tokens: int = 0
     latency_s: float = 0.0
+    exec_s: float = 0.0              # time until the graph stopped, before the final diff is read and graded
     error: str = ""
+    snapshot: dict = field(default_factory=dict)     # only with Budget.snapshot_at: the state at that call, graded like the end
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -110,6 +122,8 @@ class Context:
         self.agent_done = False
         self.events: list = []
         self.log: NodeLog | None = None
+        self.tokens = [0, 0]                   # prompt and completion tokens so far
+        self.snapshot: dict | None = None
 
     def say(self, text: str) -> None:
         """Add harness text to the conversation (merged into a trailing user turn, so roles alternate)."""
@@ -120,6 +134,11 @@ class Context:
         self.events.append({"node": self.log.node, "role": "harness", "content": text[:6000]})
 
     async def ask(self, max_tokens: int | None = None) -> str:
+        if self.snapshot is None and self.calls == self.budget.snapshot_at:
+            peek = getattr(self.ws, "peek_diff", self.ws.diff)      # leaves nothing behind for the agent to find
+            self.snapshot = {"diff": await asyncio.to_thread(peek), "model_calls": self.calls, "terminal": False,
+                             "prompt_tokens": self.tokens[0], "completion_tokens": self.tokens[1],
+                             "elapsed_s": round(time.perf_counter() - self.t0, 3)}
         if self.calls >= self.budget.model_calls:
             raise EpisodeStop("model_call_budget")
         if time.perf_counter() - self.t0 > self.budget.wall_s:
@@ -135,6 +154,8 @@ class Context:
         self.log.model_calls += 1
         self.log.prompt_tokens += r.prompt_tokens
         self.log.completion_tokens += r.completion_tokens
+        self.tokens[0] += r.prompt_tokens
+        self.tokens[1] += r.completion_tokens
         self.log.cached_tokens += r.cached_tokens
         self.log.reasoning_tokens += r.reasoning_tokens
         self.log.cost_usd = round(self.log.cost_usd + r.cost_usd, 6)
@@ -291,10 +312,21 @@ async def run_episode(graph: Graph, task: dict, ws, llm: LLM, seed: int, model: 
         except EpisodeStop as stop:
             ep.exit_reason = str(stop)
             ep.node_logs[-1]["outcome"] = "stopped:" + str(stop)
+        ep.exec_s = round(time.perf_counter() - ctx.t0, 3)
         ep.diff = await asyncio.to_thread(ws.diff)
         if grade is not None and ep.diff.strip():
             ep.grade = await grade(ep.diff)
             ep.resolved = bool(ep.grade.get("resolved"))
+        if budget.snapshot_at is not None:
+            # an episode that ended before the snapshot call contributes its final state; the same diff is not graded twice
+            snap = ctx.snapshot or {"diff": ep.diff, "model_calls": ctx.calls, "terminal": True, "prompt_tokens": ctx.tokens[0],
+                                    "completion_tokens": ctx.tokens[1], "elapsed_s": round(time.perf_counter() - ctx.t0, 3)}
+            if snap["diff"] == ep.diff:
+                snap["grade"] = ep.grade
+            else:
+                snap["grade"] = await grade(snap["diff"]) if grade is not None and snap["diff"].strip() else {}
+            snap["resolved"] = bool(snap["grade"].get("resolved"))
+            ep.snapshot = {"at": budget.snapshot_at, **snap}
     except Exception as e:
         ep.status, ep.error = "engine_error", f"{type(e).__name__}: {e}\n{traceback.format_exc()[-1500:]}"
     ep.agent_done, ep.events = ctx.agent_done, ctx.events

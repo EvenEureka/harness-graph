@@ -1,0 +1,25 @@
+{
+ "source": "data/c1/confirm.jsonl",
+ "source_sha256": "98133df03bd20b9d",
+ "source_tasks": 900,
+ "n": 200,
+ "seed": 0,
+ "per_repository": {
+  "Mimino666__langdetect.a1598f1a": 14,
+  "cantools__cantools.0c6a7871": 14,
+  "django-money__django-money.835c1ab8": 14,
+  "gweis__isodate.17cb25eb": 14,
+  "lepture__mistune.bf54ef67": 14,
+  "life4__textdistance.c3aca916": 13,
+  "lincolnloop__python-qrcode.456b01d4": 13,
+  "marshmallow-code__apispec.8b421526": 13,
+  "pygments__pygments.27649ebb": 13,
+  "pylint-dev__astroid.b114f6b5": 13,
+  "python-openxml__python-docx.0cf6d71f": 13,
+  "rsalmei__alive-progress.35853799": 13,
+  "scanny__python-pptx.278b47b1": 13,
+  "theskumar__python-dotenv.2b8635b7": 13,
+  "tobymao__sqlglot.036601ba": 13
+ },
+ "sha256": "342f0f0054f62e15"
+}

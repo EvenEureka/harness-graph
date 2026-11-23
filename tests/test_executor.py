@@ -281,3 +281,89 @@ def test_dollar_budget_ends_the_episode_and_the_work_is_still_graded():
     ep, graded = go(REACT, FakeWS(), Paid(), budget=Budget(usd=1.0))
     assert ep.status == "ok" and ep.exit_reason == "usd_budget"
     assert ep.model_calls == 3 and graded                 # three calls reach $1.20; the edit made before is graded
+
+
+def test_snapshot_keeps_the_state_a_shorter_budget_would_have_ended_in():
+    # the agent edits at its third call only; a snapshot after two calls must hold the tree as it stood then
+    n = {"i": 0}
+
+    def reply(messages, seed):
+        n["i"] += 1
+        return act("EDIT pkg/a.py") if n["i"] == 3 else act("ls")
+    ep, graded = go(CHECKED, FakeWS(), MockLLM(reply), budget=Budget(model_calls=6, snapshot_at=2))
+    snap = ep.snapshot
+    assert snap["at"] == 2 and snap["model_calls"] == 2 and not snap["terminal"]
+    assert snap["diff"] == "" and not snap["resolved"] and snap["grade"] == {}
+    assert ep.model_calls == 6 and ep.resolved and len(graded) == 1          # the end is graded as before
+    # the same run under the shorter budget ends in exactly that state
+    n["i"] = 0
+    short, _ = go(CHECKED, FakeWS(), MockLLM(reply), budget=Budget(model_calls=2))
+    assert short.diff == snap["diff"] and short.resolved == snap["resolved"]
+
+
+def test_snapshot_of_an_episode_that_ended_earlier_is_its_final_state():
+    ep, graded = go(REACT, FakeWS(), script(act("EDIT pkg/a.py")), budget=Budget(model_calls=10, snapshot_at=5))
+    assert ep.exit_reason == "end" and ep.snapshot["terminal"] and ep.snapshot["model_calls"] == ep.model_calls
+    assert ep.snapshot["diff"] == ep.diff and ep.snapshot["resolved"] == ep.resolved and len(graded) == 1
+
+
+def test_no_snapshot_field_is_filled_without_the_option():
+    ep, _ = go(REACT, FakeWS(), script(act("EDIT pkg/a.py")))
+    assert ep.snapshot == {}
+
+
+def test_a_failed_snapshot_is_an_engine_error_not_an_unsolved_state():
+    class Broken(FakeWS):
+        def peek_diff(self):
+            raise RuntimeError("snapshot diff failed (rc 128)")
+    ep, _ = go(REACT, Broken(), MockLLM(lambda m, s: act("ls")), budget=Budget(model_calls=6, snapshot_at=2))
+    assert ep.status == "engine_error" and "snapshot diff failed" in ep.error
+
+
+def test_snapshot_then_a_stop_before_any_further_call_keeps_both_states():
+    from harness_graph.llm import ContextExceeded, Completion
+
+    class Full(MockLLM):
+        async def chat(self, messages, **kw):
+            if len(self.calls) >= 2:                      # the third call does not fit the context any more
+                raise ContextExceeded("too long")
+            return await super().chat(messages, **kw)
+    ep, _ = go(REACT, FakeWS(), Full(lambda m, s: act("EDIT pkg/a.py")), budget=Budget(model_calls=6, snapshot_at=2))
+    assert ep.exit_reason == "context_exceeded" and ep.model_calls == 2
+    assert not ep.snapshot["terminal"] and ep.snapshot["model_calls"] == 2       # the boundary was reached, no call followed
+    assert ep.snapshot["diff"] == ep.diff and ep.snapshot["resolved"] == ep.resolved
+    assert 0 <= ep.exec_s <= ep.latency_s                 # stops before the final diff is read and graded
+
+
+def test_the_snapshot_diff_reads_like_the_final_diff_and_fails_loudly():
+    from harness_graph.swe.container import Workspace
+    text = "diff --git a/pkg/a.py b/pkg/a.py\n+fix\n"
+    ws = Workspace.__new__(Workspace)
+    ws.init_sha = "abc"
+    seen = []
+
+    def execute(command, timeout=None):
+        seen.append(command)
+        out = f"RC=0\n{text}" if "_final.diff" in command else f"{text}\n__HG_DIFF_RC=0\n"
+        return {"output": out, "returncode": 0, "timed_out": False, "secs": 0.0}
+    ws.execute = execute
+    assert ws.peek_diff() == ws.diff() == text
+    assert "/tmp" not in seen[0] and "rc=$?" in seen[0]          # nothing is written where the agent could find it
+    ws.execute = lambda command, timeout=None: {"output": "\n__HG_DIFF_RC=0\n", "returncode": 0, "timed_out": False, "secs": 0.0}
+    assert ws.peek_diff() == ""
+    ws.execute = lambda command, timeout=None: {"output": "\n__HG_DIFF_RC=128\n", "returncode": 0, "timed_out": False, "secs": 0.0}
+    with pytest.raises(RuntimeError):
+        ws.peek_diff()
+    ws.execute = lambda command, timeout=None: {"output": "partial", "returncode": -1, "timed_out": True, "secs": 0.0}
+    with pytest.raises(RuntimeError):
+        ws.peek_diff()
+
+
+def test_stored_records_name_the_snapshot_call_in_both_runners():
+    from harness_graph.executor import budget_meta
+    assert budget_meta(Budget(model_calls=100, snapshot_at=50)) == {"model_calls": 100, "wall_s": 3600.0, "snapshot_at": 50}
+    assert "snapshot_at" not in budget_meta(Budget())
+    root = Path(__file__).resolve().parents[1]
+    for f in ("scripts/run_grid.py", "harness_graph/runner.py"):
+        assert 'rec["budget"] = budget_meta(' in (root / f).read_text()
+

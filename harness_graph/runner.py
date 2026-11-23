@@ -17,7 +17,7 @@ from pathlib import Path
 
 from .analysis import episode_row
 from .check import visible_failures
-from .executor import Budget, episode_id, run_episode
+from .executor import Budget, budget_meta, episode_id, run_episode
 from .search import Pull
 from .swe.container import Workspace, ensure_sif
 from .swe.grading import grade
@@ -85,7 +85,7 @@ class EpisodeRunner:
                 await asyncio.to_thread(ws.close)
         rec["task"] = {k: t.get(k) for k in ("repo_key", "strategy", "gold_files")}
         rec["tests"] = "visible" if self.visible else "hidden"
-        rec["budget"] = {"model_calls": self.budget.model_calls, "wall_s": self.budget.wall_s}
+        rec["budget"] = budget_meta(self.budget)
         with open(self.out, "a") as f:
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
         row = episode_row(rec)

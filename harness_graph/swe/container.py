@@ -164,6 +164,17 @@ class Workspace:
         head, _, body = r["output"].partition("\n")
         return body if head.strip() == "RC=0" else ""
 
+    def peek_diff(self):
+        """The same diff, read without leaving a file in the workspace, for a look at a run that goes on.
+        A failure raises instead of reading as an empty diff."""
+        mark = "__HG_DIFF_RC="
+        r = self.execute(f"git -c core.fileMode=false diff --no-color --no-ext-diff {self.init_sha} 2>/dev/null; "
+                         f"rc=$?; echo; echo {mark}$rc", timeout=120)
+        body, sep, rc = r["output"].rpartition("\n" + mark)
+        if not sep or rc.strip() != "0" or r["timed_out"]:
+            raise RuntimeError(f"snapshot diff failed (rc {rc.strip() or r['returncode']})")
+        return body                                    # the newline of the bare `echo` went with the marker
+
     def restore(self):
         """Put the repository back to the initial commit (scratch files under /tmp are kept)."""
         return self.execute(f"git checkout -q -f {self.init_sha} -- . && git clean -fdq", timeout=120)

@@ -1,0 +1,124 @@
+{
+ "note": "exploratory audit; nothing is built on it and it has no pass or fail",
+ "graph": "g-p0-fn-t0-vn-kcon2-c0-snon",
+ "model": "qwen3.8-27b",
+ "tasks": 200,
+ "seeds": [
+  2,
+  3
+ ],
+ "cap": 100,
+ "state_kept_after_call": 50,
+ "stored_record_problems": [],
+ "n_problems": 0,
+ "scored_runs": 400,
+ "engine_error_records_rerun": 0,
+ "repair_of_the_state_after_call_50": {
+  "mean": 0.8175,
+  "lo": 0.7775,
+  "hi": 0.8575,
+  "n_tasks": 200
+ },
+ "repair_at_the_end_of_the_100_call_run": {
+  "mean": 0.9025,
+  "lo": 0.87,
+  "hi": 0.9325,
+  "n_tasks": 200
+ },
+ "primary_end_minus_state_after_call_50": {
+  "mean": 0.085,
+  "lo": 0.0575,
+  "hi": 0.115,
+  "n_tasks": 200
+ },
+ "runs_by_outcome": {
+  "solved after call 50 -> solved at the end": 327,
+  "unsolved after call 50 -> solved at the end": 34,
+  "unsolved after call 50 -> unsolved at the end": 39
+ },
+ "tasks_better_worse": {
+  "better": 28,
+  "worse": 0
+ },
+ "runs_that_reached_the_boundary_after_call_50": {
+  "n": 97,
+  "share": 0.2425,
+  "with_at_least_one_further_model_call": 97,
+  "stopped_at_the_boundary_by": {},
+  "state_after_call_50_already_solved": 27,
+  "unsolved_after_call_50": 70,
+  "of_those_solved_at_the_end": 34,
+  "solved_after_call_50_but_not_at_the_end": 0,
+  "ended_by": {
+   "end": 60,
+   "model_call_budget": 23,
+   "visit_cap": 3,
+   "context_exceeded": 11
+  },
+  "ended_by_when_unsolved_at_the_end": {
+   "model_call_budget": 22,
+   "visit_cap": 3,
+   "context_exceeded": 11
+  },
+  "model_calls_after_call_50_mean": 22.422680412371133,
+  "tokens_after_call_50_mean": 798046.3608247422,
+  "tokens_up_to_call_50_mean": 740366.5670103093,
+  "largest_prompt_tokens_mean": 39022.63917525773
+ },
+ "unsolved_after_call_50_finishing_solved_by_block": {
+  "51-60": {
+   "not_yet_terminated_and_unsolved_at_the_50_call_snapshot": 70,
+   "finish_solved": 10
+  },
+  "61-70": {
+   "not_yet_terminated_and_unsolved_at_the_50_call_snapshot": 56,
+   "finish_solved": 11
+  },
+  "71-80": {
+   "not_yet_terminated_and_unsolved_at_the_50_call_snapshot": 42,
+   "finish_solved": 6
+  },
+  "81-90": {
+   "not_yet_terminated_and_unsolved_at_the_50_call_snapshot": 32,
+   "finish_solved": 3
+  },
+  "91-100": {
+   "not_yet_terminated_and_unsolved_at_the_50_call_snapshot": 27,
+   "finish_solved": 4
+  }
+ },
+ "unsolved_after_call_50_all_runs": {
+  "n": 73,
+  "run_had_already_ended": 3
+ },
+ "tokens_all_runs": {
+  "up_to_the_state_after_call_50": 156186529,
+  "at_the_end": 233597026,
+  "ratio": 1.4956285122387218
+ },
+ "grades_that_timed_out": {
+  "state_after_call_50": [
+   "qwen3.8-27b/g-p0-fn-t0-vn-kcon2-c0-snon/pygments__pygments.27649ebb.combine_file__ffprp0lo/s2",
+   "qwen3.8-27b/g-p0-fn-t0-vn-kcon2-c0-snon/pygments__pygments.27649ebb.combine_file__ffprp0lo/s3"
+  ],
+  "end": []
+ },
+ "all_runs_ended_by": {
+  "end": 360,
+  "model_call_budget": 23,
+  "visit_cap": 6,
+  "context_exceeded": 11
+ },
+ "graph_ran_past_the_3600_s_limit": 0,
+ "seconds_until_the_graph_stopped": {
+  "mean": 605.375065,
+  "max": 3059.495
+ },
+ "stored_50_call_runs_of_the_same_tasks": {
+  "mean": 0.7875,
+  "lo": 0.7475,
+  "hi": 0.825,
+  "n_tasks": 200
+ },
+ "verdict": "complete"
+}

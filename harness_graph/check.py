@@ -34,8 +34,9 @@ async def visible_failures(ws, timeout: int = 300) -> set[str] | None:
     return None if out["timed_out"] else parse_failures(out["output"])
 
 
-async def run_check(ws, baseline: set[str] | None, test_timeout: int = 300) -> tuple[bool, str, str]:
-    """Returns (passed, feedback for the agent, short reason for the log)."""
+async def restore_protected(ws) -> list[str]:
+    """The changed tracked files, after the agent's edits to test files and test-runner configuration have been
+    reverted (visible tests only).  The check node does this before it runs; so does its forced-continuation control."""
     ex = lambda cmd, t=120: asyncio.to_thread(ws.execute, cmd, t)
     changed = (await ex(f"git diff --name-only {ws.init_sha}"))["output"].split()
     if getattr(ws, "tests_visible", False):
@@ -44,6 +45,13 @@ async def run_check(ws, baseline: set[str] | None, test_timeout: int = 300) -> t
         if fixed:
             await ex(f"git checkout -q {ws.init_sha} -- " + " ".join(map(shlex.quote, fixed)))
             changed = [f for f in changed if f not in fixed]
+    return changed
+
+
+async def run_check(ws, baseline: set[str] | None, test_timeout: int = 300) -> tuple[bool, str, str]:
+    """Returns (passed, feedback for the agent, short reason for the log)."""
+    ex = lambda cmd, t=120: asyncio.to_thread(ws.execute, cmd, t)
+    changed = await restore_protected(ws)
     if not changed:
         return False, ("No tracked source file has been changed, so nothing would be submitted. "
                        "Edit the source to fix the problem."), "empty_diff"

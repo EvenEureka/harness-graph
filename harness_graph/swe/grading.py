@@ -201,7 +201,31 @@ def grade(task, sif, mode="model", model_patch="", test_timeout=600, version=Non
                     "gold_via": "model_diff" if mode == "gold" else None,
                     "untracked_test_or_hook_files": (sorted(f for f in untracked if is_test_path(f) or is_hook_path(f))
                                                      if untracked is not None else None)})
+    if task.get("withheld_f2p") is not None:            # split task: the same run, counted per part of the failing tests
+        out["split"] = split_counts(task, st)
     out["log_tail"] = log[-3000:] if not out["resolved"] else log[-400:]
+    return out
+
+
+def split_counts(task, st):
+    """Per-part counts for a task whose failing tests were split into a shown and a withheld part (E1).
+    ``withheld_success`` is the primary outcome: every withheld failing test and every pass-to-pass test passes.
+    ``shown_f2p_success`` / ``withheld_f2p_success`` look at the failing tests of one part only.
+    ``partial_evaluator_accepts``: every shown failing test passes and so does every pass-to-pass test whose file is
+    present in the agent's workspace (what a check restricted to the reduced suite could accept)."""
+    shown, withheld = task["shown_f2p"], task["withheld_f2p"]
+    assert sorted(shown + withheld) == sorted(task["FAIL_TO_PASS"]) and not set(shown) & set(withheld)
+    gone = set(task["withheld_files"])
+    p2p = task["PASS_TO_PASS"]
+    avail = [t for t in p2p if t.split("::")[0] not in gone]
+    n = lambda tests: {"pass": sum(st.get(t) in OK for t in tests), "total": len(tests), "missing": sum(t not in st for t in tests)}
+    out = {"shown": n(shown), "withheld": n(withheld), "p2p": n(p2p), "p2p_available": n(avail)}
+    full = lambda d: d["total"] > 0 and d["pass"] == d["total"]
+    every = lambda d: d["pass"] == d["total"]
+    out["shown_f2p_success"] = full(out["shown"])
+    out["withheld_f2p_success"] = full(out["withheld"])
+    out["withheld_success"] = full(out["withheld"]) and every(out["p2p"])
+    out["partial_evaluator_accepts"] = full(out["shown"]) and every(out["p2p_available"])
     return out
 
 

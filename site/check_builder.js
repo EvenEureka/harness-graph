@@ -31,7 +31,7 @@ for (const n of Object.keys(panel.configs)) if (!names.has(n)) fail(`panel graph
 /* the "draw" buttons of the page give exactly the graphs the live searches returned */
 const cand = JSON.parse(fs.readFileSync(path.join(root, 'graphs_select/candidates.json')));
 const selPath = path.join(root, 'results/summary/selection.json');
-const picked = fs.existsSync(selPath) && /Stage 4 · Selection/.test(fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8'))
+const picked = fs.existsSync(selPath) && /Draw the selected graph in the builder/.test(fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8'))
   ? [JSON.parse(fs.readFileSync(selPath)).searched_graph] : [];
 const want = Object.values(cand.live).map((r) => r.recommendation).concat(picked).sort();
 const page = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');

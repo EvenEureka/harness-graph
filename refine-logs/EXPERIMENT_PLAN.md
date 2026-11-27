@@ -407,3 +407,126 @@ that most unsolved check-and-retry runs end on the cap; that says where a run st
   this setting"; it does not support branching or any multi-agent design, and it says nothing about how extra calls
   should be allocated. No gain supports "little benefit from this increase of the cap", not impossibility.
 - A missing, doubled or foreign record makes the read-out incomplete; an engine error is rerun by resuming the job.
+
+### A1 result (2026-11-23, exploratory; judged by Codex against the reading stated above)
+400 scored runs, no record problem, no engine error (`results/summary/a1_cap_extension.json`).
+- Repair of the state after call 50: 81.75% [77.75, 85.75]. Repair at the end of the 100-call run: 90.25% [87.0, 93.25].
+  Difference +8.5 points [5.75, 11.5]; 28 tasks better, none worse; 34 runs recovered, none lost.
+- 73 runs were unsolved after call 50. Three had already ended; 70 went on and 34 of them finished solved.
+- Of the runs still unsolved at the end, 22 stopped on the 100-call cap, 11 on the context limit and 3 on the visit
+  cap; four runs finished solved in calls 91 to 100. The benefit beyond 100 calls was not measured.
+- Total tokens over the 400 runs rose from 156.19 to 233.60 million (+49.6%). No graph ran past 3,600 s. Two
+  snapshot grades timed out in the grader (one pygments task, both seeds) and count as unsolved.
+- Reading: the 50-call cap prevented some recoverable repairs under these conditions. The earlier graph comparisons
+  were all made at 50 calls and stand; A1 gives no ranking of graphs at 100 calls, does not explain why search found
+  no better graph, makes no comparison with restarting, and is not evidence for branching or multi-agent designs.
+- Added to the read-out after the judgement, with every earlier number unchanged: all unsolved runs after call 50,
+  total tokens, grader timeouts, a duplicate check on the stored runs. No further experiment follows from A1.
+
+## E1 and E2: validity controls of the check-and-retry finding (written 2026-11-27, before any E1 or E2 run)
+
+Why. With visible tests the check node runs the grader's own failing tests and the grader then scores with the same
+tests; with the tests hidden the lead of check-and-retry is 0.4 points. The gain measured so far therefore cannot be
+split into "repaired the defect" and "satisfied the tests it was shown" (E1), and check-and-retry is a package of an
+enforced check, its diagnostic text and retries whose parts were never separated (E2). Both are controls of the main
+positive finding, not a new method line; the generated-check line and the selected-graph line stay stopped and no
+multi-agent graph is run. Tasks come from the follow-up set and are used as development data. Design debated with
+Codex (it proposed, the proposal was then attacked in review) and frozen before any run; implementation frozen after
+the infrastructure pilot. Passing supplied tests is evidence of repair but not independent evidence of
+generalization; losing the lead on withheld tests would challenge the generalization claim, not the narrower finding
+that enforced feedback improves performance on supplied tests.
+
+### E1: transfer to withheld tests
+- Candidates: the 644 follow-up tasks whose failing tests sit in two or more files (`data/c1/confirm.jsonl`).
+- Components (`scripts/e1_components.py`, no model): the bug patch is cut into code-change components, its hunks
+  merged when they touch the same top-level function or method (decorators included; a hunk spanning two functions
+  joins them). A change outside any function, a non-Python file, a new or deleted file or an unparsable source makes
+  the task ambiguous. Each state runs in the container on the failing-test files: healthy tree, whole bug, the
+  components together, each component alone. A task is decomposable when every failing test passes on the healthy
+  tree and fails with the whole bug, the components rebuild the bug patch, every component alone applies, compiles,
+  lets every failing test run and makes at least one FAIL (a test failure, not a collection error), and no failing
+  test fails only under the combination. These are individually test-detectable components, not the benchmark's own
+  record of planted bugs.
+- Split (`scripts/e1_split.py`): test files that import one another form a unit. For split seed s = 0..9 the units are
+  ordered by sha256("<task id>|<unit files>|<s>") and the first ceil(n/2) are shown; the files of the other units are
+  removed from the agent's workspace (file-level removal, as in the hidden condition). Primary block: the first seed
+  whose shown tests detect every component. Incomplete block ("incomplete shown-component detection"): no seed among
+  the ten does, seed 0 is used. A task with one unit is left out.
+- Container validation (`scripts/e1_validate.py`): with the bug, no withheld file or copy of one is present and every
+  shown failing test is collected and fails; on the healthy reduced tree every shown failing test passes and the
+  reduced suite finishes (the check node's baseline is measured on this same reduced suite); the grader accepts the
+  reference fix on both parts and the unchanged bug passes no failing test of either part. A failed validation
+  removes the task.
+- Task sets (`scripts/e1_sample.py`), all in the order of sha256("e1|<task id>"): primary, target 240 with equal
+  repository quotas (240 // R, one more for the first 240 % R repositories alphabetically; a short repository passes
+  its shortfall on round-robin in alphabetical order); with 160 to 239 valid candidates all are used; below 160 the
+  primary experiment is not run and the test is declared infeasible. Incomplete block: the first 120 valid
+  candidates. At 160 tasks the interval can be wider than plus or minus five points.
+- Runs: plain loop and unchanged check-and-retry (`graphs_e1/`), tests visible apart from the withheld files,
+  Qwen3.8-27B with thinking off, 50 model calls, 3,600 s, 65,536-token context, 16 runs in flight per GPU, seeds 0 and
+  1, at most two GPUs. Stored all-visible and all-hidden runs are context only.
+- Grading: a fresh complete workspace and the unchanged full criterion; in addition the per-part counts
+  (`grading.split_counts`): shown and withheld failing tests passed, total and missing; all pass-to-pass tests stay in.
+- Primary (`scripts/e1_analysis.py`): check-and-retry minus plain loop in the share of tasks whose final patch passes
+  every withheld failing test and every pass-to-pass test, primary block, seeds averaged within task, tasks redrawn
+  inside repositories (4,000 draws, seed 0). Margin five points. Reading fixed in advance: interval above zero
+  supports a positive transfer advantage; an upper end below five points excludes a gain of five points; an upper end
+  at or below zero contradicts a positive advantage in this population; otherwise inconclusive. A gain on shown tests
+  without an established gain on withheld tests does not by itself demonstrate overfitting.
+- Secondary: full-grader repair; success on every shown failing test; shares of shown and of withheld failing tests
+  passed; calls and tokens; the primary contrast leaving one repository out; the primary read-out restricted to tasks
+  whose withheld tests also detect every component; "withheld-test rejection among partial-evaluator acceptances" (of
+  the runs that pass every shown failing test and every pass-to-pass test present in the workspace, the pooled share
+  that fail the withheld criterion, per graph, task-cluster bootstrap; a rate against a fuller test criterion, not
+  semantic ground truth; the two graphs select different accepted runs). The incomplete block is described with the
+  same read-outs and no verdict; nothing is attributed to missing issue information. No semantic audit of
+  grader-accepted patches is done.
+- Infrastructure pilot: the first 16 primary tasks, both graphs, seeds 90 and 91. Used only to check that no withheld
+  file reaches a workspace, baselines are measured, per-part counts are written and the read-out runs. Its outcomes
+  are not compared by graph, its records are kept apart, and the 16 tasks stay in the main set. Zero unresolved
+  leakage, baseline, grading or accounting defect is required before the main run; code changes after it are recorded.
+
+### E2: what in the check-and-retry package carries the gain
+- Tasks: the 200 tasks of `data/a1/tasks.jsonl` (drawn without consulting outcomes), tests visible, seeds 4 and 5,
+  same model, caps and settings as above. Run after E1 whatever E1 shows.
+- Arms (`graphs_e2/`), identical solver prompt and continue prompt, same retry limit:
+  plain loop (hand-in is submitted); full gate (check-and-retry unchanged); binary gate (the same check and the same
+  branching, on failure the agent is told only "An automatic check of your work failed.", and no failure detail
+  enters the conversation or the harness state the agent reads); forced continuation (no check is run and no outcome
+  consulted: the agent is told "Continue reviewing and repairing the task." after its first and second hand-in and its
+  third is submitted; the agent's edits to test files and test-runner configuration are reverted as the check node
+  reverts them).
+- Primary (`scripts/e2_analysis.py`): full gate minus binary gate in full-grader repair, the effect of automatically
+  supplied diagnostic text. An interval above zero supports benefit, below zero harm, one crossing zero leaves the
+  direction unresolved. The agent can still run tests itself, so this does not remove all access to failure
+  information. Secondary: binary gate minus forced continuation (outcome-dependent checking and stopping against
+  unconditional further opportunities), forced continuation minus plain loop, full gate minus plain loop. Caps are
+  equal; realized calls and tokens are reported and are not matched. Not a complete factorial decomposition, and no
+  secondary contrast replaces the primary one.
+
+### E1 and E2: corrections after the implementation review (2026-11-27, before any main run)
+Codex's freeze check of the implementation returned six defects; none changes an arm, an outcome or a reading. The
+first task set and its 64 pilot runs (seeds 90, 91) are set aside (`data/e1_v1_before_freeze_fix`,
+`results/raw/e1_pilot_v1`); no graph was compared on them. The task set is rebuilt from the 644 candidates.
+- Component ownership: an added line belongs to the function that holds it in the patched text (the first version
+  used the line before it in the healthy source, which put a module-level line added after a function inside it). A
+  patch that does not match the source text exactly, or leaves an unparsable file, makes the task ambiguous.
+- Statuses: in every control state every failing test either passes or FAILS; a setup error or a skip leaves the task
+  out. In validation a shown failing test has to FAIL with the bug, both when its files run alone and in the
+  reduced-suite command the check node runs; on the healthy reduced tree that command reports none of them; removing
+  the withheld files adds no failure or collection error to the suite of the complete healthy tree.
+- Withheld files: their bytecode and backup copies are removed with them, before the commit the agent can read. The
+  scan covers the repository explicitly (the first version's `find / -xdev` skipped it, a separate mount) and the rest
+  of the container, has to finish without a traversal error (a directory left unread is tolerated only when the
+  agent's user neither owns it nor may enter it), and looks for the file name, `name.pyc`, `__pycache__/name.*.pyc` and
+  `name.py.*`. A hit is a file-name collision: unrelated files with the same name (a dependency's own
+  `test_common.py`) also remove the task. The rule is kept as written; it selects against common test-file names.
+- Baseline: the gate nodes of E1 and E2 carry `baseline: required`. When the suite cannot be measured on the
+  unchanged repository the run ends as an engine error and is repeated; it is never a check that passes without
+  consulting the tests. Every check visit logs `measured:<n>` or `unavailable`. (The 400 A1 runs on the E2 tasks had
+  no such pass.)
+- Secondary outcomes as frozen: "success on every shown failing test" uses the shown failing tests only; "withheld-test
+  rejection" counts an accepted run that does not pass every withheld failing test (the variant that also counts a
+  broken passing test inside a withheld file is reported beside it). The primary outcome is unchanged.
+- Records: the read-out checks every stored per-part record against the task (totals, ranges, flags) and stops on a
+  mismatch; tests the grader did not run are counted; the pilot check requires each (task, graph, seed) exactly once.

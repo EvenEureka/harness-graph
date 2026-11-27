@@ -1,0 +1,23 @@
+name: e2-binary-gate
+description: control for check-and-retry, the same enforced check, but on failure the agent is told only that it failed (up to 2 times)
+entry: solve
+nodes:
+  solve:
+    type: agent
+    max_visits: 3
+  check:
+    type: check
+    max_visits: 3
+    params:
+      feedback: binary
+      baseline: required
+edges:
+- - solve
+  - check
+  - done
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail

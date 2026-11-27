@@ -463,6 +463,73 @@ def search_numbers(q, hand) -> dict:
     return N
 
 
+def audit_numbers() -> dict:
+    """Failure audit of stored runs and the cap-extension audit (both exploratory)."""
+    a, fa, hd = load("a1_cap_extension.json"), load("failure_audit.json"), load("headroom_diagnostics.json")
+    assert a["verdict"] == "complete" and a["n_problems"] == 0
+    two = lambda x: minus(f"{100 * x:.2f}".rstrip("0").rstrip("."))          # 0.8175 -> 81.75, 0.115 -> 11.5
+    one = lambda x: f"{x:.1f}"
+    mil = lambda x: f"{x / 1e6:.1f}"
+    p50, pend, d = a["repair_of_the_state_after_call_50"], a["repair_at_the_end_of_the_100_call_run"], a["primary_end_minus_state_after_call_50"]
+    b, ro, un, tok = a["runs_that_reached_the_boundary_after_call_50"], a["runs_by_outcome"], a["unsolved_after_call_50_all_runs"], a["tokens_all_runs"]
+    last = a["unsolved_after_call_50_finishing_solved_by_block"]["91-100"]
+    end_uns = b["ended_by_when_unsolved_at_the_end"]
+    assert ro.get("solved after call 50 -> unsolved at the end", 0) == 0 and a["tasks_better_worse"]["worse"] == 0
+    assert un["n"] == b["unsolved_after_call_50"] + un["run_had_already_ended"] and b["of_those_solved_at_the_end"] == ro["unsolved after call 50 -> solved at the end"]
+    assert set(end_uns) == {"model_call_budget", "visit_cap", "context_exceeded"} and a["graph_ran_past_the_3600_s_limit"] == 0
+    N = dict(a1_tasks=str(a["tasks"]), a1_runs=str(a["scored_runs"]), a1_cutoff=str(a["state_kept_after_call"]), a1_cap=str(a["cap"]),
+             a1_seeds=nw(len(a["seeds"])), a1_before=two(p50["mean"]) + "%", a1_before_lo=two(p50["lo"]), a1_before_hi=two(p50["hi"]),
+             a1_after=two(pend["mean"]) + "%", a1_after_lo=two(pend["lo"]), a1_after_hi=two(pend["hi"]),
+             a1_d="+" + two(d["mean"]), a1_lo=two(d["lo"]), a1_hi=two(d["hi"]),
+             a1_better=str(a["tasks_better_worse"]["better"]), a1_worse=str(a["tasks_better_worse"]["worse"]),
+             a1_rec=str(b["of_those_solved_at_the_end"]), a1_cont_uns=str(b["unsolved_after_call_50"]), a1_uns=str(un["n"]),
+             a1_ended=nw(un["run_had_already_ended"]), a1_boundary=str(b["n"]), a1_bsolved=str(b["state_after_call_50_already_solved"]),
+             a1_end_uns=str(ro["unsolved after call 50 -> unsolved at the end"]), a1_end_cap=str(end_uns["model_call_budget"]),
+             a1_end_ctx=str(end_uns["context_exceeded"]), a1_end_visit=nw(end_uns["visit_cap"]),
+             a1_calls_more=one(b["model_calls_after_call_50_mean"]), a1_tok_more=f"{100 * (tok['ratio'] - 1):.1f}%",
+             a1_tok_cut=mil(tok["up_to_the_state_after_call_50"]), a1_tok_end=mil(tok["at_the_end"]),
+             a1_last_solved=nw(last["finish_solved"]), a1_last_open=str(last["not_yet_terminated_and_unsolved_at_the_50_call_snapshot"]),
+             a1_grade_timeouts=nw(len(a["grades_that_timed_out"]["state_after_call_50"])))
+    vf = fa["visible"]["qwen3.8-27b, 900 follow-up tasks, two runs"]["check and retry"]
+    vc = fa["visible"]["qwen3.8-27b, 232 confirmation tasks, two runs"]["check and retry"]
+    for k, v in (("fa", vf), ("fc", vc)):
+        chk = v["unsolved_by_checks_reached"]
+        assert sum(chk.values()) == v["unsolved"]
+        N.update({f"{k}_runs": f'{v["runs"]:,}', f"{k}_uns": str(v["unsolved"]), f"{k}_cap": str(v["unsolved_by_exit"]["model_call_budget"]),
+                  f"{k}_nocheck": str(chk["no check"]), f"{k}_one": str(chk["one check"]), f"{k}_two": str(chk["two or more checks"])})
+    for k, name in (("fa", "qwen3.8-27b, 900 follow-up tasks, two runs"), ("fc", "qwen3.8-27b, 232 confirmation tasks, two runs")):
+        r = fa["parallel_branches_replay_visible"][name]
+        t4 = {int(n): c for n, c in r["tasks_by_number_of_solved_runs_of_four"].items()}
+        assert sum(t4.values()) == r["tasks"] and r["runs_per_task"] == 4
+        N.update({f"{k}_all4": str(t4[4]), f"{k}_none4": str(t4[0]), f"{k}_some4": str(t4[1] + t4[2] + t4[3]),
+                  f"{k}_best2": pct1(r["some_stored_run_finished_solved"]["2 runs, cutoff 50 calls"]),
+                  f"{k}_one50": pct1(r["one_branch_full_budget"]),
+                  f"{k}_two25": pct1(r["some_stored_run_finished_solved_within_cutoff"]["2 runs, cutoff 25 calls"])})
+    sp = fa["checkpoint_split_visible"]["qwen3.8-27b, 900 follow-up tasks, two runs"]["split_emulation_by_checkpoint"]["20"]
+    N.update(fa_cont20=pct1(sp["continue"]), fa_split20=pct1(sp["split_in_two"]), fa_open20=str(sp["tasks_with_two_or_more_open_runs"]),
+             fa_cut20=str(sp["branch_cutoff_calls"]))
+    h = fa["hidden"]["qwen3.8-27b, 232 confirmation tasks"]
+    u = h["unsolved_attempts"]
+    assert h["tasks_every_attempt_solves"] + h["tasks_no_attempt_solves"] + h["tasks_some_attempts_solve"] == h["tasks"] and set(h["attempts_per_task"]) == {"3"}
+    N.update(fh_tasks=str(h["tasks"]), fh_always=str(h["tasks_every_attempt_solves"]), fh_never=str(h["tasks_no_attempt_solves"]),
+             fh_some=str(h["tasks_some_attempts_solve"]), fh_mean=pct1(h["mean_repair_rate"]),
+             fh_best3=pct1(h["best_of_k_with_a_perfect_selector"]["3"]),
+             fh_agree=pct1(h["label_free_selection_over_all_attempts"]["largest_group_with_the_same_files_and_changed_lines"]),
+             fh_uns=str(u["n"]), fh_sub=str(u["by_exit"]["end"]), fh_partial=pct(u["share_passing_some_target_tests"]),
+             fh_graded=str(u["with_a_complete_grade"]))
+    g1 = [fa["hidden"][k]["repair_rate_by_group"] for k in fa["hidden"]]
+    N.update(fh_file1_lo=pct(min(g["defect in 1 file"]["rate"] for g in g1)), fh_file1_hi=pct(max(g["defect in 1 file"]["rate"] for g in g1)),
+             fh_file2_lo=pct(min(g["defect in 2+ files"]["rate"] for g in g1)), fh_file2_hi=pct(max(g["defect in 2+ files"]["rate"] for g in g1)),
+             fh_sets=nw(len(g1)))
+    sel, sel13, cf = hd["selection_14_graphs_56_tasks"], hd["selection_13_graphs_with_check_56_tasks"], hd["confirmation_3_graphs_232_tasks_visible"]
+    cors = [x["interaction_correlation_between_runs"] for x in (sel, sel13, cf)]
+    N.update(hd_same=pct1(sel["disagreement_same_graph_two_runs"]), hd_diff=pct1(sel["disagreement_two_graphs_two_runs"]),
+             hd_cor_lo=f"{min(cors):.2f}", hd_cor_hi=f"{max(cors):.2f}",
+             hd_route=pct1(cf["pick_on_one_run_score_on_the_other"]["best_per_task"]),
+             hd_fixed=pct1(cf["pick_on_one_run_score_on_the_other"]["fixed_best"]))
+    return N
+
+
 def main():
     N = {"updated": datetime.date.today().strftime("%-d %B %Y")}
     three, main_, enf, space = load("h04_h01_three_seeds.json"), load("main.json"), load("enforcement.json"), load("space.json")
@@ -491,12 +558,15 @@ def main():
                   f"e_{k}_d": pts(forced["delta"]), f"e_{k}_lo": num(forced["lo"]), f"e_{k}_hi": num(forced["hi"])})
         v = {r["graph"]: r for r in main_["conditions"][m]}
         N[f"{k}_sv"] = pts(v["h14_verify"]["visible_delta"])
+        N[f"{k}_sv_k"] = pts(v[H04]["visible_delta"])          # check-and-retry on the same tasks and run
+        assert v["h14_verify"]["n_tasks"] == v[H04]["n_tasks"] == g[H04]["n_tasks"]
         assert all(v[g_]["visible_dlo"] > 0 for g_, _, gated in VARIANTS if gated), "an enforced-check graph is not clearly above zero"
         assert v["h14_verify"]["visible_delta"] < v[H04]["visible_delta"]
     assert enf["seeds"] == [1, 2] and cost[next(iter(MODELS))]["runs_per_task"] == 3
     N.update(hid_min=pts(min(hid)), hid_max=pts(max(hid)), raw=f'{space["raw_combinations"]:,}',
              distinct=f'{space["distinct_graph_signatures"]:,}', max_nodes=str(space["max_nodes"]))
     assert space["all_pass_static_checks"] and space["distinct_graph_signatures"] == space["after_rule_canonicalisation"]
+    assert space["distinct_graph_signatures"] == 3600, "docs/hero.svg (site/hero/fig_hg.py) says 3,600 graphs: redraw it"
     q = load("replay_search_qwen3.8-27b_visible_panel.json")
     t, hand = q["truth_all_tasks"], space["hand_written_points"]
     rest = [v for g, v in t.items() if g not in (hand[H01], hand[H04])]
@@ -512,6 +582,7 @@ def main():
     N.update(confirm_numbers(hand))
     N.update(followup_numbers())
     N.update(premise_numbers())
+    N.update(audit_numbers())
     N["fig_main"] = fig_main(rows_vis + rows_hid)
     N["fig_variants"] = fig_variants(main_["conditions"])
 

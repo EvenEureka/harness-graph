@@ -82,6 +82,10 @@ STALLED = """You have run {n} commands and no source file has been changed yet. 
 likely cause and make the edit."""
 
 CHECK_FAILED = "An automatic check of your work failed.\n\n{feedback}"
+# control variants of the check node (E2): the same opening sentence without any detail, and a continuation
+# request that mentions no check
+CHECK_FAILED_BINARY = "An automatic check of your work failed."
+FORCED_CONTINUE = "Continue reviewing and repairing the task."
 
 REFLECT = """Before acting again, diagnose the failure in at most 6 sentences: what in your approach or your change
 was wrong, and what you will do differently. Do not write a command in this response."""

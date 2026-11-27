@@ -96,7 +96,10 @@ async def main(a):
                     try:
                         # visible tests: what fails on the healthy repository; hidden: what fails before the agent acts
                         await asyncio.to_thread(ws.setup, task, a.visible_tests, not a.visible_tests)
-                        base_cache[tid] = await visible_failures(ws)
+                        base = await visible_failures(ws)
+                        if base is None:                # the suite did not finish: not remembered, the next run measures again
+                            return None
+                        base_cache[tid] = base
                     finally:
                         ws.close()
             return base_cache[tid]

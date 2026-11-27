@@ -41,9 +41,11 @@ NODE_TYPES: dict[str, NodeType] = {t.name: t for t in [
     _nt("agent", ["done"], writes=["work"], params=["role", "max_steps", "compact_at", "edit_by", "checker"],
         doc="Model-in-the-loop segment: one shell command per step until the model says it is done."),
     _nt("plan", ["next"], writes=["plan"], doc="One model call that writes a plan before any action."),
-    _nt("check", ["pass", "fail"], reads=["work"], writes=["feedback"],
+    _nt("check", ["pass", "fail"], reads=["work"], writes=["feedback"], params=["feedback", "mode", "baseline"],
         doc="Deterministic gate on the working tree: non-empty diff, files compile, reproduction script, "
-            "no new failures in the visible tests."),
+            "no new failures in the visible tests.  Control variants: feedback=binary runs the same check and "
+            "tells the agent only that it failed; mode=forced runs no check and sends the agent back on its "
+            "first two visits whatever the working tree holds."),
     _nt("reflect", ["next"], reads=["feedback"], writes=["lesson"],
         doc="One model call that diagnoses a failed check."),
     _nt("reset", ["next"], reads=["feedback"],

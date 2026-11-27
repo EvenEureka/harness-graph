@@ -1,0 +1,22 @@
+name: e2-forced-continue
+description: control for check-and-retry, no check is run, the agent is sent back twice whatever it has done and its third hand-in is submitted
+entry: solve
+nodes:
+  solve:
+    type: agent
+    max_visits: 3
+  check:
+    type: check
+    max_visits: 3
+    params:
+      mode: forced
+edges:
+- - solve
+  - check
+  - done
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail

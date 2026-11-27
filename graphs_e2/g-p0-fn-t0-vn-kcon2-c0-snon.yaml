@@ -1,0 +1,22 @@
+name: g-p0-fn-t0-vn-kcon2-c0-snon
+description: enforced check, on failure continue with the feedback (up to 2 times)
+entry: solve
+nodes:
+  solve:
+    type: agent
+    max_visits: 3
+  check:
+    type: check
+    max_visits: 3
+    params:
+      baseline: required
+edges:
+- - solve
+  - check
+  - done
+- - check
+  - END
+  - pass
+- - check
+  - solve
+  - fail

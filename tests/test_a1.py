@@ -43,6 +43,19 @@ def test_gains_and_losses_are_counted_run_by_run(tmp_path):
     assert reached["n"] == 3 and reached["unsolved_after_call_50"] == 2 and reached["of_those_solved_at_the_end"] == 1
     assert reached["with_at_least_one_further_model_call"] == 3 and out["engine_error_records_rerun"] == 0
     assert out["unsolved_after_call_50_finishing_solved_by_block"]["61-70"]["finish_solved"] == 1
+    assert out["unsolved_after_call_50_all_runs"] == {"n": 2, "run_had_already_ended": 0}
+    assert out["tokens_all_runs"]["up_to_the_state_after_call_50"] == 1010 * 170 and out["tokens_all_runs"]["at_the_end"] == 1010 * 280
+    assert out["grades_that_timed_out"] == {"state_after_call_50": [], "end": []}
+
+
+def test_grader_timeouts_and_runs_that_ended_unsolved_before_the_boundary_are_reported(tmp_path):
+    slow = rec("a", 2, False, False, 100, grade={"timeout": False})
+    slow["snapshot"]["grade"] = {"timeout": True}
+    rows = [slow, rec("a", 3, False, False, 30, terminal=True, exit_reason="visit_cap"),
+            rec("b", 2, True, True, 20, terminal=True), rec("b", 3, True, True, 20, terminal=True)]
+    out = run(tmp_path, rows)
+    assert out["unsolved_after_call_50_all_runs"] == {"n": 2, "run_had_already_ended": 1}
+    assert out["grades_that_timed_out"] == {"state_after_call_50": [slow["episode_id"]], "end": []}
 
 
 def test_a_missing_run_or_a_wrong_budget_makes_the_result_incomplete(tmp_path):

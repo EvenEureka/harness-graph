@@ -93,11 +93,16 @@ def run_script(sif, root, script, io_files, timeout, network=False):
 
 
 # The agent's view: bug applied, the files holding the failing tests removed (unless the tests are left
-# visible), history squashed to one commit (so `git log` / `git diff HEAD~1` cannot reveal the bug).
+# visible) together with their bytecode and backup copies, history squashed to one commit (so `git log` /
+# `git diff HEAD~1` cannot reveal the bug or a removed file).
 SETUP_SH = """set -euo pipefail
 cd /testbed
 if [ -s /io/bug.patch ]; then git apply --whitespace=nowarn /io/bug.patch; fi
-while IFS= read -r f; do [ -n "$f" ] && rm -f -- "$f"; done < /io/hide_files.txt
+while IFS= read -r f; do
+  [ -n "$f" ] || continue
+  d=$(dirname -- "$f"); b=$(basename -- "$f"); s=${b%.py}
+  rm -f -- "$f" "$f".* "$f"~ "$d/$s.pyc" "$d/$s.pyo" "$d/__pycache__/$s".*.pyc "$d/__pycache__/$s".*.pyo
+done < /io/hide_files.txt
 rm -rf .git
 git init -q
 git add -A
@@ -125,7 +130,8 @@ class Workspace:
             raise ValueError(f"task {task['instance_id']} keeps its failing tests in source files: {source[:3]}")
         self.tests_visible = tests_visible
         extract_testbed(self.sif, self.root)
-        hide = [] if tests_visible else task["f2p_files"]
+        # a split task (E1) shows part of the failing tests: the files of the withheld part are removed like hidden ones
+        hide = list(task.get("withheld_files") or []) if tests_visible else task["f2p_files"]
         r = run_script(self.sif, self.root, SETUP_SH, {"bug.patch": task["bug_patch"] if bug else "",
                                                        "hide_files.txt": "\n".join(hide) + "\n"}, timeout=300)
         if r["rc"] != 0:

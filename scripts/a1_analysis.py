@@ -111,18 +111,32 @@ def main(a):
         f"{c + 1}-{c + 10}": {"not_yet_terminated_and_unsolved_at_the_50_call_snapshot": sum(r["model_calls"] > c for r in open_),
                               "finish_solved": sum(r["resolved"] and c < r["model_calls"] <= c + 10 for r in open_)}
         for c in range(SNAP, CAP, 10)}
+    # added after the result was judged (REVIEW_A1_RESULT.md): denominators, total tokens and grader timeouts
+    out["unsolved_after_call_50_all_runs"] = {
+        "n": sum(not v for v in at50.values()),
+        "run_had_already_ended": sum(not at50[k] and r["snapshot"]["terminal"] for k, r in cells.items())}
+    tok = lambda r: r["prompt_tokens"] + r["completion_tokens"]
+    cut = sum(tok(r) if r["snapshot"]["terminal"] else tok(r["snapshot"]) for r in cells.values())
+    fin = sum(tok(r) for r in cells.values())
+    out["tokens_all_runs"] = {"up_to_the_state_after_call_50": cut, "at_the_end": fin, "ratio": fin / cut}
+    out["grades_that_timed_out"] = {
+        "state_after_call_50": sorted(r["episode_id"] for r in cells.values() if (r["snapshot"].get("grade") or {}).get("timeout")),
+        "end": sorted(r["episode_id"] for r in cells.values() if (r.get("grade") or {}).get("timeout"))}
     out["all_runs_ended_by"] = dict(Counter(r["exit_reason"] for r in cells.values()))
     # exec_s stops before the final diff is read and graded; latency_s would also count grading
     out["graph_ran_past_the_3600_s_limit"] = sum(r["exec_s"] > WALL for r in cells.values())
     out["seconds_until_the_graph_stopped"] = {"mean": float(np.mean([r["exec_s"] for r in cells.values()])),
                                               "max": float(max(r["exec_s"] for r in cells.values()))}
     if a.stored:
-        st = defaultdict(dict)
+        st, doubled = defaultdict(dict), False
         for r in load(a.stored):
             if (r["graph"] == GRAPH and r["task_id"] in tasks and r.get("status") == "ok" and r.get("tests") == "visible"
                     and r.get("model") == MODEL and (r.get("budget") or {}).get("model_calls") == STORED_CAP):
+                doubled |= r["seed"] in st[r["task_id"]]
                 st[r["task_id"]][r["seed"]] = bool(r["resolved"])
-        if set(st) == set(tasks) and all(set(v) == set(STORED_SEEDS) for v in st.values()):
+        if doubled:
+            out["stored_50_call_runs_of_the_same_tasks"] = "not shown: a stored run appears twice"
+        elif set(st) == set(tasks) and all(set(v) == set(STORED_SEEDS) for v in st.values()):
             out["stored_50_call_runs_of_the_same_tasks"] = boot({t: float(np.mean(list(v.values()))) for t, v in st.items()}, tasks)
         else:
             out["stored_50_call_runs_of_the_same_tasks"] = "not shown: the stored runs are not exactly seeds 0 and 1 of every task"

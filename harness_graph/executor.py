@@ -15,7 +15,7 @@ from dataclasses import asdict, dataclass, field
 from typing import Awaitable, Callable
 
 from . import prompts as P
-from .check import run_check
+from .check import restore_protected, run_check
 from .graph import END, Graph, Node
 from .llm import LLM, ContextExceeded
 
@@ -67,6 +67,7 @@ class NodeLog:
     truncated: int = 0
     latency_s: float = 0.0
     summary: str = ""
+    baseline: str = ""               # check node: "measured:<failing tests on the unchanged repository>" or "unavailable"
 
 
 @dataclass
@@ -239,10 +240,28 @@ async def _plan(ctx: Context, node: Node, visit: int):
 
 
 async def _check(ctx: Context, node: Node, visit: int):
-    ok, feedback, reason = await run_check(ctx.ws, await ctx.baseline())
+    if node.params.get("mode") == "forced":            # control: no check is run and no outcome is consulted
+        await restore_protected(ctx.ws)
+        ctx.log.commands += 1
+        if visit > FORCED_RETURNS:
+            return "pass", "forced:submit"
+        ctx.state["feedback"] = P.FORCED_CONTINUE
+        ctx.say(P.FORCED_CONTINUE)
+        return "fail", f"forced:continue:{visit}"
+    base = await ctx.baseline()
+    ctx.log.baseline = "unavailable" if base is None else f"measured:{len(base)}"
+    if base is None and node.params.get("baseline") == "required":
+        # the suite could not be measured on the unchanged repository: an infrastructure error (the run is repeated),
+        # never a check that passes without having consulted the tests
+        raise RuntimeError("check baseline unavailable")
+    ok, feedback, reason = await run_check(ctx.ws, base)
     ctx.log.commands += 1
     if ok:
         return "pass", reason
+    if node.params.get("feedback") == "binary":        # control: the same check, none of its detail reaches the agent
+        ctx.state["feedback"] = P.CHECK_FAILED_BINARY
+        ctx.say(P.CHECK_FAILED_BINARY)
+        return "fail", reason
     ctx.state["feedback"] = feedback
     ctx.say(P.CHECK_FAILED.format(feedback=feedback))
     return "fail", reason
@@ -269,6 +288,9 @@ async def _compact(ctx: Context, node: Node, visit: int):
     ctx.messages = [dict(m) for m in ctx.head]
     ctx.say(P.COMPACTED.format(summary=summary, diff=diff[:8000] or "(no changes yet)"))
     return "next", f"prompt was {before} tokens"
+
+
+FORCED_RETURNS = 2            # the forced-continuation control sends the agent back twice, as two failed checks would
 
 
 HANDLERS = {"agent": _agent, "plan": _plan, "check": _check, "reflect": _reflect, "reset": _reset, "compact": _compact}

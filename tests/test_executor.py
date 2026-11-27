@@ -367,3 +367,52 @@ def test_stored_records_name_the_snapshot_call_in_both_runners():
     for f in ("scripts/run_grid.py", "harness_graph/runner.py"):
         assert 'rec["budget"] = budget_meta(' in (root / f).read_text()
 
+
+
+BINARY = graph({"solve": {"type": "agent", "max_visits": 3},
+                "check": {"type": "check", "max_visits": 3, "params": {"feedback": "binary"}}},
+               [["solve", "check"], ["check", END, "pass"], ["check", "solve", "fail"]])
+FORCED = graph({"solve": {"type": "agent", "max_visits": 3},
+                "check": {"type": "check", "max_visits": 3, "params": {"mode": "forced"}}},
+               [["solve", "check"], ["check", END, "pass"], ["check", "solve", "fail"]])
+
+
+def test_binary_gate_runs_the_same_check_and_passes_none_of_its_detail_to_the_agent():
+    llm = script(act("EDIT pkg/a.py"), DONE, act("ls"))
+    ws = FakeWS(breaks_tests=["tests/test_a.py::test_x"])
+    ep, _ = go(BINARY, ws, llm)
+    assert [l["outcome"] for l in ep.node_logs][:2] == ["done", "fail"]
+    assert ep.node_logs[1]["summary"] == "new_test_failures:1"           # the log keeps the reason, the agent does not get it
+    said = "\n".join(m["content"] for call in llm.calls for m in call)
+    assert P.CHECK_FAILED_BINARY in said and "test_x" not in said and "for example" not in said
+    full_llm = script(act("EDIT pkg/a.py"), DONE, act("ls"))
+    go(CHECKED, FakeWS(breaks_tests=["tests/test_a.py::test_x"]), full_llm)
+    assert "test_x" in "\n".join(m["content"] for call in full_llm.calls for m in call)
+
+
+def test_forced_continuation_sends_the_agent_back_twice_without_running_any_check():
+    llm = script(act("EDIT pkg/a.py"))
+    ws = FakeWS(breaks_tests=["tests/test_a.py::test_x"])
+    ep, graded = go(FORCED, ws, llm)
+    assert ep.path == ["solve", "check", "solve", "check", "solve", "check"] and ep.exit_reason == "end"
+    assert [l["outcome"] for l in ep.node_logs] == ["done", "fail", "done", "fail", "done", "pass"]
+    assert not any("pytest" in c or "py_compile" in c for c in ws.commands) and graded == [ws.diff()]
+    said = "\n".join(m["content"] for call in llm.calls for m in call)
+    assert P.FORCED_CONTINUE in said and "automatic check" not in said
+    ep2, _ = go(FORCED, FakeWS(), script(act("ls")))                       # sent back even with nothing changed
+    assert [l["outcome"] for l in ep2.node_logs if l["node"] == "check"] == ["fail", "fail", "pass"]
+
+
+def test_a_gate_that_requires_a_baseline_stops_with_an_engine_error_when_none_can_be_measured():
+    need = graph({"solve": {"type": "agent", "max_visits": 3},
+                  "check": {"type": "check", "max_visits": 3, "params": {"baseline": "required"}}},
+                 [["solve", "check"], ["check", END, "pass"], ["check", "solve", "fail"]])
+
+    async def none():
+        return None
+    ep = asyncio.run(run_episode(need, TASK, FakeWS(), script(act("EDIT pkg/a.py"), DONE), 0, baseline=none))
+    assert ep.status == "engine_error" and "baseline unavailable" in ep.error
+    ep = asyncio.run(run_episode(CHECKED, TASK, FakeWS(), script(act("EDIT pkg/a.py"), DONE), 0, baseline=none))
+    assert ep.status == "ok" and ep.node_logs[-1]["summary"] == "pass_untested" and ep.node_logs[-1]["baseline"] == "unavailable"
+    ep, _ = go(need, FakeWS(), script(act("EDIT pkg/a.py"), DONE))
+    assert ep.status == "ok" and ep.node_logs[-1]["baseline"].startswith("measured:")

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Adaptive Graph Harness Optimization for LLM Agents</title>
+<title>Controlled Evaluation of Workflow Graphs and Routing for Code-Repair Agents</title>
 <meta name="description" content="A coding agent's harness written as a graph: checking supplied tests, returning failure feedback and retrying improves repairs; search over 3,600 graphs, per-task selection and model-written checks measured on bug-fixing tasks.">
 <style>
 :root{
@@ -34,11 +34,6 @@ section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
 .btn.primary{background:var(--fg);color:var(--bg)}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
 .btn.primary:hover{background:var(--accent);color:var(--bg)}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
-.tile .big{font-size:30px;font-weight:700;letter-spacing:-.01em;line-height:1.2;font-variant-numeric:tabular-nums}
-.tile .big span{color:var(--muted);font-weight:500}
-.tile .what{font-size:14.5px;color:var(--muted);margin-top:4px}
 figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px}
 .scroll{overflow-x:auto}
 figure svg{display:block;width:100%;min-width:720px;height:auto;font-family:var(--sans)}
@@ -118,9 +113,48 @@ details h3{margin-top:14px}
 
 <header>
   <div class="kicker">Research project · <b>main experiments complete</b> · two validity controls underway · updated 27 November 2026</div>
-  <h1>Adaptive Graph Harness Optimization for LLM Agents</h1>
+  <h1>Controlled Evaluation of Workflow Graphs and Routing for Code-Repair Agents</h1>
   <div class="by">Yiwen Lu · University of Notre Dame</div>
   <p class="lead">We turn a coding agent's harness into a searchable graph and show that checking supplied tests, returning failure feedback and retrying improves repair success on the tested bug-fixing tasks.</p>
+  <figure style="margin-top:18px">
+    <div class="scroll">
+    <svg viewBox="0 0 1000 300" role="img" aria-label="One agent and the nine wrapper variables. Main line: plan, reproduce, work, compact, self-verify, programmatic gate, submit. Three side loops return to the work node: a failed gate, a long context, and a stall.">
+      <defs><marker id="as" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="ah" d="M0 0L10 5L0 10z"/></marker></defs>
+      <text class="cap" x="10" y="22">One agent, one model-call budget (50 per run); nine variables decide what is wrapped around the work node</text>
+      <rect class="box" x="10" y="100" width="85" height="56" rx="4"/>
+      <text class="t" x="52" y="124" text-anchor="middle">Plan</text><text class="s" x="52" y="143" text-anchor="middle">① on / off</text>
+      <rect class="box" x="125" y="100" width="100" height="56" rx="4"/>
+      <text class="t" x="175" y="124" text-anchor="middle">Reproduce</text><text class="s" x="175" y="143" text-anchor="middle">② on / off</text>
+      <rect class="hl" x="255" y="92" width="150" height="72" rx="4"/>
+      <text class="t" x="330" y="116" text-anchor="middle">Work</text><text class="s" x="330" y="134" text-anchor="middle">code-editing loop</text><text class="s" x="330" y="152" text-anchor="middle">③ checker tool on / off</text>
+      <rect class="box" x="445" y="100" width="90" height="56" rx="4"/>
+      <text class="t" x="490" y="124" text-anchor="middle">Compact</text><text class="s" x="490" y="143" text-anchor="middle">④ fresh only</text>
+      <rect class="box" x="565" y="100" width="135" height="56" rx="4"/>
+      <text class="t" x="632" y="124" text-anchor="middle">Self-Verify</text><text class="s" x="632" y="143" text-anchor="middle">④ none / same / fresh</text>
+      <rect class="box prog" x="722" y="100" width="168" height="56" rx="4"/>
+      <text class="t" x="806" y="124" text-anchor="middle">Programmatic Gate</text><text class="s" x="806" y="143" text-anchor="middle">⑤ on / off</text>
+      <rect class="box" x="926" y="104" width="66" height="48" rx="24"/>
+      <text class="t" x="959" y="133" text-anchor="middle">Submit</text>
+      <line class="ar" x1="95" y1="128" x2="123" y2="128" marker-end="url(#as)"/>
+      <line class="ar" x1="225" y1="128" x2="253" y2="128" marker-end="url(#as)"/>
+      <line class="ar" x1="405" y1="128" x2="443" y2="128" marker-end="url(#as)"/>
+      <text class="e" x="424" y="120" text-anchor="middle">done</text>
+      <line class="ar" x1="535" y1="128" x2="563" y2="128" marker-end="url(#as)"/>
+      <line class="ar" x1="700" y1="128" x2="720" y2="128" marker-end="url(#as)"/>
+      <line class="ar" x1="890" y1="128" x2="924" y2="128" marker-end="url(#as)"/>
+      <text class="e" x="907" y="120" text-anchor="middle">pass</text>
+      <polyline class="ar" points="806,156 806,214 350,214 350,166" marker-end="url(#as)"/>
+      <text class="e" x="578" y="234" text-anchor="middle">fail: ⑥ back to work, via a note on the cause, or via a note and a reset · ⑦ at most 1, 2 or 3 times</text>
+      <path class="ar" d="M285 92 C285 48 327 48 327 90" marker-end="url(#as)"/>
+      <text class="e" x="277" y="62" text-anchor="end">⑧ context past 16k / 32k tokens: summarize</text>
+      <path class="ar" d="M345 92 C345 48 387 48 387 90" marker-end="url(#as)"/>
+      <text class="e" x="397" y="62">⑨ no edit by step 20: remind, find the cause, start over or summarize</text>
+      <text class="s" x="10" y="262">Solid box: the node calls the model. Dashed box: a program, no model call. Shaded: the work node present in every graph.</text>
+      <text class="s" x="10" y="282">A node switched off is left out and its neighbours are joined. Plain loop: Work → Submit. Check and retry adds the gate and its fail edge.</text>
+    </svg>
+    </div>
+    <figcaption><b>Every candidate graph wraps the same code-editing loop.</b> The agent is one language model issuing shell commands, with no sub-agents and at most 50 model calls per run counted over all nodes; Qwen3.8-27B with thinking disabled runs search, selection, confirmation and the follow-up. <b>Nodes.</b> <em>Plan</em>: the model writes a short plan. <em>Reproduce</em>: the agent first reproduces the bug, in at most 15 steps. <em>Work</em>: the agent edits code until it says it is done. <em>Compact</em>: the model replaces the conversation with a summary; on the main line it appears only when ④ is set to a fresh review. <em>Self-Verify</em>: the agent reviews its own patch. <em>Programmatic Gate</em>: a program runs the tests on the current patch (the <code>check</code> node). <b>Edges.</b> Each edge is followed on the outcome the node returns (<code>done</code>, <code>pass</code>, <code>fail</code>, <code>context too long</code>, <code>stalled</code>) and carries no data; the conversation, the repository working copy and the latest feedback live in a shared state. The stall edge ⑨ is followed when the repository is still unchanged at step 20 of a visit to the work node, at most once per run. The nine variables ①–⑨ switch nodes on and set the three side loops, which gives 3,600 distinct graphs (section 6).</figcaption>
+  </figure>
   <figure style="margin-top:18px;padding:10px"><div class="scroll"><img src="hero.svg" style="display:block;width:100%;min-width:720px;height:auto" alt="Three cartoon panels. Plain loop: a robot hands a patch to the grader with no enforced check. Check and retry: edit code, run tests, and a failed run sends the error back to editing before submit. Search over 3,600 graphs: the pick is check and retry plus a reflect step after a failed check and a summarize step when the agent stalls."></div>
     <figcaption><b>The harness decides what happens between the agent's edit and the grader.</b> Left: the plain loop submits without a harness-enforced check. Middle: with tests visible, check and retry runs the supplied tests and sends a failure back to editing (a successful run is drawn). Right: search over 3,600 graphs returns check and retry plus a reflect step after a failed check and a summarize step when the agent stalls. On 232 held-out tasks with grading tests visible, that graph differs from check and retry by +0.6 points (95% interval −1.3 to 2.8).</figcaption></figure>
   <div class="ex" style="margin-top:16px">
@@ -131,17 +165,28 @@ details h3{margin-top:14px}
     <a class="btn primary" href="#builder">Try the graph builder</a>
     <a class="btn" href="https://github.com/EvenEureka/harness-graph">Code</a>
     <a class="btn" href="harness_graph_report.pdf">Report (PDF)</a>
-    <a class="btn" href="#check">Results</a>
+    <a class="btn" href="#results">Results</a>
     <a class="btn" href="#why">What the failed runs show</a>
     <a class="btn" href="#limits">Details and limits</a>
   </div>
 </header>
 
-<div class="tiles">
-  <div class="tile"><div class="big">84.3% <span>→</span> 90.7%</div><div class="what">bugs repaired on 232 held-out tasks when the harness runs the supplied tests, sends the failure back and lets the agent retry: +6.5 points over the plain loop (95% interval 3.4 to 9.7)</div></div>
-  <div class="tile"><div class="big">+0.6 <span>points</span></div><div class="what">observed repair-rate difference between the graph selected by search and check-and-retry on the same held-out tasks, grading tests visible (95% interval −1.3 to 2.8); the rule fixed in advance excludes a gain of 5 points or more</div></div>
-  <div class="tile"><div class="big">18.9%</div><div class="what">task-averaged rate at which checks the model wrote from the issue, with the grading tests hidden, rejected the bug-free repository (version 2, among delivered checks; 95% interval 14.0 to 23.8; the limit set in advance was 2%)</div></div>
-</div>
+<section id="results">
+  <h2>Main results</h2>
+  <p>Three graphs run through every stage with Qwen3.8-27B: the plain loop, check and retry, and the graph that search and selection returned. The tasks are split into 188 for search, 56 for selection and 232 held out for confirmation, and 900 fresh tasks that combine several defects re-test the selected graph.</p>
+  <div class="scroll">
+  <table>
+    <tr><th>Task set</th><th>Tests</th><th class="num">Tasks</th><th class="num">Plain loop</th><th class="num">Check and retry</th><th class="num">Selected graph</th><th class="num">Check and retry − plain loop [95% interval]</th><th class="num">Selected − check and retry [95% interval]</th></tr>
+    <tr><td>Search (one run)</td><td>visible</td><td class="num">188</td><td class="num">72.9%</td><td class="num">81.9%</td><td class="num">82.4%</td><td class="num">+9.0 [4.3, 13.8]</td><td class="num">+0.5</td></tr>
+    <tr><td>Selection (two runs)</td><td>visible</td><td class="num">56</td><td class="num">81.3%</td><td class="num">92.0%</td><td class="num">93.8%</td><td class="num">+10.7 [3.6, 17.9]</td><td class="num">+1.8 [−0.9, 5.4]</td></tr>
+    <tr class="ours"><td>Held-out confirmation (two runs)</td><td>visible</td><td class="num">232</td><td class="num">84.3%</td><td class="num">90.7%</td><td class="num">91.4%</td><td class="num">+6.5 [3.4, 9.7]</td><td class="num">+0.6 [−1.3, 2.8]</td></tr>
+    <tr class="ours"><td>Held-out confirmation (one run)</td><td>hidden</td><td class="num">232</td><td class="num">64.2%</td><td class="num">64.7%</td><td class="num">64.2%</td><td class="num">+0.4 [−3.0, 3.9]</td><td class="num">−0.4 [−3.9, 3.0]</td></tr>
+    <tr><td>Fresh combined-defect follow-up</td><td>visible</td><td class="num">900</td><td class="num">56.2%</td><td class="num">81.3%</td><td class="num">81.5%</td><td class="num">+24.2 [20.9, 27.3]</td><td class="num">+0.2 [−1.3, 1.7]</td></tr>
+  </table>
+  </div>
+  <p class="tnote"><b>Main table.</b> Share of bugs repaired by the three graphs on each task set, Qwen3.8-27B with thinking disabled, at most 50 model calls per run. Differences are in percentage points with 95% intervals from paired bootstraps over tasks inside repositories. The search row has one stored run per task; its last cell is a point difference, and the selected graph was returned by search procedures that read these runs. On the follow-up the plain loop ran once per task and the other two graphs twice; the difference to the plain loop uses the first run of each (80.4% for check and retry). The shaded rows are the held-out confirmation.</p>
+  <p class="tnote"><b>Visible and hidden tests.</b> In the visible condition the failing tests that the grader uses are in the repository, so the gate runs the grader's own tests. In the hidden condition those test files are removed, and the gate runs what remains. Search and selection used visible tests only. <b>The tasks.</b> SWE-smith injects bugs into real Python repositories, and a language model writes each issue text from the bug patch and the failing tests. Its authors state that the released dataset does not yield instances appropriate for evaluation. We have not validated the issue texts for ambiguity or leakage, or established how faithful these synthetic tasks are to real issues.</p>
+</section>
 
 <section id="check">
   <h2>1 · Checking and retrying improves repairs when tests are supplied</h2>

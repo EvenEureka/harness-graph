@@ -1,4 +1,4 @@
-# Adaptive Graph Harness Optimization for LLM Agents
+# Controlled Evaluation of Workflow Graphs and Routing for Code-Repair Agents
 
 **Status: main experiments complete; two validity controls of the check-and-retry result are underway** (protocol in `refine-logs/EXPERIMENT_PLAN.md`, sections E1 and E2; main runs not started). Project page with an interactive graph builder: https://eveneureka.github.io/harness-graph/ · Report: [docs/harness_graph_report.pdf](docs/harness_graph_report.pdf)
 

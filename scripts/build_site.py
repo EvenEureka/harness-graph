@@ -246,6 +246,8 @@ def confirm_numbers(hand) -> dict:
              c_tok_ratio=f'{pa["tokens"]["ratio"]:.2f}', c_tok_lo=f'{pa["tokens"]["lo"]:.2f}', c_tok_hi=f'{pa["tokens"]["hi"]:.2f}')
     assert pa["tokens"]["lo"] < 1 < pa["tokens"]["hi"], "the token sentence no longer holds"
     N["c_margin"] = f'{100 * c["sesoi"]:.0f}'
+    for key, name in (("h04 - h01", "c_hid_k"), ("searched - h04", "c_hid_d")):   # hidden-test rows of the main results table
+        N.update({name: pts(kh[key]["all"]["mean"]), f"{name}_lo": num(kh[key]["all"]["lo"]), f"{name}_hi": num(kh[key]["all"]["hi"])})
     names = {"h04 - h01": "Check and retry minus plain loop", "searched - h04": "Selected graph minus check and retry",
              "searched - h01": "Selected graph minus plain loop"}
     assert set(kh) == set(names)
@@ -577,6 +579,8 @@ def main():
     assert len({len(main_["models"][m]["confirm"]["graphs"]) for m in MODELS}) == 1
     N.update(n_conf_graphs=str(len(first)),
              n_conf_repos=str(len({json.loads(l)["repo"] for l in open(ROOT / "data" / "confirm_tasks.jsonl") if l.strip()})))
+    top = load("selection.json")["searched_graph"]      # the selected graph is one of the table graphs: its one stored run per search task
+    N.update(q_top=pct1(t[top]), q_top_d4=pts(t[top] - t[hand[H04]]))
     N.update(search_numbers(q, hand))
     N.update(selection_numbers(hand))
     N.update(confirm_numbers(hand))
